@@ -19,6 +19,18 @@
   --btn-glow-hover: 0 6px 28px rgba(99, 102, 241, 0.65);
 }
 
+[data-theme="light"], body.theme-light {
+  --nav-bg: rgba(255, 255, 255, 0.88);
+  --nav-border: rgba(217, 119, 6, 0.2);
+  --nav-text: #334155;
+  --nav-text-muted: #64748b;
+  --nav-text-hover: #d97706;
+  --btn-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --btn-gradient-hover: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --btn-glow: 0 4px 20px rgba(217, 119, 6, 0.45);
+  --btn-glow-hover: 0 6px 28px rgba(217, 119, 6, 0.65);
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -161,6 +173,11 @@
   text-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
 }
 
+[data-theme="light"] .nav-link.active {
+  color: #d97706;
+  text-shadow: 0 0 12px rgba(217, 119, 6, 0.35);
+}
+
 .active-indicator {
   position: absolute;
   top: -12px;
@@ -172,6 +189,11 @@
   border-radius: 9999px;
   box-shadow: 0 0 10px #8b5cf6, 0 0 18px rgba(139, 92, 246, 0.8);
   animation: glowPulse 2.5s infinite ease-in-out;
+}
+
+[data-theme="light"] .active-indicator {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+  box-shadow: 0 0 10px #f59e0b, 0 0 18px rgba(245, 158, 11, 0.8);
 }
 
 @keyframes glowPulse {

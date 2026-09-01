@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Header.css';
-import logo from './assets/logo.png';
+import '../styles/Header.css';
+import logo from '../assets/logo.png';
 
 const Header = () => {
   const [activeNav, setActiveNav] = useState('Home');

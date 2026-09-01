@@ -1,12 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Home.css';
-import heroBg from './assets/hero-bg.jpg';
+import '../styles/Home.css';
+import heroBg from '../assets/hero-bg.png';
+import heroBgLight from '../assets/hero-bg-light.png';
+import SocialOrbit from './SocialOrbit';
 
 const Home = () => {
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [counts, setCounts] = useState({ launched: 0, satisfaction: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  
+  // Theme State (Dark / Light) with LocalStorage persistence
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('vayonix_theme') || 'dark';
+  });
+
   const heroRef = useRef(null);
+
+  // Apply theme to document element on change
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = `theme-${theme}`;
+    localStorage.setItem('vayonix_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
 
   // Smooth Animated Numbers on Mount
   useEffect(() => {
@@ -94,6 +112,8 @@ const Home = () => {
     },
   ];
 
+  const currentBg = theme === 'light' ? heroBgLight : heroBg;
+
   return (
     <div
       className="home-container"
@@ -101,31 +121,46 @@ const Home = () => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Background Ambience & Canvas Starfield */}
+      {/* Full Size Background Image */}
       <div className="cosmic-bg">
-        <img src={heroBg} alt="Space Rocket Launch Scene" className="hero-bg-img" />
-        <div className="cosmic-overlay"></div>
-        <div className="stars-container">
-          <div className="star star-1"></div>
-          <div className="star star-2"></div>
-          <div className="star star-3"></div>
-          <div className="star star-4"></div>
-          <div className="star star-5"></div>
-          <div className="shooting-star shooting-star-1"></div>
-          <div className="shooting-star shooting-star-2"></div>
-        </div>
+        <img 
+          src={currentBg} 
+          alt="Digital Marketing Hero Background" 
+          className="hero-bg-img" 
+          key={theme}
+        />
+        {theme === 'dark' && (
+          <div className="stars-container">
+            <div className="star star-1"></div>
+            <div className="star star-2"></div>
+            <div className="star star-3"></div>
+            <div className="shooting-star shooting-star-1"></div>
+          </div>
+        )}
       </div>
 
-      {/* Main Aligned Wrapper */}
+      {/* =================================================================
+          TOP RIGHT POSITIONED SOCIAL ORBIT ANIMATION
+          ================================================================= */}
+      <div
+        className="home-top-right-orbit"
+        style={{
+          transform: `translate3d(${mousePos.x * 10}px, ${mousePos.y * 10}px, 0)`,
+        }}
+      >
+        <SocialOrbit />
+      </div>
+
+      {/* Main Edge-to-Edge Content Layout */}
       <div className="home-wrapper">
         <section className="hero-main">
           {/* =================================================================
-              LEFT CONTENT COLUMN
+              LEFT CORNER CONTENT
               ================================================================= */}
           <div
             className="hero-left-content"
             style={{
-              transform: `translate3d(${mousePos.x * -12}px, ${mousePos.y * -12}px, 0)`,
+              transform: `translate3d(${mousePos.x * -10}px, ${mousePos.y * -10}px, 0)`,
             }}
           >
             {/* Top Announcement Badge */}
@@ -166,7 +201,7 @@ const Home = () => {
                 <div
                   key={service.id}
                   className="service-card"
-                  style={{ animationDelay: `${0.3 + index * 0.1}s` }}
+                  style={{ animationDelay: `${0.25 + index * 0.08}s` }}
                 >
                   <div className="service-icon-wrap">
                     {service.icon}
@@ -176,127 +211,69 @@ const Home = () => {
               ))}
             </div>
 
-            {/* CTA Buttons Row */}
+            {/* CTA & Stats Card Row */}
             <div className="cta-action-row animate-fade-in-delayed">
               <a href="#launch" className="primary-launch-btn">
                 <span>Let's Launch Your Brand</span>
                 <span className="btn-arrow">→</span>
               </a>
 
-              <button
-                className="watch-story-btn"
-                onClick={() => setVideoModalOpen(true)}
-                aria-label="Watch our story"
-              >
-                <div className="play-icon-circle">
-                  <div className="play-ripple"></div>
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <polygon points="6 3 20 12 6 21 6 3" />
-                  </svg>
-                </div>
-                <div className="watch-text-wrap">
-                  <span className="watch-title">Watch Our Story</span>
-                  <span className="watch-subtitle">See how we work</span>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* =================================================================
-              RIGHT VISUAL COLUMN (Floating 3D Scene with Parallax)
-              ================================================================= */}
-          <div
-            className="hero-right-visual"
-            style={{
-              transform: `translate3d(${mousePos.x * 18}px, ${mousePos.y * 18}px, 0)`,
-            }}
-          >
-            {/* Top Right Floating Mission Stats Card */}
-            <div className="floating-mission-card animate-float-card">
-              <span className="mission-title">Your Growth, Our Mission</span>
-              <div className="mission-stats-row">
-                <div className="mission-stat">
-                  <span className="stat-num">{counts.launched}+</span>
-                  <span className="stat-label">Projects Launched</span>
-                </div>
-                <div className="mission-stat-divider"></div>
-                <div className="mission-stat">
-                  <span className="stat-num accent-purple">{counts.satisfaction}%</span>
-                  <span className="stat-label">Client Satisfaction</span>
+              {/* Your Growth, Our Mission Stats Card */}
+              <div className="inline-mission-card">
+                <span className="mission-title">Your Growth, Our Mission</span>
+                <div className="mission-stats-row">
+                  <div className="mission-stat">
+                    <span className="stat-num">{counts.launched}+</span>
+                    <span className="stat-label">Projects Launched</span>
+                  </div>
+                  <div className="mission-stat-divider"></div>
+                  <div className="mission-stat">
+                    <span className="stat-num accent-purple">{counts.satisfaction}%</span>
+                    <span className="stat-label">Client Satisfaction</span>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* 3D Floating Interactive Badges with Organic Gravity Keyframes */}
-            <div className="floating-icon icon-bullseye animate-float-target" title="Target Marketing">
-              <div className="icon-3d-inner bullseye-glow">
-                <span className="emoji-icon">🎯</span>
-              </div>
-            </div>
-
-            <div className="floating-icon icon-chart animate-float-chart" title="Growth Analytics">
-              <div className="icon-3d-inner chart-glow">
-                <span className="emoji-icon">📊</span>
-              </div>
-            </div>
-
-            <div className="floating-icon icon-instagram animate-float-insta" title="Instagram Marketing">
-              <div className="icon-3d-inner insta-glow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-badge-icon">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-              </div>
-            </div>
-
-            <div className="floating-icon icon-google-ads animate-float-ads" title="Google Ads">
-              <div className="icon-3d-inner ads-glow">
-                <svg viewBox="0 0 24 24" fill="none" className="svg-badge-icon">
-                  <polygon points="12 2 22 20 2 20 12 2" fill="url(#adsGrad)" />
-                  <defs>
-                    <linearGradient id="adsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#60a5fa" />
-                      <stop offset="50%" stopColor="#f59e0b" />
-                      <stop offset="100%" stopColor="#10b981" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-            </div>
-
-            <div className="floating-icon icon-facebook animate-float-fb" title="Social Advertising">
-              <div className="icon-3d-inner fb-glow">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="svg-badge-icon">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                </svg>
-              </div>
-            </div>
-
-            {/* Glowing Rocket Engine Ambient Core */}
-            <div className="rocket-ambient-core animate-engine-pulse"></div>
           </div>
         </section>
       </div>
 
-      {/* Video Modal Preview */}
-      {videoModalOpen && (
-        <div className="video-modal-backdrop" onClick={() => setVideoModalOpen(false)}>
-          <div className="video-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal-btn" onClick={() => setVideoModalOpen(false)}>✕</button>
-            <div className="video-content-preview">
-              <div className="preview-header">
-                <h3>DigitalGrow Agency Reel</h3>
-                <p>Scaling brands beyond limits with rocket speed 🚀</p>
-              </div>
-              <div className="video-placeholder">
-                <div className="video-play-pulse">▶</div>
-                <span>Interactive Agency Showcase</span>
-              </div>
+      {/* =================================================================
+          RIGHT BOTTOM FLOATING DARK & LIGHT THEME TOGGLE BUTTON
+          ================================================================= */}
+      <div className="theme-toggle-container">
+        <button
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+        >
+          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : 'dark-active'}`}>
+            {/* Sun Icon */}
+            <div className="theme-icon sun-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" fill="#f59e0b"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+
+            {/* Moon Icon */}
+            <div className="theme-icon moon-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#f59e0b"></path>
+              </svg>
             </div>
           </div>
-        </div>
-      )}
+          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+        </button>
+      </div>
     </div>
   );
 };
