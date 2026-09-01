@@ -1,0 +1,552 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   Design Tokens (Exact Matching Dark & Light Themes)
+   ========================================================================== */
+
+:root {
+  --wp-bg: #03040f;
+  --wp-card-bg: rgba(10, 14, 38, 0.78);
+  --wp-card-border: rgba(255, 255, 255, 0.1);
+  --wp-card-hover-border: rgba(139, 92, 246, 0.6);
+  --wp-text-title: #ffffff;
+  --wp-text-sub: #94a3b8;
+  --wp-accent-purple: #8b5cf6;
+  --wp-accent-cyan: #38bdf8;
+  --wp-highlight-grad: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+  --wp-highlight-hover: linear-gradient(135deg, #8b5cf6 0%, #7042f8 50%, #60a5fa 100%);
+  --wp-glow-halo: rgba(139, 92, 246, 0.55);
+  --wp-pill-inactive: rgba(15, 23, 42, 0.75);
+  --wp-track-line: rgba(255, 255, 255, 0.1);
+  --wp-track-active: var(--wp-highlight-grad);
+  --wp-wireframe-color: rgba(139, 92, 246, 0.65);
+}
+
+[data-theme="light"], body.theme-light {
+  --wp-bg: #ffffff;
+  --wp-card-bg: rgba(255, 255, 255, 0.94);
+  --wp-card-border: rgba(217, 119, 6, 0.22);
+  --wp-card-hover-border: rgba(217, 119, 6, 0.65);
+  --wp-text-title: #0f172a;
+  --wp-text-sub: #475569;
+  --wp-accent-purple: #d97706;
+  --wp-accent-cyan: #f59e0b;
+  --wp-highlight-grad: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --wp-highlight-hover: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --wp-glow-halo: rgba(217, 119, 6, 0.45);
+  --wp-pill-inactive: rgba(241, 245, 249, 0.9);
+  --wp-track-line: rgba(217, 119, 6, 0.2);
+  --wp-track-active: var(--wp-highlight-grad);
+  --wp-wireframe-color: rgba(217, 119, 6, 0.65);
+}
+
+/* ==========================================================================
+   Master Section Layout
+   ========================================================================== */
+
+.wp-section-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 6.5rem 0 8.5rem 0;
+  background-color: var(--wp-bg);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.4s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Ambient Backdrops */
+.wp-bg-glow {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(150px);
+  z-index: 1;
+}
+
+.wp-glow-left {
+  top: 15%;
+  left: -150px;
+  background: radial-gradient(circle, var(--wp-glow-halo) 0%, transparent 70%);
+}
+
+.wp-glow-right {
+  bottom: 10%;
+  right: -100px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+}
+
+.wp-main-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2.25rem;
+  box-sizing: border-box;
+}
+
+/* Two-Column Split Grid */
+.wp-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 5rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* ==========================================================================
+   LEFT COLUMN: HEADINGS & 3D HOLOGRAPHIC WIREFRAME
+   ========================================================================== */
+
+.wp-left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Tag Badge */
+.wp-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.wp-spark-icon {
+  color: var(--wp-accent-purple);
+  font-size: 0.95rem;
+  animation: sparkTwinkle 2.5s infinite ease-in-out;
+}
+
+@keyframes sparkTwinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+  50% { transform: scale(1.3) rotate(20deg); opacity: 1; filter: drop-shadow(0 0 6px var(--wp-accent-purple)); }
+}
+
+.wp-tag-label {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--wp-accent-purple);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Main Headline */
+.wp-main-heading {
+  font-size: clamp(2.35rem, 3.6vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--wp-text-title);
+  margin: 0 0 1.25rem 0;
+}
+
+.wp-highlight-gradient {
+  background: var(--wp-highlight-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px var(--wp-glow-halo));
+}
+
+.wp-sub-text {
+  font-size: 0.96rem;
+  line-height: 1.68;
+  color: var(--wp-text-sub);
+  margin: 0 0 3rem 0;
+  max-width: 480px;
+}
+
+/* 3D Wireframe Geometry Mesh Container */
+.wp-3d-wireframe-container {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 800px;
+}
+
+.wp-wireframe-glow-halo {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--wp-glow-halo) 0%, transparent 70%);
+  opacity: 0.5;
+  filter: blur(25px);
+  pointer-events: none;
+}
+
+.wp-3d-cube-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: floatGeometric 6s ease-in-out infinite alternate;
+}
+
+@keyframes floatGeometric {
+  0% { transform: translateY(0px) rotateY(-5deg) rotateX(8deg); }
+  100% { transform: translateY(-15px) rotateY(12deg) rotateX(-5deg); }
+}
+
+.wp-wireframe-svg {
+  width: 100%;
+  height: 100%;
+  color: var(--wp-wireframe-color);
+  filter: drop-shadow(0 0 8px var(--wp-glow-halo));
+}
+
+.wp-wire-outer {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: drawOuter 8s linear infinite;
+}
+
+@keyframes drawOuter {
+  0% { stroke-dashoffset: 800; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -800; }
+}
+
+.wp-core-pulse {
+  animation: corePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes corePulse {
+  0% { transform-origin: 140px 150px; transform: scale(0.9); opacity: 0.6; }
+  100% { transform-origin: 140px 150px; transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px var(--wp-accent-purple)); }
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: DYNAMIC TIMELINE STEPS
+   ========================================================================== */
+
+.wp-right-timeline {
+  position: relative;
+  width: 100%;
+}
+
+.wp-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+  width: 100%;
+}
+
+.wp-timeline-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 1.75rem;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wp-timeline-row:hover {
+  transform: translateX(4px);
+}
+
+/* Vertical Step Capsule Badge */
+.wp-step-capsule-badge {
+  width: 50px;
+  height: 94px;
+  border-radius: 9999px;
+  background: var(--wp-pill-inactive);
+  border: 1.5px solid var(--wp-card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.wp-capsule-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--wp-text-sub);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+/* Active Step Capsule Glow */
+.wp-timeline-row.is-active-step .wp-step-capsule-badge {
+  background: var(--wp-highlight-grad);
+  border-color: transparent;
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px var(--wp-glow-halo);
+}
+
+.wp-timeline-row.is-active-step .wp-capsule-text {
+  color: #ffffff;
+}
+
+/* Step Content Block */
+.wp-step-content-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.wp-step-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--wp-text-title);
+  margin: 0 0 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.wp-timeline-row.is-active-step .wp-step-title {
+  color: var(--wp-text-title);
+}
+
+.wp-step-description {
+  font-size: 0.92rem;
+  line-height: 1.62;
+  color: var(--wp-text-sub);
+  margin: 0 0 1.25rem 0;
+  transition: color 0.3s ease;
+}
+
+.wp-timeline-row.is-active-step .wp-step-description {
+  color: var(--wp-text-title);
+  opacity: 0.92;
+}
+
+/* Horizontal Progress Track Line with Node Dot */
+.wp-step-track-line {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: var(--wp-track-line);
+  display: flex;
+  align-items: center;
+  transition: all 0.4s ease;
+}
+
+.wp-track-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--wp-track-active);
+  transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wp-track-node-dot {
+  position: absolute;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wp-text-sub);
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Active Track Progress & Glowing Node Dot */
+.wp-timeline-row.is-active-step .wp-track-fill {
+  width: 100%;
+}
+
+.wp-timeline-row.is-active-step .wp-track-node-dot {
+  background: #ffffff;
+  transform: scale(1.3);
+  box-shadow: 0 0 12px var(--wp-glow-halo), 0 0 4px #ffffff;
+}
+
+[data-theme="light"] .wp-timeline-row.is-active-step .wp-track-node-dot {
+  background: var(--wp-accent-purple);
+  box-shadow: 0 0 12px var(--wp-glow-halo);
+}
+
+/* ==========================================================================
+   Comprehensive Responsive Breakpoints (All Screen Sizes)
+   ========================================================================== */
+
+/* 1. Ultra-Wide Screens (> 1400px) */
+@media (min-width: 1400px) {
+  .wp-3d-wireframe-container {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+/* 2. Standard Laptops (1200px - 1399px) */
+@media (max-width: 1399px) {
+  .wp-split-grid {
+    gap: 3.5rem;
+  }
+
+  .wp-main-heading {
+    font-size: clamp(2.1rem, 3.2vw, 2.8rem);
+  }
+
+  .wp-step-capsule-badge {
+    width: 46px;
+    height: 86px;
+  }
+
+  .wp-step-title {
+    font-size: 1.22rem;
+  }
+}
+
+/* 3. Small Laptops (992px - 1199px) */
+@media (max-width: 1199px) {
+  .wp-split-grid {
+    gap: 2.75rem;
+  }
+
+  .wp-3d-wireframe-container {
+    width: 210px;
+    height: 210px;
+  }
+
+  .wp-timeline-list {
+    gap: 1.85rem;
+  }
+}
+
+/* 4. Tablets (768px - 991px) */
+@media (max-width: 991px) {
+  .wp-section-wrapper {
+    padding: 5rem 0 7rem 0;
+  }
+
+  .wp-split-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .wp-left-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .wp-sub-text {
+    text-align: center;
+    max-width: 580px;
+    margin-bottom: 2rem;
+  }
+
+  .wp-3d-wireframe-container {
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+  }
+
+  .wp-timeline-list {
+    max-width: 650px;
+    margin: 0 auto;
+  }
+}
+
+/* 5. Large Mobile Devices (576px - 767px) */
+@media (max-width: 767px) {
+  .wp-section-wrapper {
+    padding: 4rem 0 5.5rem 0;
+  }
+
+  .wp-main-container {
+    padding: 0 1.5rem;
+  }
+
+  .wp-timeline-row {
+    grid-template-columns: 44px 1fr;
+    gap: 1.25rem;
+  }
+
+  .wp-step-capsule-badge {
+    width: 42px;
+    height: 82px;
+  }
+
+  .wp-step-title {
+    font-size: 1.18rem;
+  }
+
+  .wp-step-description {
+    font-size: 0.88rem;
+  }
+}
+
+/* 6. Small Mobile Screens (< 576px) */
+@media (max-width: 575px) {
+  .wp-section-wrapper {
+    padding: 3.5rem 0 5rem 0;
+  }
+
+  .wp-main-container {
+    padding: 0 1.15rem;
+  }
+
+  .wp-main-heading {
+    font-size: clamp(1.85rem, 7.5vw, 2.3rem);
+  }
+
+  .wp-sub-text {
+    font-size: 0.88rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .wp-timeline-row {
+    grid-template-columns: 38px 1fr;
+    gap: 1rem;
+  }
+
+  .wp-step-capsule-badge {
+    width: 36px;
+    height: 76px;
+  }
+
+  .wp-capsule-text {
+    font-size: 0.68rem;
+  }
+
+  .wp-step-title {
+    font-size: 1.08rem;
+  }
+
+  .wp-step-description {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .wp-3d-wireframe-container {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* 7. Extra Small Foldables (< 380px) */
+@media (max-width: 379px) {
+  .wp-timeline-row {
+    grid-template-columns: 32px 1fr;
+    gap: 0.75rem;
+  }
+
+  .wp-step-capsule-badge {
+    width: 30px;
+    height: 70px;
+  }
+
+  .wp-capsule-text {
+    font-size: 0.62rem;
+  }
+
+  .wp-step-title {
+    font-size: 1rem;
+  }
+}

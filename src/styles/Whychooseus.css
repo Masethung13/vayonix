@@ -1,0 +1,826 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   Design Tokens (Exact Home & Top Section Brand Colors)
+   ========================================================================== */
+
+:root {
+  --wcu-bg: #03040f;
+  --wcu-card-bg: rgba(10, 14, 38, 0.78);
+  --wcu-card-border: rgba(255, 255, 255, 0.1);
+  --wcu-card-hover-border: rgba(139, 92, 246, 0.6);
+  --wcu-text-title: #ffffff;
+  --wcu-text-sub: #94a3b8;
+  --wcu-accent-purple: #8b5cf6;
+  --wcu-accent-cyan: #38bdf8;
+  --wcu-highlight-grad: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+  --wcu-highlight-hover: linear-gradient(135deg, #8b5cf6 0%, #7042f8 50%, #60a5fa 100%);
+  --wcu-glow-halo: rgba(139, 92, 246, 0.55);
+  --wcu-icon-bg: rgba(139, 92, 246, 0.12);
+  --wcu-icon-border: rgba(139, 92, 246, 0.3);
+  --wcu-capsule-bg: rgba(10, 14, 38, 0.88);
+}
+
+[data-theme="light"], body.theme-light {
+  --wcu-bg: #ffffff;
+  --wcu-card-bg: rgba(255, 255, 255, 0.94);
+  --wcu-card-border: rgba(217, 119, 6, 0.22);
+  --wcu-card-hover-border: rgba(217, 119, 6, 0.65);
+  --wcu-text-title: #0f172a;
+  --wcu-text-sub: #475569;
+  --wcu-accent-purple: #d97706;
+  --wcu-accent-cyan: #f59e0b;
+  --wcu-highlight-grad: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --wcu-highlight-hover: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --wcu-glow-halo: rgba(217, 119, 6, 0.45);
+  --wcu-icon-bg: rgba(217, 119, 6, 0.1);
+  --wcu-icon-border: rgba(217, 119, 6, 0.3);
+  --wcu-capsule-bg: rgba(248, 250, 252, 0.95);
+}
+
+/* ==========================================================================
+   Master Section Layout
+   ========================================================================== */
+
+.wcu-section-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 6.5rem 0 8.5rem 0;
+  background-color: var(--wcu-bg);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.4s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Ambient Backdrops */
+.wcu-bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(160px);
+  z-index: 1;
+}
+
+.wcu-glow-orange {
+  bottom: 5%;
+  right: -100px;
+  background: radial-gradient(circle, var(--wcu-glow-halo) 0%, transparent 70%);
+}
+
+.wcu-glow-purple {
+  top: 10%;
+  left: -150px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+}
+
+.wcu-main-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2.25rem;
+  box-sizing: border-box;
+}
+
+/* Two-Column Split Grid */
+.wcu-split-grid {
+  display: grid;
+  grid-template-columns: 1.18fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* ==========================================================================
+   LEFT COLUMN: HEADINGS & FEATURE DECK
+   ========================================================================== */
+
+.wcu-left-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Tag Badge */
+.wcu-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.wcu-spark-icon {
+  color: var(--wcu-accent-purple);
+  font-size: 0.95rem;
+  animation: sparkPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes sparkPulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.3) rotate(25deg); opacity: 1; filter: drop-shadow(0 0 8px var(--wcu-accent-purple)); }
+}
+
+.wcu-tag-label {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--wcu-accent-purple);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Headline */
+.wcu-main-heading {
+  font-size: clamp(2.35rem, 3.6vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  color: var(--wcu-text-title);
+  margin: 0 0 1.25rem 0;
+}
+
+.wcu-highlight-gradient {
+  background: var(--wcu-highlight-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px var(--wcu-glow-halo));
+}
+
+/* Sub-Description */
+.wcu-sub-description {
+  font-size: 0.96rem;
+  line-height: 1.68;
+  color: var(--wcu-text-sub);
+  margin: 0 0 2.5rem 0;
+  max-width: 520px;
+}
+
+/* Feature Deck Row (Card + Middle Floating Pills) */
+.wcu-feature-deck-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* 4-Feature Card Box */
+.wcu-dual-feature-card {
+  position: relative;
+  flex: 1;
+  background: var(--wcu-card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid var(--wcu-card-border);
+  border-radius: 26px;
+  padding: 1.85rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.wcu-dual-feature-card:hover {
+  border-color: var(--wcu-card-hover-border);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 32px var(--wcu-glow-halo);
+}
+
+.wcu-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
+  padding: 0.35rem 0;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.wcu-feature-item:hover,
+.wcu-feature-item.is-hovered {
+  transform: translateX(4px);
+}
+
+/* Neon Icon Box */
+.wcu-feature-icon-box {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--wcu-icon-bg);
+  border: 1px solid var(--wcu-icon-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wcu-accent-purple);
+  flex-shrink: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wcu-feat-svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.wcu-feature-item:hover .wcu-feature-icon-box {
+  background: var(--wcu-highlight-grad);
+  color: #ffffff;
+  border-color: transparent;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--wcu-glow-halo);
+}
+
+.wcu-feature-item:hover .wcu-feat-svg {
+  transform: scale(1.06);
+}
+
+.wcu-feat-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.wcu-feat-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--wcu-text-title);
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.01em;
+}
+
+.wcu-feat-desc {
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: var(--wcu-text-sub);
+  margin: 0;
+}
+
+/* Card Internal Divider */
+.wcu-card-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--wcu-card-border), transparent);
+  margin: 1.15rem 0;
+}
+
+/* Ambient Specular Hover Shine */
+.wcu-card-specular-shine {
+  position: absolute;
+  top: -50%;
+  left: -150%;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
+  transform: rotate(25deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+}
+
+[data-theme="light"] .wcu-card-specular-shine {
+  background: linear-gradient(115deg, transparent 15%, rgba(245, 158, 11, 0.3) 45%, rgba(251, 191, 36, 0.45) 50%, transparent 80%);
+}
+
+.wcu-dual-feature-card:hover .wcu-card-specular-shine {
+  left: 180%;
+}
+
+/* ==========================================================================
+   FLOATING VERTICAL PILLS (AVATARS + CONCENTRIC BADGE)
+   ========================================================================== */
+
+.wcu-floating-pills-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.15rem;
+  width: 84px;
+  flex-shrink: 0;
+}
+
+/* Vertical Capsule */
+.wcu-vertical-capsule {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  background: var(--wcu-capsule-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid var(--wcu-card-border);
+  border-radius: 9999px;
+  padding: 1.15rem 0.65rem 1.65rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.wcu-vertical-capsule:hover {
+  border-color: var(--wcu-card-hover-border);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 25px var(--wcu-glow-halo);
+}
+
+.wcu-avatar-plus-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--wcu-highlight-grad);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 10px var(--wcu-glow-halo);
+}
+
+.wcu-avatars-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.15rem;
+}
+
+.wcu-avatar-circle-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--wcu-bg);
+  margin-top: -10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.25s ease;
+}
+
+.wcu-avatar-circle-img:first-child {
+  margin-top: 0;
+}
+
+.wcu-vertical-capsule:hover .wcu-avatar-circle-img {
+  transform: scale(1.08);
+}
+
+.wcu-vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--wcu-text-sub);
+  white-space: nowrap;
+  margin-top: auto;
+}
+
+/* Concentric Waves Badge */
+.wcu-concentric-badge {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--wcu-capsule-bg);
+  border: 1.5px solid var(--wcu-card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wcu-accent-purple);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.wcu-concentric-badge:hover {
+  border-color: var(--wcu-card-hover-border);
+  transform: scale(1.1) rotate(45deg);
+  box-shadow: 0 0 25px var(--wcu-glow-halo);
+}
+
+.wcu-wave-svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: LARGE CIRCULAR PORTAL IMAGE WITH SCROLL TRIGGER 92%
+   ========================================================================== */
+
+.wcu-right-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.wcu-circular-portal-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Outer Radiant Glowing Crescent Rings */
+.wcu-crescent-aura {
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--wcu-glow-halo) 0%, transparent 70%);
+  opacity: 0.7;
+  filter: blur(25px);
+  pointer-events: none;
+}
+
+.wcu-crescent-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-right-color: var(--wcu-accent-cyan);
+  border-bottom-color: var(--wcu-accent-purple);
+  transform: rotate(35deg);
+  filter: drop-shadow(0 0 15px var(--wcu-glow-halo));
+  animation: crescentSpin 18s linear infinite;
+}
+
+@keyframes crescentSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Circular Team Image Frame */
+.wcu-circle-img-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .wcu-circle-img-frame {
+  border-color: rgba(217, 119, 6, 0.35);
+  box-shadow: 0 20px 50px rgba(217, 119, 6, 0.2);
+}
+
+.wcu-portal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wcu-circular-portal-wrapper:hover .wcu-portal-img {
+  transform: scale(1.06);
+}
+
+.wcu-img-soft-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 55%, rgba(3, 4, 15, 0.5) 100%);
+  pointer-events: none;
+}
+
+[data-theme="light"] .wcu-img-soft-vignette {
+  background: radial-gradient(circle at center, transparent 65%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+/* 92% Satisfied Clients Central Disc */
+.wcu-stats-disc {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(15%);
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(10, 14, 38, 0.95);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 3px solid var(--wcu-accent-purple);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 35px var(--wcu-glow-halo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .wcu-stats-disc {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: var(--wcu-accent-purple);
+  box-shadow: 0 15px 40px rgba(217, 119, 6, 0.35);
+}
+
+.wcu-stats-disc:hover {
+  transform: translateX(-50%) translateY(10%) scale(1.05);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.7), 0 0 45px var(--wcu-glow-halo);
+}
+
+.wcu-stats-disc-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.wcu-stats-number {
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1;
+  background: var(--wcu-highlight-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px var(--wcu-glow-halo));
+  margin-bottom: 0.35rem;
+}
+
+.wcu-stats-label {
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--wcu-text-title);
+  margin: 0;
+  max-width: 150px;
+}
+
+/* Bottom Corner Holographic Discs */
+.wcu-holographic-discs-accent {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 140px;
+  height: 90px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.wcu-holo-disc {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.4), rgba(139, 92, 246, 0.6) 60%, rgba(56, 189, 248, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transform: rotateX(60deg) rotateZ(-30deg);
+  transition: transform 0.4s ease;
+}
+
+[data-theme="light"] .wcu-holo-disc {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.6), rgba(245, 158, 11, 0.6) 60%, rgba(217, 119, 6, 0.8) 100%);
+}
+
+.disc-1 { bottom: 0; right: 0; }
+.disc-2 { bottom: 8px; right: 18px; opacity: 0.85; }
+.disc-3 { bottom: 16px; right: 36px; opacity: 0.65; }
+.disc-4 { bottom: 24px; right: 54px; opacity: 0.45; }
+
+.wcu-circular-portal-wrapper:hover .disc-1 { transform: rotateX(60deg) rotateZ(-30deg) translateY(-6px); }
+.wcu-circular-portal-wrapper:hover .disc-2 { transform: rotateX(60deg) rotateZ(-30deg) translateY(-12px); }
+
+/* ==========================================================================
+   Comprehensive Responsive Breakpoints (All Screen Sizes)
+   ========================================================================== */
+
+/* 1. Ultra-Wide Screens (> 1400px) */
+@media (min-width: 1400px) {
+  .wcu-circular-portal-wrapper {
+    max-width: 540px;
+  }
+}
+
+/* 2. Standard Laptops (1200px - 1399px) */
+@media (max-width: 1399px) {
+  .wcu-split-grid {
+    gap: 3rem;
+  }
+
+  .wcu-circular-portal-wrapper {
+    max-width: 480px;
+  }
+
+  .wcu-stats-disc {
+    width: 230px;
+    height: 230px;
+  }
+
+  .wcu-stats-number {
+    font-size: 3.2rem;
+  }
+}
+
+/* 3. Small Laptops (992px - 1199px) */
+@media (max-width: 1199px) {
+  .wcu-split-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .wcu-main-heading {
+    font-size: clamp(2.1rem, 3.2vw, 2.8rem);
+  }
+
+  .wcu-dual-feature-card {
+    padding: 1.6rem 1.4rem;
+  }
+
+  .wcu-circular-portal-wrapper {
+    max-width: 420px;
+  }
+
+  .wcu-stats-disc {
+    width: 200px;
+    height: 200px;
+  }
+
+  .wcu-stats-number {
+    font-size: 2.8rem;
+  }
+
+  .wcu-stats-label {
+    font-size: 0.8rem;
+  }
+}
+
+/* 4. Tablets (768px - 991px) */
+@media (max-width: 991px) {
+  .wcu-section-wrapper {
+    padding: 5rem 0 7rem 0;
+  }
+
+  .wcu-split-grid {
+    grid-template-columns: 1fr;
+    gap: 4.5rem;
+  }
+
+  .wcu-left-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .wcu-sub-description {
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .wcu-feature-deck-row {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .wcu-circular-portal-wrapper {
+    max-width: 460px;
+    margin: 0 auto;
+  }
+}
+
+/* 5. Large Mobile Devices (576px - 767px) */
+@media (max-width: 767px) {
+  .wcu-feature-deck-row {
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .wcu-floating-pills-col {
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .wcu-vertical-capsule {
+    flex-direction: row;
+    padding: 0.75rem 1.5rem;
+    gap: 0.85rem;
+    width: auto;
+  }
+
+  .wcu-vertical-text {
+    writing-mode: horizontal-tb;
+    transform: none;
+    margin-top: 0;
+  }
+
+  .wcu-avatars-stack {
+    flex-direction: row;
+    margin-bottom: 0;
+  }
+
+  .wcu-avatar-circle-img {
+    margin-top: 0;
+    margin-left: -8px;
+  }
+
+  .wcu-avatar-plus-badge {
+    margin-bottom: 0;
+  }
+
+  .wcu-circular-portal-wrapper {
+    max-width: 380px;
+  }
+
+  .wcu-stats-disc {
+    width: 190px;
+    height: 190px;
+  }
+
+  .wcu-stats-number {
+    font-size: 2.5rem;
+  }
+}
+
+/* 6. Small Mobile Screens (< 576px) */
+@media (max-width: 575px) {
+  .wcu-section-wrapper {
+    padding: 3.5rem 0 5.5rem 0;
+  }
+
+  .wcu-main-container {
+    padding: 0 1.15rem;
+  }
+
+  .wcu-main-heading {
+    font-size: clamp(1.85rem, 7.5vw, 2.3rem);
+  }
+
+  .wcu-sub-description {
+    font-size: 0.88rem;
+    margin-bottom: 2rem;
+  }
+
+  .wcu-dual-feature-card {
+    padding: 1.35rem 1.15rem;
+    border-radius: 20px;
+  }
+
+  .wcu-feature-item {
+    gap: 0.85rem;
+  }
+
+  .wcu-feature-icon-box {
+    width: 42px;
+    height: 42px;
+  }
+
+  .wcu-feat-svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .wcu-feat-title {
+    font-size: 1.02rem;
+  }
+
+  .wcu-feat-desc {
+    font-size: 0.8rem;
+  }
+
+  .wcu-floating-pills-col {
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .wcu-vertical-capsule {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wcu-circular-portal-wrapper {
+    max-width: 300px;
+  }
+
+  .wcu-stats-disc {
+    width: 165px;
+    height: 165px;
+    transform: translateX(-50%) translateY(22%);
+  }
+
+  .wcu-stats-number {
+    font-size: 2.2rem;
+  }
+
+  .wcu-stats-label {
+    font-size: 0.72rem;
+    max-width: 120px;
+  }
+
+  .wcu-holographic-discs-accent {
+    display: none;
+  }
+}

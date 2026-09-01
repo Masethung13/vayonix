@@ -9,6 +9,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import "../styles/SocialOrbit.css";
+import logo from "../assets/vayonix-logo1.png";
 
 export default function SocialOrbit() {
   return (
@@ -25,16 +26,15 @@ export default function SocialOrbit() {
         </div>
 
         {/* ============================================================
-            CENTER CORE (Brand 3D Metallic Badge)
+            CENTER CORE (Brand 3D Metallic Badge with Logo)
         ============================================================ */}
-        <div className="orbit-center-core" title="DigitalGrow">
+        <div className="orbit-center-core" title="Vayonix">
           <div className="core-ambient-glow" />
           <div className="core-pulse-ring ring-1" />
           <div className="core-pulse-ring ring-2" />
           <div className="core-inner-badge">
             <div className="core-glass-reflection" />
-            <span className="core-logo-text">DG</span>
-            <span className="core-sub-text">GROW</span>
+            <img src={logo} alt="Vayonix Brand Logo" className="core-logo-img" />
           </div>
         </div>
 
@@ -87,7 +87,7 @@ export default function SocialOrbit() {
             <div className="badge-specular-shine" />
             <div className="badge-3d-bevel" />
             <FaInstagram className="realistic-icon" />
-            <span className="realistic-tooltip">@DigitalGrow</span>
+            <span className="realistic-tooltip">@Vayonix</span>
           </a>
         </div>
 

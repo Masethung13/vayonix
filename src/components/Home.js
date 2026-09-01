@@ -50,6 +50,29 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Scroll Progress and Bottom-to-Top Button Visibility
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        const currentProgress = (window.scrollY / totalScroll) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, currentProgress)));
+      }
+      setShowScrollTop(window.scrollY > 220);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Subtle Interactive Mouse Parallax Effect
   const handleMouseMove = (e) => {
     if (!heroRef.current) return;
@@ -140,12 +163,12 @@ const Home = () => {
       </div>
 
       {/* =================================================================
-          TOP RIGHT POSITIONED SOCIAL ORBIT ANIMATION
+          TOP RIGHT POSITIONED SOCIAL ORBIT ANIMATION (Restored Old Position)
           ================================================================= */}
       <div
         className="home-top-right-orbit"
         style={{
-          transform: `translate3d(${mousePos.x * 10}px, ${mousePos.y * 10}px, 0)`,
+          transform: `translate3d(${mousePos.x * 12}px, ${mousePos.y * 12}px, 0)`,
         }}
       >
         <SocialOrbit />
@@ -228,7 +251,7 @@ const Home = () => {
                   </div>
                   <div className="mission-stat-divider"></div>
                   <div className="mission-stat">
-                    <span className="stat-num accent-purple">{counts.satisfaction}%</span>
+                    <span className="stat-num">{counts.satisfaction}%</span>
                     <span className="stat-label">Client Satisfaction</span>
                   </div>
                 </div>
@@ -239,9 +262,49 @@ const Home = () => {
       </div>
 
       {/* =================================================================
-          RIGHT BOTTOM FLOATING DARK & LIGHT THEME TOGGLE BUTTON
+          RIGHT BOTTOM FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME TOGGLE)
           ================================================================= */}
-      <div className="theme-toggle-container">
+      <div className="floating-action-cluster">
+        {/* Bottom to Top Button with Circular SVG Scroll Progress Loader */}
+        <button
+          className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
+          onClick={scrollToTop}
+          aria-label="Scroll back to top"
+          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+        >
+          {/* Circular SVG Progress Ring */}
+          <svg className="scroll-progress-svg" viewBox="0 0 48 48">
+            <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
+            <circle
+              className="scroll-progress-bar"
+              cx="24"
+              cy="24"
+              r="20"
+              style={{
+                strokeDasharray: 125.66,
+                strokeDashoffset: 125.66 - (scrollProgress / 100) * 125.66,
+              }}
+            />
+          </svg>
+
+          {/* Centered Upward Arrow Icon */}
+          <div className="scroll-arrow-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
+              <path
+                d="M12 19V5M5 12L12 5L19 12"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* Ambient Glow */}
+          <div className="scroll-btn-glow" />
+        </button>
+
+        {/* Theme Toggle Button */}
         <button
           className="theme-toggle-btn"
           onClick={toggleTheme}
