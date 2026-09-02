@@ -17,7 +17,7 @@ const Header = () => {
     { name: 'Home', path: '/', isHash: false },
     { name: 'About Us', path: '/about', isHash: false },
     { name: 'Services', path: '/services', isHash: false },
-    { name: 'Process', path: isDedicatedPage ? '/#working-process' : '#working-process', isHash: !isDedicatedPage },
+    { name: 'Blogs', path: isDedicatedPage ? '/#working-process' : '#working-process', isHash: !isDedicatedPage },
     { name: 'Contact', path: isDedicatedPage ? '/#contact' : '#contact', isHash: !isDedicatedPage },
   ];
 

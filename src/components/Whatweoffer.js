@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ScrollTitle from './ScrollTitle';
+import useScrollReveal from '../hooks/useScrollReveal';
 import '../styles/Whatweoffer.css';
 
 // Import rich showcase assets for each service
@@ -7,7 +8,6 @@ import imgWebDev from '../assets/abt-dual-monitor.jpg';
 import imgMobileApp from '../assets/abt-team-laptop.jpg';
 import imgSeo from '../assets/service-icon-seo.jpg';
 import imgSocial from '../assets/service-icon-social.jpg';
-import imgPpc from '../assets/service-icon-ppc.jpg';
 import imgContent from '../assets/case-study-saas.jpg';
 import imgEmail from '../assets/case-study-fintech.jpg';
 import imgAnalytics from '../assets/service-purple-rocket.jpg';
@@ -22,17 +22,17 @@ const timelineServices = [
     desc: 'We engineer ultra-fast Next.js and React architectures, robust microservice APIs, and secure zero-latency cloud infrastructure built for high concurrency and conversion acceleration.',
     image: imgWebDev,
     pills: [
-      { icon: '⚡', label: 'Next.js & React' },
+      { icon: '⚡', label: 'React js & Python' },
       { icon: '🔌', label: 'High-Speed APIs' },
       { icon: '☁', label: 'Edge Hosting' },
       { icon: '🛡', label: 'Enterprise Security' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
     number: '02',
     step: 'STEP 02',
-    title: 'Mobile App Engineering',
+    title: 'Mobile App',
     tagline: 'Native 60fps Performance & Fluid Micro-Interactions.',
     desc: 'Our mobile engineers craft native and cross-platform apps for iOS and Android with sub-second launch speeds, biometric authentication, and seamless offline data synchronization.',
     image: imgMobileApp,
@@ -42,7 +42,7 @@ const timelineServices = [
       { icon: '🔄', label: 'Offline Sync' },
       { icon: '🔒', label: 'Biometrics' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
     number: '03',
@@ -57,7 +57,7 @@ const timelineServices = [
       { icon: '🌐', label: 'Authority Backlinks' },
       { icon: '🚀', label: 'Core Web Vitals' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
     number: '04',
@@ -72,26 +72,11 @@ const timelineServices = [
       { icon: '📢', label: 'Influencer Funnels' },
       { icon: '📈', label: 'Social Telemetry' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
     number: '05',
     step: 'STEP 05',
-    title: 'Pay Per Click Advertising (PPC)',
-    tagline: 'Targeted Buyer Traffic with Peak ROAS Multipliers.',
-    desc: 'Maximize customer acquisition efficiency with Google Search Ads, Programmatic DSP, and Meta retargeting matrices designed with algorithmic real-time bid optimization.',
-    image: imgPpc,
-    pills: [
-      { icon: '🎯', label: 'High-Intent Search' },
-      { icon: '🤖', label: 'Predictive Bidding' },
-      { icon: '🔄', label: 'Retargeting Funnels' },
-      { icon: '🧪', label: 'A/B Split Testing' }
-    ],
-    link: '#contact'
-  },
-  {
-    number: '06',
-    step: 'STEP 06',
     title: 'Content Marketing & Brand Resonance',
     tagline: 'Persuasive Storytelling That Turns Prospects Into Clients.',
     desc: 'Create captivating long-form whitepapers, conversion copy, and viral lead magnets that educate, establish domain leadership, and systematically nurture cold prospects.',
@@ -102,11 +87,11 @@ const timelineServices = [
       { icon: '🎨', label: 'Tone-of-Voice' },
       { icon: '🔄', label: 'Multi-Format Repurposing' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
-    number: '07',
-    step: 'STEP 07',
+    number: '06',
+    step: 'STEP 06',
     title: 'Email Marketing & CRM Automation',
     tagline: 'Automated Lifecycle Flows That Drive Repeat Revenue.',
     desc: 'Build high-converting behavioral email automations, personalized SMS sequences, and VIP loyalty nurture flows that multiply customer lifetime value on autopilot.',
@@ -117,11 +102,11 @@ const timelineServices = [
       { icon: '🔥', label: 'Inbox Deliverability' },
       { icon: '💬', label: 'Omnichannel CRM' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
-    number: '08',
-    step: 'STEP 08',
+    number: '07',
+    step: 'STEP 07',
     title: 'Analytics & Performance Telemetry',
     tagline: 'Clear Predictive Business Intelligence & Attribution.',
     desc: 'Eliminate revenue blindspots with multi-touch attribution, server-side tracking, and custom executive BI dashboards that turn raw marketing metrics into profitable decisions.',
@@ -132,11 +117,11 @@ const timelineServices = [
       { icon: '⚙', label: 'Server-Side GTM' },
       { icon: '🔮', label: 'Predictive Cohort LTV' }
     ],
-    link: '#contact'
+    link: '/#contact'
   },
   {
-    number: '09',
-    step: 'STEP 09',
+    number: '08',
+    step: 'STEP 08',
     title: 'Video Production & Motion Editing',
     tagline: 'High-Impact Cinematic Ads That Stop the Scroll.',
     desc: 'Produce cinematic commercial films, 3D motion graphics, VFX animations, and high-energy social ads that capture immediate attention and inspire massive action.',
@@ -147,14 +132,27 @@ const timelineServices = [
       { icon: '📱', label: 'Reels & TikToks' },
       { icon: '🎧', label: 'Audio Mastering' }
     ],
-    link: '#contact'
+    link: '/#contact'
   }
 ];
 
 const Whatweoffer = () => {
+  // Activate continuous scroll reveal animations for fade-left, fade-right, fade-up
+  useScrollReveal(0.08);
+
   const timelineRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeNodes, setActiveNodes] = useState({});
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Handle subtle interactive mouse parallax for background 3D elements
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth - 0.5) * 30;
+    const y = (clientY / innerHeight - 0.5) * 30;
+    setMousePos({ x, y });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -189,14 +187,99 @@ const Whatweoffer = () => {
   }, []);
 
   return (
-    <section className="wwo-section-wrapper" id="services-grid">
-      
-      {/* Volumetric Atmospheric Over-Lighting Glow Halos */}
-      <div className="wwo-ambient-glow wwo-ambient-glow-1" />
-      <div className="wwo-ambient-glow wwo-ambient-glow-2" />
+    <section
+      className="wwo-section-wrapper"
+      id="services-grid"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Dynamic 3D Moving Background Elements with Parallax Depth Layers */}
+      <div className="wwo-3d-bg-canvas" aria-hidden="true">
+        {/* Layer 1: 3D Crystal Diamonds */}
+        <div
+          className="wwo-3d-elem wwo-3d-diamond elem-1"
+          style={{ transform: `translate3d(${mousePos.x * 0.7}px, ${mousePos.y * 0.7}px, 0)` }}
+        >
+          <div className="wwo-diamond-face" />
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-diamond elem-2"
+          style={{ transform: `translate3d(${mousePos.x * -0.9}px, ${mousePos.y * -0.9}px, 0)` }}
+        >
+          <div className="wwo-diamond-face" />
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-diamond elem-3"
+          style={{ transform: `translate3d(${mousePos.x * 0.6}px, ${mousePos.y * 0.6}px, 0)` }}
+        >
+          <div className="wwo-diamond-face" />
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-diamond elem-4"
+          style={{ transform: `translate3d(${mousePos.x * -0.8}px, ${mousePos.y * -0.8}px, 0)` }}
+        >
+          <div className="wwo-diamond-face" />
+        </div>
+
+        {/* Layer 2: 3D Multi-Point Stars */}
+        <div
+          className="wwo-3d-elem wwo-3d-star elem-star-1"
+          style={{ transform: `translate3d(${mousePos.x * 1.2}px, ${mousePos.y * 1.2}px, 0)` }}
+        >
+          <span className="wwo-star-sparkle">✦</span>
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-star elem-star-2"
+          style={{ transform: `translate3d(${mousePos.x * -1.1}px, ${mousePos.y * -1.1}px, 0)` }}
+        >
+          <span className="wwo-star-sparkle">✦</span>
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-star elem-star-3"
+          style={{ transform: `translate3d(${mousePos.x * 0.9}px, ${mousePos.y * 0.9}px, 0)` }}
+        >
+          <span className="wwo-star-sparkle">✦</span>
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-star elem-star-4"
+          style={{ transform: `translate3d(${mousePos.x * -0.85}px, ${mousePos.y * -0.85}px, 0)` }}
+        >
+          <span className="wwo-star-sparkle">✦</span>
+        </div>
+
+        {/* Layer 3: 3D Holographic Orbit Rings & Crosshairs */}
+        <div
+          className="wwo-3d-elem wwo-3d-ring elem-ring-1"
+          style={{ transform: `translate3d(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px, 0)` }}
+        />
+
+        <div
+          className="wwo-3d-elem wwo-3d-ring elem-ring-2"
+          style={{ transform: `translate3d(${mousePos.x * -0.6}px, ${mousePos.y * -0.6}px, 0)` }}
+        />
+
+        <div
+          className="wwo-3d-elem wwo-3d-crosshair elem-cross-1"
+          style={{ transform: `translate3d(${mousePos.x * 1.3}px, ${mousePos.y * 1.3}px, 0)` }}
+        >
+          +
+        </div>
+
+        <div
+          className="wwo-3d-elem wwo-3d-crosshair elem-cross-2"
+          style={{ transform: `translate3d(${mousePos.x * -1.2}px, ${mousePos.y * -1.2}px, 0)` }}
+        >
+          +
+        </div>
+      </div>
 
       <div className="wwo-container">
-        
+
         {/* Section Header Block */}
         <div className="wwo-header-block" data-reveal="fade-up">
           <div className="wwo-tag-pill">
@@ -226,7 +309,7 @@ const Whatweoffer = () => {
 
         {/* Central Vertical Laser Timeline */}
         <div className="wwo-timeline-container" ref={timelineRef}>
-          
+
           {/* Vertical Dual-Rail Spine with Real-Time Laser Progression */}
           <div className="wwo-timeline-spine-track">
             <div
@@ -235,7 +318,6 @@ const Whatweoffer = () => {
             >
               {/* High-Lumen Diamond Flare Beacon */}
               <div className="wwo-timeline-laser-beacon">
-                <div className="wwo-beacon-ring" />
                 <div className="wwo-beacon-diamond" />
               </div>
             </div>
@@ -249,7 +331,7 @@ const Whatweoffer = () => {
 
               return (
                 <div key={svc.number} className="wwo-timeline-row">
-                  
+
                   {/* Left Slot */}
                   <div
                     className="wwo-timeline-slot-left"
@@ -276,7 +358,7 @@ const Whatweoffer = () => {
                         <h3 className="wwo-card-main-title">{svc.title}</h3>
                         <div className="wwo-card-tagline">{svc.tagline}</div>
                         <p className="wwo-card-paragraph">{svc.desc}</p>
-                        
+
                         <div className="wwo-pill-capsules-wrap">
                           {svc.pills.map((pill, pIdx) => (
                             <div key={pIdx} className="wwo-pill-capsule">
@@ -288,7 +370,7 @@ const Whatweoffer = () => {
 
                         <div className="wwo-action-link-row">
                           <a href={svc.link} className="wwo-learn-more-action">
-                            <span>EXPLORE STRATEGY</span>
+                            <span>CONTACT US</span>
                             <span className="wwo-learn-arrow-symbol">→</span>
                           </a>
                         </div>
@@ -325,7 +407,7 @@ const Whatweoffer = () => {
                         <h3 className="wwo-card-main-title">{svc.title}</h3>
                         <div className="wwo-card-tagline">{svc.tagline}</div>
                         <p className="wwo-card-paragraph">{svc.desc}</p>
-                        
+
                         <div className="wwo-pill-capsules-wrap">
                           {svc.pills.map((pill, pIdx) => (
                             <div key={pIdx} className="wwo-pill-capsule">
@@ -337,7 +419,7 @@ const Whatweoffer = () => {
 
                         <div className="wwo-action-link-row">
                           <a href={svc.link} className="wwo-learn-more-action">
-                            <span>EXPLORE STRATEGY</span>
+                            <span>CONTACT US</span>
                             <span className="wwo-learn-arrow-symbol">→</span>
                           </a>
                         </div>

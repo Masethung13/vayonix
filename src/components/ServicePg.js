@@ -136,7 +136,7 @@ const ServicePg = () => {
 
   return (
     <div className="svc-page-wrapper" onMouseMove={handleMouseMove}>
-      
+
       {/* =====================================================================
           1. TOP BANNER: HERO HEADER WITH CINEMATIC BREADCRUMBS (Matches Abt.js)
           ===================================================================== */}
@@ -165,7 +165,7 @@ const ServicePg = () => {
           2. HERO SHOWCASE SECTION (Matches Abt.js Design System & ScrollTitle)
           ===================================================================== */}
       <section className="svc-hero-section">
-        
+
         {/* 3D Background Canvas with 8 Parallax Stars & Neon Splines (Matches Abt.js) */}
         <div
           className="svc-3d-loop-canvas"
@@ -177,7 +177,7 @@ const ServicePg = () => {
           <div className="svc-glow svc-glow-1" />
           <div className="svc-glow svc-glow-2" />
           <div className="svc-glow svc-glow-3" />
-          
+
           {/* 8 Multi-Depth 3D Moving Twinkle Star Prisms */}
           <div className="svc-3d-star-prism svc-star-1" style={{ transform: `translate3d(${mousePos.x * -18}px, ${mousePos.y * -18}px, 0)` }}>✦</div>
           <div className="svc-3d-star-prism svc-star-2" style={{ transform: `translate3d(${mousePos.x * 22}px, ${mousePos.y * 22}px, 0)` }}>✦</div>
@@ -219,13 +219,13 @@ const ServicePg = () => {
         </div>
 
         <div className="svc-main-container">
-          
+
           {/* Top Split: Left Content + Right Image Frame (Matches Abt.js) */}
           <div className="svc-hero-split-grid">
-            
+
             {/* Left Column: Headlines, CTAs */}
             <div className="svc-hero-left-content" data-reveal="fade-right">
-              
+
               {/* Floating Spark on Left */}
               <span className="svc-hero-spark-decor">✦</span>
 
@@ -305,7 +305,7 @@ const ServicePg = () => {
               4. FULL-WIDTH GLOWING CYBER METRICS BANNER
               ================================================================= */}
           <div className="svc-cyber-metrics-card" data-reveal="fade-up">
-            
+
             <div className="svc-metrics-inner-grid">
               {metricsStats.map((stat, idx) => (
                 <div key={idx} className="svc-cyber-stat-item" data-reveal="zoom-in">
