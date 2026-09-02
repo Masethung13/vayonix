@@ -1,11 +1,9 @@
 /* ==========================================================================
-   Ourvalues Component Stylesheet (Card-Free Ultra-Modern Architecture)
-   Exact Cyber Colors from Abt.css & Mission.css for Dark & Light Themes
-   Fully Responsive for Large Laptop, Small Laptop, Tablet, and Mobile
+   Ourvalues Component Stylesheet (Overlap & Stacking Context Fixed)
    ========================================================================== */
 
 :root {
-  /* Dark Theme Variables (Matches Abt.css) */
+  /* Dark Theme Variables */
   --ov-bg: #03040f;
   --ov-text-main: #ffffff;
   --ov-text-muted: #94a3b8;
@@ -26,7 +24,7 @@
 
 [data-theme="light"],
 body.theme-light {
-  /* Light Theme Variables (Matches Abt.css) */
+  /* Light Theme Variables */
   --ov-bg: #ffffff;
   --ov-text-main: #0f172a;
   --ov-text-muted: #64748b;
@@ -46,7 +44,7 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Master Section & Background
+   Master Section (Isolated Stacking Context to prevent external leakage)
    ========================================================================== */
 
 .ov-section-wrapper {
@@ -55,9 +53,11 @@ body.theme-light {
   background: var(--ov-bg);
   padding: clamp(4.5rem, 7vw, 7.5rem) 0;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: hidden; /* Clips glowing elements from leaking into other pages */
+  isolation: isolate; /* Creates independent stacking context */
   transition: background 0.4s ease;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  z-index: 1;
 }
 
 /* 3D Background Canvas */
@@ -67,7 +67,7 @@ body.theme-light {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   overflow: hidden;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -117,7 +117,7 @@ body.theme-light {
   100% { transform: translate(40px, -40px) scale(1.12); }
 }
 
-/* 3D Twinkle Star Prisms System */
+/* 3D Twinkle Star Prisms */
 .ov-3d-star-prism {
   position: absolute;
   font-size: 1.8rem;
@@ -201,29 +201,10 @@ body.theme-light {
   animation: ovStarTwinkle2 6.8s ease-in-out infinite alternate-reverse;
 }
 
-[data-theme="light"] .star-1,
-[data-theme="light"] .star-6 {
-  color: #d97706;
-  filter: drop-shadow(0 0 12px rgba(217, 119, 6, 0.7));
-}
-
-[data-theme="light"] .star-2,
-[data-theme="light"] .star-7 {
-  color: #ea580c;
-  filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.7));
-}
-
-[data-theme="light"] .star-3,
-[data-theme="light"] .star-5 {
-  color: #f59e0b;
-  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.7));
-}
-
-[data-theme="light"] .star-4,
-[data-theme="light"] .star-8 {
-  color: #b45309;
-  filter: drop-shadow(0 0 10px rgba(180, 83, 9, 0.6));
-}
+[data-theme="light"] .star-1, [data-theme="light"] .star-6 { color: #d97706; filter: drop-shadow(0 0 12px rgba(217, 119, 6, 0.7)); }
+[data-theme="light"] .star-2, [data-theme="light"] .star-7 { color: #ea580c; filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.7)); }
+[data-theme="light"] .star-3, [data-theme="light"] .star-5 { color: #f59e0b; filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.7)); }
+[data-theme="light"] .star-4, [data-theme="light"] .star-8 { color: #b45309; filter: drop-shadow(0 0 10px rgba(180, 83, 9, 0.6)); }
 
 @keyframes ovStarTwinkle1 {
   0% { transform: scale(0.7) rotate(0deg); opacity: 0.35; }
@@ -244,20 +225,21 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Main Content Layout & Seamless Blocks
+   Main Content Layout (Block Flow to Prevent Pin-Spacer Collapse)
    ========================================================================== */
 
 .ov-main-container {
   position: relative;
-  z-index: 5;
+  z-index: 2;
   width: 100%;
   max-width: 1360px;
   margin: 0 auto;
   padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3.5rem, 6vw, 6rem);
+}
+
+.ov-values-block {
+  margin-bottom: clamp(3rem, 5vw, 4.5rem);
 }
 
 .ov-tier-divider {
@@ -265,18 +247,16 @@ body.theme-light {
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, var(--ov-divider) 20%, var(--ov-accent-cyan) 50%, var(--ov-divider) 80%, transparent 100%);
   opacity: 0.6;
+  margin: clamp(2rem, 4vw, 3.5rem) 0;
 }
 
 /* ==========================================================================
-   Seamless Block Layouts (Our Values & Our Process)
+   Block 1: Our Values
    ========================================================================== */
 
 .ov-seamless-block {
   position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 3.5vw, 3.5rem);
 }
 
 .ov-seamless-header-row {
@@ -285,6 +265,7 @@ body.theme-light {
   justify-content: space-between;
   gap: 2rem;
   width: 100%;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
 }
 
 .ov-block-header {
@@ -341,7 +322,6 @@ body.theme-light {
   transition: color 0.3s ease;
 }
 
-/* Header Flow Decor Line */
 .ov-header-flow-decor {
   display: flex;
   align-items: center;
@@ -365,10 +345,7 @@ body.theme-light {
   filter: drop-shadow(0 0 8px var(--ov-accent-cyan));
 }
 
-/* ==========================================================================
-   Seamless 4 Items Grid (Consistent across Large & Small Laptops)
-   ========================================================================== */
-
+/* Values 4 Items Grid */
 .ov-seamless-items-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -384,8 +361,9 @@ body.theme-light {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0.5rem;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1.25rem 0.75rem;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
@@ -393,7 +371,6 @@ body.theme-light {
   transform: translateY(-6px);
 }
 
-/* Minimal Luminous Icon Node */
 .ov-item-icon-node {
   position: relative;
   width: 58px;
@@ -437,7 +414,6 @@ body.theme-light {
   opacity: 0.85;
 }
 
-/* Titles & Descriptions */
 .ov-item-title {
   font-size: clamp(1.2rem, 1.4vw, 1.45rem);
   font-weight: 750;
@@ -463,7 +439,6 @@ body.theme-light {
   color: var(--ov-text-sub);
 }
 
-/* Expanding Underline Accent */
 .ov-item-hover-line {
   width: 32px;
   height: 2.5px;
@@ -480,82 +455,243 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Block 2: Our Process Track with Continuous Horizontal Line
+   BLOCK 2: OUR PROCESS (Pinned Scroll Section)
    ========================================================================== */
 
+.ov-process-pinned-wrapper {
+  position: relative;
+  width: 100%;
+  margin: clamp(2rem, 3.5vw, 3rem) 0;
+  background: transparent;
+}
+
+.ov-process-block {
+  position: relative;
+  width: 100%;
+  background: transparent;
+}
+
+/* Status Pill */
+.ov-process-live-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 1.15rem;
+  background: var(--ov-tag-bg);
+  border: 1px solid var(--ov-tag-border);
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-bottom: 0.8rem;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+  transition: all 0.35s ease;
+}
+
+.ov-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.ov-status-text {
+  font-size: 0.82rem;
+  font-weight: 750;
+  color: var(--ov-text-main);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Horizontal Track */
 .ov-process-track-container {
   position: relative;
   width: 100%;
+  padding-top: 1rem;
 }
 
 .ov-process-continuous-line {
   position: absolute;
   top: 4.8rem;
-  left: 6%;
-  right: 6%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--ov-accent-cyan) 25%, var(--ov-accent-purple) 50%, var(--ov-accent-pink) 75%, transparent 100%);
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  background: var(--ov-divider);
   border-radius: 9999px;
-  overflow: hidden;
-  box-shadow: 0 0 12px var(--ov-glow-blue);
+  overflow: visible;
   z-index: 1;
+}
+
+.ov-process-line-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #38bdf8 0%,
+    #818cf8 35%,
+    #a855f7 70%,
+    #ec4899 100%
+  );
+  border-radius: 9999px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  box-shadow: 0 0 16px var(--ov-glow-blue), 0 0 30px var(--ov-glow-purple);
+  will-change: transform;
+}
+
+[data-theme="light"] .ov-process-line-fill {
+  background: linear-gradient(90deg, #ea580c 0%, #f59e0b 50%, #fbbf24 100%);
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.7);
 }
 
 .ov-process-line-pulse {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 80px;
+  top: -1px;
+  left: -100%;
+  width: 60px;
+  height: 5px;
   background: linear-gradient(90deg, transparent, #ffffff, transparent);
-  animation: processPulseFlow 4s ease-in-out infinite;
+  animation: processLaserFlow 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  border-radius: 9999px;
 }
 
-@keyframes processPulseFlow {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(1200%); }
+@keyframes processLaserFlow {
+  0% { left: -100%; }
+  60%, 100% { left: 200%; }
+}
+
+/* Process Step Cards */
+.ov-process-step-item {
+  position: relative;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 24px;
+  padding: 1.5rem 1rem;
+  opacity: 0.45;
+  filter: blur(0.5px);
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.4s ease,
+              background 0.4s ease,
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+  will-change: transform, opacity, filter;
+}
+
+.ov-card-ambient-glow {
+  position: absolute;
+  inset: -15px;
+  border-radius: 35px;
+  background: radial-gradient(circle at 50% 30%, var(--proc-accent) 0%, transparent 70%);
+  opacity: 0;
+  filter: blur(28px);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+}
+
+.ov-process-step-item.is-illuminated {
+  opacity: 1 !important;
+  filter: blur(0px) !important;
+  transform: translateY(-8px) scale(1.04) !important;
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .ov-process-step-item.is-illuminated {
+  background: rgba(217, 119, 6, 0.03);
+  border-color: rgba(217, 119, 6, 0.25);
+  box-shadow: 0 16px 40px rgba(217, 119, 6, 0.12);
+}
+
+.ov-process-step-item.is-illuminated .ov-card-ambient-glow {
+  opacity: 0.5;
 }
 
 .ov-process-step-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--ov-bg);
-  border: 1.5px solid var(--ov-accent-cyan);
-  box-shadow: 0 0 12px var(--ov-glow-blue);
-  margin-bottom: 0.9rem;
+  border: 1.5px solid var(--ov-divider);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
   position: relative;
   z-index: 3;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ov-step-digit {
-  font-size: 0.92rem;
+  font-size: 0.96rem;
   font-weight: 800;
-  color: var(--ov-accent-cyan);
+  color: var(--ov-text-muted);
   letter-spacing: -0.01em;
+  transition: color 0.3s ease;
 }
 
-.ov-seamless-item:hover .ov-process-step-badge {
-  transform: scale(1.15);
-  border-color: var(--ov-accent-pink);
-  box-shadow: 0 0 18px var(--ov-accent-pink);
+.ov-process-step-item.is-illuminated .ov-process-step-badge {
+  transform: scale(1.18);
+  border-color: var(--proc-accent);
+  box-shadow: 0 0 25px var(--proc-accent);
 }
 
-.ov-seamless-item:hover .ov-step-digit {
-  color: var(--ov-accent-pink);
+.ov-process-step-item.is-illuminated .ov-step-digit {
+  color: #ffffff;
+  text-shadow: 0 0 10px var(--proc-accent);
 }
 
-/* ==========================================================================
-   Block 3: CTA HERO BANNER (Seamless Floating Layout)
-   ========================================================================== */
+[data-theme="light"] .ov-process-step-item.is-illuminated .ov-step-digit {
+  color: var(--proc-accent);
+}
+
+.ov-process-step-item.is-completed:not(.is-illuminated) .ov-process-step-badge {
+  border-color: var(--ov-accent-cyan);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.ov-process-step-item.is-completed:not(.is-illuminated) .ov-step-digit {
+  color: var(--ov-accent-cyan);
+}
+
+.ov-process-step-item.is-illuminated .ov-item-icon-node {
+  transform: scale(1.15) translateY(-2px);
+  color: var(--proc-accent);
+}
+
+.ov-process-step-item.is-illuminated .ov-icon-svg {
+  filter: drop-shadow(0 0 18px var(--proc-accent));
+}
+
+.ov-process-step-item.is-illuminated .ov-item-title {
+  color: var(--proc-accent);
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.2);
+}
+
+.ov-process-step-item.is-illuminated .ov-item-desc {
+  color: var(--ov-text-main);
+}
+
+.ov-process-step-item.is-illuminated .ov-item-hover-line {
+  width: 90px;
+  background: var(--proc-accent);
+  box-shadow: 0 0 20px var(--proc-accent);
+}
+
+/* ============================================================
+   BLOCK 3: CTA HERO BANNER
+   ============================================================ */
 
 .ov-cta-seamless-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 1rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
 }
 
 .ov-cta-split-layout {
@@ -592,7 +728,6 @@ body.theme-light {
   transition: color 0.3s ease;
 }
 
-/* Luxury Consultation Button */
 .ov-cta-consult-btn {
   position: relative;
   display: inline-flex;
@@ -749,15 +884,14 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Comprehensive Responsive Breakpoints
-   Large Laptop (1440px+), Small Laptop (1024px-1366px), Tablet (768px-1023px), Mobile (<768px)
+   Responsive Breakpoints
    ========================================================================== */
 
 /* Small Laptops (1024px to 1280px) */
 @media (max-width: 1280px) and (min-width: 1024px) {
   .ov-seamless-items-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   .ov-item-title {
@@ -768,13 +902,18 @@ body.theme-light {
     font-size: 0.88rem;
     line-height: 1.6;
   }
+
+  .ov-process-continuous-line {
+    left: 10%;
+    right: 10%;
+  }
 }
 
 /* Tablet Landscape & Portrait (768px to 1023px) */
 @media (max-width: 1023px) {
   .ov-seamless-items-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem 2rem;
+    gap: 2rem;
   }
 
   .ov-process-continuous-line {
@@ -785,6 +924,12 @@ body.theme-light {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .ov-process-step-item {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
 
   .ov-header-flow-decor {
@@ -822,7 +967,6 @@ body.theme-light {
 
   .ov-main-container {
     padding: 0 1.25rem;
-    gap: 3.5rem;
   }
 
   .ov-block-header {
@@ -843,7 +987,7 @@ body.theme-light {
 
   .ov-seamless-items-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
     max-width: 420px;
     margin: 0 auto;
   }
