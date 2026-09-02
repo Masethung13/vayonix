@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
 /* ==========================================================================
-   Design Tokens (Exact Home Section Brand Colors for Dark & Light Themes)
+   Design Tokens
    ========================================================================== */
 
 :root {
@@ -16,6 +16,11 @@
   --srv-tag-bg: rgba(255, 255, 255, 0.05);
   --srv-tag-border: rgba(255, 255, 255, 0.12);
   --srv-item-border: rgba(255, 255, 255, 0.08);
+
+  /* Cube Mathematical Geometry */
+  --cube-width: 530px;
+  --cube-height: 340px;
+  --cube-depth: 170px; /* Half of height for true center 3D pivot */
 }
 
 [data-theme="light"],
@@ -34,18 +39,21 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Clean Open Services Section (No Outer Enclosing Box)
+   1. PINNED SERVICES MASTER SECTION
    ========================================================================== */
 
-.clean-services-section {
+.pinned-services-section {
   position: relative;
   width: 100%;
-  padding: 6rem 0 8rem 0;
+  height: 100vh; /* Pinned viewport height */
+  min-height: 100vh;
   background-color: var(--srv-bg);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  transition: background-color 0.4s ease;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Ambient Neon Glow Backdrops */
@@ -60,34 +68,33 @@ body.theme-light {
 }
 
 .services-glow-1 {
-  top: 20%;
-  right: -120px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  top: 15%;
+  right: -100px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
 }
 
 .services-glow-2 {
-  bottom: 15%;
-  left: -120px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, transparent 70%);
+  bottom: 10%;
+  left: -100px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
 }
 
-[data-theme="light"] .services-glow-1,
-[data-theme="light"] .services-glow-2 {
-  background: radial-gradient(circle, rgba(217, 119, 6, 0.16) 0%, transparent 70%);
-}
-
-.clean-services-container {
+.pinned-services-container {
   position: relative;
   z-index: 5;
   width: 100%;
   max-width: 1360px;
   margin: 0 auto;
   padding: 0 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   box-sizing: border-box;
 }
 
 /* ==========================================================================
-   Clean Section Header
+   Section Header
    ========================================================================== */
 
 .services-header-clean {
@@ -95,125 +102,85 @@ body.theme-light {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 4.5rem;
+  margin-bottom: 2rem;
 }
 
 .services-tag-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.45rem 1.15rem;
+  padding: 0.35rem 1rem;
   background: var(--srv-tag-bg);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--srv-tag-border);
   border-radius: 9999px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .tag-sparkle {
   color: var(--srv-accent-purple);
-  font-size: 0.95rem;
-  animation: sparkleTwinkle 2.5s infinite ease-in-out;
-}
-
-@keyframes sparkleTwinkle {
-
-  0%,
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 0.8;
-  }
-
-  50% {
-    transform: scale(1.3) rotate(20deg);
-    opacity: 1;
-    filter: drop-shadow(0 0 6px var(--srv-accent-purple));
-  }
+  font-size: 0.9rem;
 }
 
 .tag-title {
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--srv-text-sub);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .services-main-heading {
-  font-size: clamp(2.3rem, 3.8vw, 3.4rem);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
   font-weight: 900;
-  line-height: 1.14;
+  line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--srv-text-title);
-  margin-bottom: 1rem;
-  max-width: 850px;
-}
-
-.heading-gradient-word {
-  background: var(--srv-accent-grad);
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px var(--srv-glow-halo));
-}
-
-.services-sub-heading {
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: var(--srv-text-sub);
-  max-width: 650px;
+  margin: 0;
 }
 
 /* ==========================================================================
-   Clean Dual Body Layout (No Heavy Boxes)
+   2. 2-COLUMN STAGE LAYOUT
    ========================================================================== */
 
-.clean-services-body {
-  display: grid;
-  grid-template-columns: 1.1fr 1.05fr;
-  gap: 4.5rem;
-  align-items: flex-start;
-  width: 100%;
-}
-
-/* ==========================================================================
-   LEFT SIDE: OPEN LIST OF SERVICES (Smooth One-by-One Fade As You Scroll)
-   ========================================================================== */
-
-.clean-services-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4.5rem;
-  width: 100%;
-}
-
-.clean-service-item {
+.services-stage-body {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 3.5rem;
-  border-bottom: 1px solid var(--srv-item-border);
-  opacity: 0.35;
-  transform: translateY(20px);
-  filter: blur(1.5px);
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.45s ease;
-  will-change: transform, opacity, filter;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr; /* Left: 4 Text Layers, Right: 3D Cube */
+  gap: 4.5rem;
+  align-items: center;
+  width: 100%;
+  min-height: 480px;
 }
 
-.clean-service-item.is-in-focus {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0px);
+/* ==========================================================================
+   LEFT SIDE: 4 TEXT LAYERS (Stacked in same position, smoothly crossfaded)
+   ========================================================================== */
+
+.services-text-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+}
+
+.service-text-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: transform, opacity;
 }
 
 .clean-service-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .clean-service-num {
@@ -227,9 +194,9 @@ body.theme-light {
 }
 
 .clean-service-badge {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 0.35rem 0.95rem;
+  padding: 0.3rem 0.9rem;
   border-radius: 9999px;
   background: var(--srv-tag-bg);
   border: 1px solid var(--srv-tag-border);
@@ -239,27 +206,26 @@ body.theme-light {
 }
 
 .clean-service-title {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
-  line-height: 1.22;
+  line-height: 1.2;
   color: var(--srv-text-title);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
   letter-spacing: -0.02em;
 }
 
 .clean-service-tagline {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--srv-accent-cyan);
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
   letter-spacing: 0.01em;
 }
 
 .clean-service-desc {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.98rem;
+  line-height: 1.65;
   color: var(--srv-text-sub);
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.4rem;
   max-width: 580px;
 }
 
@@ -267,24 +233,23 @@ body.theme-light {
 .clean-features-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.85rem 1.25rem;
-  margin-bottom: 1.85rem;
+  gap: 0.75rem 1.2rem;
+  margin-bottom: 1.6rem;
 }
 
 .clean-feature-row {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.6rem;
 }
 
 .clean-feature-bullet {
-  color: var(--srv-accent-purple);
   font-size: 0.85rem;
   flex-shrink: 0;
 }
 
 .clean-feature-text {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--srv-text-title);
 }
@@ -302,13 +267,13 @@ body.theme-light {
   padding: 0.7rem 1.6rem;
   background: var(--srv-accent-grad);
   color: #ffffff;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   font-weight: 700;
   text-decoration: none;
   border-radius: 9999px;
   box-shadow: 0 4px 20px var(--srv-glow-halo);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
 }
 
 .clean-action-btn:hover {
@@ -326,86 +291,203 @@ body.theme-light {
   transform: translateX(4px);
 }
 
-/* ==========================================================================
-   RIGHT SIDE: STATIC FIXED / STICKY CANVAS (Locked in Viewport Center)
-   ========================================================================== */
+/* ============================================================
+   3. RIGHT SIDE: 3D CUBE TARGET (ROTATES ON SCROLL)
+============================================================ */
 
-.clean-canvas-sticky-col {
-  position: sticky;
-  top: 50vh;
-  transform: translateY(-50%);
+.services-cube-viewport {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: max-content;
-  align-self: flex-start;
   z-index: 20;
 }
 
-.clean-canvas-wrapper {
+.cube-scene-wrapper {
   position: relative;
   width: 100%;
-  max-width: 580px;
+  max-width: var(--cube-width);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-/* Ambient Backlight Halo */
-.clean-canvas-aura {
+/* Ambient Backlight Aura */
+.clean-cube-aura {
   position: absolute;
-  inset: -15px;
-  border-radius: 30px;
-  background: radial-gradient(circle at 50% 50%, var(--srv-glow-halo) 0%, rgba(56, 189, 248, 0.2) 60%, transparent 80%);
-  filter: blur(35px);
-  opacity: 0.55;
+  inset: -25px;
+  border-radius: 40px;
+  filter: blur(55px);
+  opacity: 0.75;
   pointer-events: none;
   z-index: 1;
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Frameless Smooth HTML5 Canvas */
-.clean-gsap-canvas {
+/* 3D Viewport Stage */
+.cube-3d-stage {
   position: relative;
   z-index: 2;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  border-radius: 24px;
-  object-fit: cover;
-  display: block;
-  background: #02030a;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  border: 1px solid var(--srv-tag-border);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  height: var(--cube-height);
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
 }
 
-/* Minimalist Floating Status Pill */
+/* 3D Rotator Box */
+.cube-3d-rotator {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Universal Face Structure */
+.cube-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #030712;
+  border: 1px solid var(--srv-tag-border);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 4-Faced Geometric Offsets (Centered on X-Axis Pivot) */
+.face-1 {
+  /* Front Face: Service 01 (Rotator = 0deg) */
+  transform: rotateX(0deg) translateZ(var(--cube-depth));
+}
+
+.face-2 {
+  /* Bottom Face: Service 02 (Rotator = 90deg -> 90 - 90 = 0deg) */
+  transform: rotateX(-90deg) translateZ(var(--cube-depth));
+}
+
+.face-3 {
+  /* Back Face: Service 03 (Rotator = 180deg -> 180 - 180 = 0deg) */
+  transform: rotateX(-180deg) translateZ(var(--cube-depth));
+}
+
+.face-4 {
+  /* Top Face: Service 04 (Rotator = 270deg -> 270 - 270 = 0deg) */
+  transform: rotateX(-270deg) translateZ(var(--cube-depth));
+}
+
+/* Face Visual Layout */
+.face-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.face-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.face-glass-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 4, 15, 0.2) 0%,
+    rgba(3, 4, 15, 0.75) 60%,
+    rgba(3, 4, 15, 0.95) 100%
+  );
+  backdrop-filter: blur(1px);
+}
+
+.face-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.85rem;
+  z-index: 5;
+}
+
+.face-top-row {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.face-badge-pill {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.9rem;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 9999px;
+}
+
+.face-num-pill {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--face-accent);
+  text-shadow: 0 0 12px var(--face-accent);
+}
+
+.face-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.face-tagline {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--srv-text-sub);
+  line-height: 1.4;
+}
+
+/* Status Pill */
 .clean-canvas-pill {
   position: relative;
   z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.35rem 1rem;
+  margin-top: 1.5rem;
+  padding: 0.4rem 1.1rem;
   background: var(--srv-tag-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--srv-tag-border);
   border-radius: 9999px;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--srv-text-title);
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
 }
 
 .pill-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* ==========================================================================
@@ -413,7 +495,13 @@ body.theme-light {
    ========================================================================== */
 
 @media (max-width: 1200px) {
-  .clean-services-body {
+  :root {
+    --cube-width: 460px;
+    --cube-height: 300px;
+    --cube-depth: 150px;
+  }
+
+  .services-stage-body {
     gap: 3rem;
   }
 
@@ -423,53 +511,44 @@ body.theme-light {
 }
 
 @media (max-width: 992px) {
-  .clean-services-section {
-    padding: 4.5rem 0 5.5rem 0;
+  .pinned-services-section {
+    height: auto;
+    min-height: auto;
+    padding: 5rem 0;
   }
 
-  .clean-services-body {
+  .services-stage-body {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
 
-  .clean-canvas-sticky-col {
+  .services-text-viewport {
     position: relative;
-    top: 0;
-    order: -1;
-    margin-bottom: 2rem;
+    min-height: auto;
   }
 
-  .clean-canvas-wrapper {
-    max-width: 520px;
-    margin: 0 auto;
+  .service-text-layer {
+    position: relative;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    margin-bottom: 3.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--srv-item-border);
   }
 
-  .clean-service-item {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
+  .services-cube-viewport {
+    display: none; /* Auto-adapts cleanly on mobile */
   }
 }
 
 @media (max-width: 576px) {
-  .clean-services-section {
-    padding: 3.5rem 0 4.5rem 0;
-  }
-
-  .clean-services-container {
-    padding: 0 1.15rem;
-  }
-
-  .clean-services-list {
-    gap: 3rem;
-  }
-
-  .clean-service-item {
-    padding-bottom: 2.5rem;
+  .pinned-services-container {
+    padding: 0 1.25rem;
   }
 
   .clean-service-title {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
   }
 
   .clean-features-list {
@@ -480,6 +559,5 @@ body.theme-light {
   .clean-action-btn {
     width: 100%;
     justify-content: center;
-    padding: 0.75rem 1.25rem;
   }
 }
