@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Whychooseus.css';
 import teamImg from '../assets/why-choose-team.jpg';
+import ScrollTitle from './ScrollTitle';
 
 const Whychooseus = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
@@ -86,7 +87,7 @@ const Whychooseus = () => {
       const updateCount = (currentTime) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        
+
         // Smooth easeOutExpo curve
         const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
@@ -123,38 +124,144 @@ const Whychooseus = () => {
     };
   }, []);
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Mouse Parallax for 3D Background Elements
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 2;
+      const y = (e.clientY / innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <section className="wcu-section-wrapper" id="why-choose-us" ref={sectionRef}>
-      {/* Ambient Neon Backdrops */}
-      <div className="wcu-bg-glow wcu-glow-orange" />
-      <div className="wcu-bg-glow wcu-glow-purple" />
+      {/* =================================================================
+          3D DYNAMIC BACKGROUND CANVAS: DIAMOND OCTAHEDRONS, GYROSCOPES & SPLINES
+          ================================================================= */}
+      <div
+        className="wcu-3d-bg-canvas"
+        style={{
+          transform: `translate3d(${mousePos.x * 12}px, ${mousePos.y * 12}px, 0)`,
+        }}
+        aria-hidden="true"
+      >
+        {/* Ambient Neon Backdrops */}
+        <div className="wcu-bg-glow wcu-glow-orange" />
+        <div className="wcu-bg-glow wcu-glow-purple" />
+
+        {/* 3D Floating Diamond Octahedron 1 */}
+        <div className="wcu-3d-diamond diamond-pos-1" style={{ transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -16}px, 0)` }}>
+          <svg viewBox="0 0 120 140" className="wcu-diamond-svg">
+            <polygon points="60,5 110,60 60,85 10,60" className="diamond-face diamond-top" />
+            <polygon points="10,60 60,85 60,135" className="diamond-face diamond-bot-l" />
+            <polygon points="60,85 110,60 60,135" className="diamond-face diamond-bot-r" />
+          </svg>
+          <div className="diamond-glow-halo" />
+        </div>
+
+        {/* 3D Floating Diamond Octahedron 2 */}
+        <div className="wcu-3d-diamond diamond-pos-2" style={{ transform: `translate3d(${mousePos.x * 20}px, ${mousePos.y * 20}px, 0)` }}>
+          <svg viewBox="0 0 120 140" className="wcu-diamond-svg diamond-rev">
+            <polygon points="60,5 110,60 60,85 10,60" className="diamond-face diamond-top" />
+            <polygon points="10,60 60,85 60,135" className="diamond-face diamond-bot-l" />
+            <polygon points="60,85 110,60 60,135" className="diamond-face diamond-bot-r" />
+          </svg>
+          <div className="diamond-glow-halo" />
+        </div>
+
+        {/* 3D Orbital Gyroscope Double Rings */}
+        <div className="wcu-3d-gyro-wrapper gyro-pos-1">
+          <svg viewBox="0 0 150 150" className="wcu-gyro-svg">
+            <circle cx="75" cy="75" r="65" stroke="url(#wcuGyroGrad1)" strokeWidth="2.5" fill="none" className="gyro-ring-outer" />
+            <circle cx="75" cy="75" r="42" stroke="url(#wcuGyroGrad2)" strokeWidth="1.8" strokeDasharray="6 4" fill="none" className="gyro-ring-inner" />
+            <defs>
+              <linearGradient id="wcuGyroGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.85" />
+                <stop offset="50%" stopColor="#ec4899" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.1" />
+              </linearGradient>
+              <linearGradient id="wcuGyroGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#a855f7" stopOpacity="0.2" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Flowing Curved Neon Splines */}
+        <svg className="wcu-neon-splines-layer" viewBox="0 0 1440 900" fill="none">
+          <path
+            d="M 20,280 C 380,80 720,480 1140,160 C 1280,60 1400,180 1500,240"
+            stroke="url(#wcuSplineGrad1)"
+            strokeWidth="2.5"
+            strokeDasharray="9 7"
+            className="wcu-spline-dash-1"
+          />
+          <path
+            d="M -30,720 C 420,520 820,860 1220,480 C 1360,360 1460,420 1540,480"
+            stroke="url(#wcuSplineGrad2)"
+            strokeWidth="2"
+            className="wcu-spline-dash-2"
+          />
+          <defs>
+            <linearGradient id="wcuSplineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ea580c" stopOpacity="0.75" />
+              <stop offset="50%" stopColor="#a855f7" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.1" />
+            </linearGradient>
+            <linearGradient id="wcuSplineGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.7" />
+              <stop offset="60%" stopColor="#ec4899" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0.05" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
 
       <div className="wcu-main-container">
         <div className="wcu-split-grid">
-          
+
           {/* =================================================================
               LEFT COLUMN: HEADINGS, 4 FEATURE CARDS & FLOATING PILL
               ================================================================= */}
-          <div className="wcu-left-content">
+          <div className="wcu-left-content" data-reveal="fade-right">
             {/* Tag Badge */}
-            <div className="wcu-tag-pill">
+            <div className="wcu-tag-pill" data-reveal="fade-up">
               <span className="wcu-spark-icon">✦</span>
               <span className="wcu-tag-label">Why Choose Us</span>
             </div>
 
             {/* Main Headline */}
-            <h2 className="wcu-main-heading">
-              Here's Why Brands <br />
-              Trust <span className="wcu-highlight-gradient">Our Expertise</span>
-            </h2>
+            <ScrollTitle
+              as="h2"
+              className="wcu-main-heading"
+              lines={[
+                [
+                  { text: "Here's", type: 'normal' },
+                  { text: 'Why', type: 'normal' },
+                  { text: 'Brands', type: 'normal' },
+                ],
+                [
+                  { text: 'Trust', type: 'normal' },
+                  { text: 'Our', type: 'gradient' },
+                  { text: 'Expertise', type: 'gradient' },
+                ],
+              ]}
+            />
 
             {/* Description */}
-            <p className="wcu-sub-description">
+            <p className="wcu-sub-description" data-reveal="fade-up" data-reveal-delay="100">
               We merge high-velocity engineering, bespoke design systems, and hyper-targeted digital strategy to build transformative digital experiences that dominate search and drive record revenue.
             </p>
 
             {/* Feature Cards & Vertical Pill Container */}
-            <div className="wcu-feature-deck-row">
+            <div className="wcu-feature-deck-row" data-reveal="fade-up" data-reveal-delay="200">
               {/* 4-Feature Card Box */}
               <div className="wcu-dual-feature-card wcu-quad-card">
                 {features.map((feat, idx) => (
@@ -214,9 +321,9 @@ const Whychooseus = () => {
           {/* =================================================================
               RIGHT COLUMN: LARGE CIRCULAR PORTAL IMAGE WITH SCROLL TRIGGER 92%
               ================================================================= */}
-          <div className="wcu-right-visual">
+          <div className="wcu-right-visual" data-reveal="fade-left">
             <div className="wcu-circular-portal-wrapper">
-              
+
               {/* Outer Radiant Glowing Crescent Rings */}
               <div className="wcu-crescent-aura" />
               <div className="wcu-crescent-ring" />

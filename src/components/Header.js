@@ -1,69 +1,108 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
 import logo from '../assets/vayonix-logo1.png';
 
 const Header = () => {
-  const [activeNav, setActiveNav] = useState('Home');
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  const isAboutPage = location.pathname === '/about';
+  const isServicesPage = location.pathname === '/services';
+  const isDedicatedPage = isAboutPage || isServicesPage;
+
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', path: '/', isHash: false },
+    { name: 'About Us', path: '/about', isHash: false },
+    { name: 'Services', path: '/services', isHash: false },
+    { name: 'Process', path: isDedicatedPage ? '/#working-process' : '#working-process', isHash: !isDedicatedPage },
+    { name: 'Contact', path: isDedicatedPage ? '/#contact' : '#contact', isHash: !isDedicatedPage },
   ];
 
   // Scroll detection for compact navbar style & scroll progress loader
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
+          const scrollHeight = Math.max(
+            document.documentElement.scrollHeight,
+            document.body.scrollHeight
+          );
+          const clientHeight = window.innerHeight || document.documentElement.clientHeight;
+          const totalScroll = scrollHeight - clientHeight;
 
-      // Calculate percentage for header progress loader
-      if (totalScroll > 0) {
-        const progress = (currentScrollY / totalScroll) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, progress)));
+          // Calculate percentage for header progress loader
+          if (totalScroll > 0) {
+            const progress = (currentScrollY / totalScroll) * 100;
+            setScrollProgress(Math.min(100, Math.max(0, progress)));
+          } else {
+            setScrollProgress(0);
+          }
+
+          setScrolled(currentScrollY > 15);
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      setScrolled(currentScrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll(); // Initialize on mount
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [location.pathname]);
 
   return (
     <header className={`site-header ${scrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
 
         {/* Brand Logo with 3D Radiant Glow on Hover */}
-        <a href="#home" className="header-logo-link" aria-label="Vayonix Home">
+        <Link to="/" className="header-logo-link" aria-label="Vayonix Home">
           <div className="header-logo-wrapper">
             <div className="logo-glow-aura" />
             <img src={logo} alt="Vayonix Logo" className="header-logo-img" />
           </div>
-        </a>
+        </Link>
 
-        {/* Clean Open Modern Navigation (No Box Container) */}
+        {/* Clean Open Modern Navigation */}
         <nav className="header-nav">
           <ul className="nav-list">
             {navLinks.map((link) => {
-              const isActive = activeNav === link.name;
+              const isActive = link.path === '/about'
+                ? isAboutPage
+                : (link.path === '/services'
+                  ? isServicesPage
+                  : (link.path === '/' ? location.pathname === '/' && !location.hash : false));
+
               return (
                 <li key={link.name} className="nav-item">
-                  <a
-                    href={link.href}
-                    className={`nav-link ${isActive ? 'active' : ''}`}
-                    onClick={() => setActiveNav(link.name)}
-                  >
-                    <span className="nav-link-title">{link.name}</span>
-                    <span className="nav-hover-bar" />
-                    <span className="nav-glow-bloom" />
-                  </a>
+                  {link.isHash ? (
+                    <a
+                      href={link.path}
+                      className={`nav-link ${isActive ? 'active' : ''}`}
+                    >
+                      <span className="nav-link-title">{link.name}</span>
+                      <span className="nav-hover-bar" />
+                      <span className="nav-glow-bloom" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      className={`nav-link ${isActive ? 'active' : ''}`}
+                    >
+                      <span className="nav-link-title">{link.name}</span>
+                      <span className="nav-hover-bar" />
+                      <span className="nav-glow-bloom" />
+                    </Link>
+                  )}
                 </li>
               );
             })}
@@ -72,37 +111,39 @@ const Header = () => {
 
         {/* Advanced Interactive CTA Button */}
         <div className="header-action">
-          <a href="#get-started" className="cta-button">
-            <span className="cta-button-text">Get Started</span>
-            <div className="cta-icon-circle">
-              <svg
-                className="cta-arrow-icon"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
+          <Link to="/about" className="cta-button">
+            <span>Get Started</span>
+            <svg
+              className="cta-arrow-icon"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <div className="btn-glow-aura" />
+          </Link>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Hamburger Toggle Button */}
           <button
-            className={`mobile-toggle-btn ${mobileMenuOpen ? 'open' : ''}`}
+            className={`mobile-menu-toggle ${mobileMenuOpen ? 'open' : ''}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
-            <span className="hamburger-line line-1"></span>
-            <span className="hamburger-line line-2"></span>
-            <span className="hamburger-line line-3"></span>
+            <div className="hamburger-box">
+              <span className="hamburger-line line-1" />
+              <span className="hamburger-line line-2" />
+              <span className="hamburger-line line-3" />
+            </div>
           </button>
         </div>
+
       </div>
 
       {/* Sleek Futuristic Glowing Laser Scroll Progress Loader */}
@@ -120,7 +161,7 @@ const Header = () => {
         >
           {/* Continuous Flowing Plasma Energy Pulse */}
           <div className="header-progress-laser-pulse" />
-          
+
           {/* Glowing Diamond Prism Star Tip */}
           <div className="header-progress-prism-edge">
             <svg viewBox="0 0 24 24" fill="currentColor" className="prism-spark-svg">
@@ -134,28 +175,44 @@ const Header = () => {
       {/* Mobile Navigation Drawer */}
       <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <ul className="mobile-nav-list">
-          {navLinks.map((link, idx) => (
-            <li
-              key={link.name}
-              className="mobile-nav-item"
-              style={{ animationDelay: `${idx * 0.06}s` }}
-            >
-              <a
-                href={link.href}
-                className={`mobile-nav-link ${activeNav === link.name ? 'active' : ''}`}
-                onClick={() => {
-                  setActiveNav(link.name);
-                  setMobileMenuOpen(false);
-                }}
+          {navLinks.map((link, idx) => {
+            const isActive = link.path === '/about' 
+              ? isAboutPage 
+              : (link.path === '/services'
+                ? isServicesPage
+                : (link.path === '/' ? location.pathname === '/' && !location.hash : false));
+
+            return (
+              <li
+                key={link.name}
+                className="mobile-nav-item"
+                style={{ animationDelay: `${idx * 0.06}s` }}
               >
-                <span>{link.name}</span>
-                {activeNav === link.name && <span className="mobile-active-badge">Active</span>}
-              </a>
-            </li>
-          ))}
+                {link.isHash ? (
+                  <a
+                    href={link.path}
+                    className={`mobile-nav-link ${isActive ? 'active' : ''}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>{link.name}</span>
+                    {isActive && <span className="mobile-active-badge">Active</span>}
+                  </a>
+                ) : (
+                  <Link
+                    to={link.path}
+                    className={`mobile-nav-link ${isActive ? 'active' : ''}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>{link.name}</span>
+                    {isActive && <span className="mobile-active-badge">Active</span>}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
           <li className="mobile-nav-item mobile-cta-item">
-            <a
-              href="#get-started"
+            <Link
+              to="/about"
               className="cta-button mobile-cta"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -174,7 +231,7 @@ const Header = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

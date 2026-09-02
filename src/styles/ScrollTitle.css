@@ -1,0 +1,107 @@
+/* ==========================================================================
+   ScrollTitle Component Shared Styles (Dark & Light Theme Adaptable)
+   Fluid Typography & Responsive Wrapping
+   ========================================================================== */
+
+.scroll-title-container {
+  display: block;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.18;
+  letter-spacing: inherit;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.scroll-title-line {
+  display: block;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.scroll-title-word {
+  position: relative;
+  display: inline-block;
+  margin-right: 0.28em;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  will-change: opacity, transform, filter, color;
+}
+
+.scroll-title-word:last-child {
+  margin-right: 0;
+}
+
+/* Normal Words */
+.scroll-title-word.word-normal.is-unlit {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.scroll-title-word.word-normal.is-lit {
+  color: #ffffff;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="light"] .scroll-title-word.word-normal.is-unlit,
+body.theme-light .scroll-title-word.word-normal.is-unlit {
+  color: rgba(15, 23, 42, 0.3);
+}
+
+[data-theme="light"] .scroll-title-word.word-normal.is-lit,
+body.theme-light .scroll-title-word.word-normal.is-lit {
+  color: #0f172a;
+  text-shadow: 0 0 16px rgba(15, 23, 42, 0.12);
+}
+
+/* Accent Words */
+.scroll-title-word.word-accent.is-unlit {
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.scroll-title-word.word-accent.is-lit {
+  color: #38bdf8;
+  text-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+}
+
+[data-theme="light"] .scroll-title-word.word-accent.is-unlit,
+body.theme-light .scroll-title-word.word-accent.is-unlit {
+  color: rgba(15, 23, 42, 0.3);
+}
+
+[data-theme="light"] .scroll-title-word.word-accent.is-lit,
+body.theme-light .scroll-title-word.word-accent.is-lit {
+  color: #d97706;
+  text-shadow: 0 0 18px rgba(217, 119, 6, 0.35);
+}
+
+/* Gradient Words */
+.scroll-title-word.word-gradient {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 35%, #a855f7 70%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .scroll-title-word.word-gradient,
+body.theme-light .scroll-title-word.word-gradient {
+  background: linear-gradient(135deg, #ea580c 0%, #d97706 40%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.scroll-title-word.word-gradient.is-lit {
+  filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.65));
+}
+
+[data-theme="light"] .scroll-title-word.word-gradient.is-lit,
+body.theme-light .scroll-title-word.word-gradient.is-lit {
+  filter: drop-shadow(0 0 16px rgba(217, 119, 6, 0.4));
+}

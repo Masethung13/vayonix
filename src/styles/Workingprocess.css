@@ -22,7 +22,8 @@
   --wp-wireframe-color: rgba(139, 92, 246, 0.65);
 }
 
-[data-theme="light"], body.theme-light {
+[data-theme="light"],
+body.theme-light {
   --wp-bg: #ffffff;
   --wp-card-bg: rgba(255, 255, 255, 0.94);
   --wp-card-border: rgba(217, 119, 6, 0.22);
@@ -55,6 +56,21 @@
   box-sizing: border-box;
 }
 
+/* ==========================================================================
+   3D Dynamic Moving Background Canvas (Isometric Cubes, Quantum Rings & Splines)
+   ========================================================================== */
+
+.wp-3d-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Ambient Backdrops */
 .wp-bg-glow {
   position: absolute;
@@ -62,7 +78,7 @@
   height: 550px;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(150px);
+  filter: blur(140px);
   z-index: 1;
 }
 
@@ -76,6 +92,127 @@
   bottom: 10%;
   right: -100px;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+}
+
+/* 3D Floating Isometric Cubes */
+.wp-3d-cube-item {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cube-pos-1 {
+  top: 14%;
+  right: 18%;
+  width: 90px;
+  height: 105px;
+  animation: wpCubeFloat1 18s ease-in-out infinite alternate;
+}
+
+.cube-pos-2 {
+  bottom: 15%;
+  left: 32%;
+  width: 75px;
+  height: 88px;
+  animation: wpCubeFloat2 15s ease-in-out infinite alternate-reverse;
+}
+
+.wp-iso-cube-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 25px rgba(139, 92, 246, 0.45));
+}
+
+.cube-top {
+  fill: #8b5cf6;
+  opacity: 0.85;
+}
+
+.cube-left {
+  fill: #6366f1;
+  opacity: 0.7;
+}
+
+.cube-right {
+  fill: #06b6d4;
+  opacity: 0.9;
+}
+
+/* Light Mode Cubes */
+[data-theme="light"] .cube-top {
+  fill: #f59e0b;
+}
+
+[data-theme="light"] .cube-left {
+  fill: #ea580c;
+}
+
+[data-theme="light"] .cube-right {
+  fill: #fbbf24;
+}
+
+[data-theme="light"] .wp-iso-cube-svg {
+  filter: drop-shadow(0 12px 25px rgba(217, 119, 6, 0.25)) drop-shadow(0 0 20px rgba(217, 119, 6, 0.35));
+}
+
+@keyframes wpCubeFloat1 {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(-35px) rotate(15deg) scale(1.1);
+  }
+
+  100% {
+    transform: translateY(25px) rotate(-10deg) scale(0.95);
+  }
+}
+
+@keyframes wpCubeFloat2 {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(40px) rotate(-20deg) scale(1.15);
+  }
+
+  100% {
+    transform: translateY(-30px) rotate(15deg) scale(0.9);
+  }
+}
+
+/* 3D Hexagonal Quantum Ring */
+.wp-3d-hex-ring-item {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hex-pos-1 {
+  top: 48%;
+  left: 45%;
+  width: 130px;
+  height: 130px;
+}
+
+.wp-hex-ring-svg {
+  width: 100%;
+  height: 100%;
+  animation: wpHexRotate3D 22s linear infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes wpHexRotate3D {
+  0% {
+    transform: rotateX(55deg) rotateY(25deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(55deg) rotateY(25deg) rotateZ(360deg);
+  }
 }
 
 .wp-main-container {
@@ -122,8 +259,18 @@
 }
 
 @keyframes sparkTwinkle {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
-  50% { transform: scale(1.3) rotate(20deg); opacity: 1; filter: drop-shadow(0 0 6px var(--wp-accent-purple)); }
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: scale(1.3) rotate(20deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px var(--wp-accent-purple));
+  }
 }
 
 .wp-tag-label {
@@ -188,8 +335,13 @@
 }
 
 @keyframes floatGeometric {
-  0% { transform: translateY(0px) rotateY(-5deg) rotateX(8deg); }
-  100% { transform: translateY(-15px) rotateY(12deg) rotateX(-5deg); }
+  0% {
+    transform: translateY(0px) rotateY(-5deg) rotateX(8deg);
+  }
+
+  100% {
+    transform: translateY(-15px) rotateY(12deg) rotateX(-5deg);
+  }
 }
 
 .wp-wireframe-svg {
@@ -206,9 +358,17 @@
 }
 
 @keyframes drawOuter {
-  0% { stroke-dashoffset: 800; }
-  50% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -800; }
+  0% {
+    stroke-dashoffset: 800;
+  }
+
+  50% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -800;
+  }
 }
 
 .wp-core-pulse {
@@ -216,8 +376,18 @@
 }
 
 @keyframes corePulse {
-  0% { transform-origin: 140px 150px; transform: scale(0.9); opacity: 0.6; }
-  100% { transform-origin: 140px 150px; transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px var(--wp-accent-purple)); }
+  0% {
+    transform-origin: 140px 150px;
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform-origin: 140px 150px;
+    transform: scale(1.15);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px var(--wp-accent-purple));
+  }
 }
 
 /* ==========================================================================

@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
 import logo from '../assets/vayonix-logo1.png';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const ctaRef = useRef(null);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -19,15 +18,6 @@ const Footer = () => {
     }
   };
 
-  // 3D dynamic mouse spotlight tracking on CTA Banner
-  const handleMouseMove = (e) => {
-    if (!ctaRef.current) return;
-    const rect = ctaRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
-  };
-
   return (
     <footer className="vyn-footer-section" id="contact">
       {/* Ambient Neon Backdrops */}
@@ -36,48 +26,11 @@ const Footer = () => {
 
       <div className="vyn-footer-container">
         {/* =================================================================
-            TOP CTA BANNER: "READY TO GROW YOUR BUSINESS?"
-            ================================================================= */}
-        <div
-          className="vyn-cta-banner"
-          ref={ctaRef}
-          onMouseMove={handleMouseMove}
-          style={{
-            '--spotlight-x': `${mousePos.x}%`,
-            '--spotlight-y': `${mousePos.y}%`,
-          }}
-        >
-          {/* Dynamic Interactive Cursor Spotlight */}
-          <div className="vyn-cta-spotlight" />
-
-          {/* Ambient Wave Texture Overlay */}
-          <div className="vyn-cta-wave-glow" />
-
-          <div className="vyn-cta-content">
-            <div className="vyn-cta-text-block">
-              <h2 className="vyn-cta-title">
-                Ready to Grow <span className="vyn-title-gradient">Your Business?</span>
-              </h2>
-              <p className="vyn-cta-subtitle">Let's build something amazing together.</p>
-            </div>
-
-            <a href="#contact" className="vyn-cta-btn">
-              <span className="vyn-btn-text">Get A Free Consultation</span>
-              <span className="vyn-cta-arrow">→</span>
-              <div className="vyn-btn-glow-ring" />
-            </a>
-          </div>
-
-          {/* Border Specular Sweep */}
-          <div className="vyn-cta-shine" />
-        </div>
-
-        {/* =================================================================
             MAIN 5-COLUMN FOOTER GRID
             ================================================================= */}
         <div className="vyn-footer-main">
           {/* Column 1: Brand Logo & Socials */}
-          <div className="vyn-footer-col vyn-brand-col">
+          <div className="vyn-footer-col vyn-brand-col" data-reveal="fade-right">
             <a href="#home" className="vyn-footer-logo" aria-label="Vayonix Home">
               <div className="vyn-logo-wrapper">
                 <div className="vyn-logo-glow-aura" />
@@ -123,20 +76,20 @@ const Footer = () => {
           </div>
 
           {/* Column 2: Quick Links with Interactive Sliders */}
-          <div className="vyn-footer-col">
+          <div className="vyn-footer-col" data-reveal="fade-up" data-reveal-delay="100">
             <h3 className="vyn-col-title">Quick Links</h3>
             <ul className="vyn-link-list">
-              <li><a href="#home"><span className="vyn-link-bullet">✦</span>Home</a></li>
-              <li><a href="#about"><span className="vyn-link-bullet">✦</span>About Us</a></li>
-              <li><a href="#services"><span className="vyn-link-bullet">✦</span>Services</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Case Studies</a></li>
-              <li><a href="#why-choose-us"><span className="vyn-link-bullet">✦</span>Process</a></li>
-              <li><a href="#contact"><span className="vyn-link-bullet">✦</span>Contact Us</a></li>
+              <li><Link to="/"><span className="vyn-link-bullet">✦</span>Home</Link></li>
+              <li><Link to="/about"><span className="vyn-link-bullet">✦</span>About Us</Link></li>
+              <li><a href="/#services"><span className="vyn-link-bullet">✦</span>Services</a></li>
+              <li><a href="/#what-we-do"><span className="vyn-link-bullet">✦</span>Case Studies</a></li>
+              <li><a href="/#working-process"><span className="vyn-link-bullet">✦</span>Process</a></li>
+              <li><a href="/#contact"><span className="vyn-link-bullet">✦</span>Contact Us</a></li>
             </ul>
           </div>
 
           {/* Column 3: Services with Interactive Sliders */}
-          <div className="vyn-footer-col">
+          <div className="vyn-footer-col" data-reveal="fade-up" data-reveal-delay="200">
             <h3 className="vyn-col-title">Services</h3>
             <ul className="vyn-link-list">
               <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Web Development</a></li>
@@ -149,7 +102,7 @@ const Footer = () => {
           </div>
 
           {/* Column 4: Contact Us with Glowing Hover Cards */}
-          <div className="vyn-footer-col">
+          <div className="vyn-footer-col" data-reveal="fade-up" data-reveal-delay="300">
             <h3 className="vyn-col-title">Contact Us</h3>
             <ul className="vyn-contact-list">
               <li className="vyn-contact-item">
@@ -182,7 +135,7 @@ const Footer = () => {
           </div>
 
           {/* Column 5: Newsletter with Advanced Input Focus Aura */}
-          <div className="vyn-footer-col vyn-newsletter-col">
+          <div className="vyn-footer-col vyn-newsletter-col" data-reveal="fade-left">
             <h3 className="vyn-col-title">Newsletter</h3>
             <p className="vyn-news-desc">Stay updated with the latest digital trends, tech insights, and case studies.</p>
 
@@ -210,7 +163,7 @@ const Footer = () => {
         {/* =================================================================
             BOTTOM COPYRIGHT BAR
             ================================================================= */}
-        <div className="vyn-footer-bottom">
+        <div className="vyn-footer-bottom" data-reveal="fade-up">
           <p className="vyn-copyright-text">
             © {new Date().getFullYear()} <span className="vyn-brand-name">Vayonix</span>. All rights reserved.
           </p>

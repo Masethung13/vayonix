@@ -21,7 +21,8 @@
   --wcu-capsule-bg: rgba(10, 14, 38, 0.88);
 }
 
-[data-theme="light"], body.theme-light {
+[data-theme="light"],
+body.theme-light {
   --wcu-bg: #ffffff;
   --wcu-card-bg: rgba(255, 255, 255, 0.94);
   --wcu-card-border: rgba(217, 119, 6, 0.22);
@@ -53,6 +54,21 @@
   box-sizing: border-box;
 }
 
+/* ==========================================================================
+   3D Dynamic Moving Background Canvas (Diamond Octahedrons, Gyroscopes & Splines)
+   ========================================================================== */
+
+.wcu-3d-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Ambient Backdrops */
 .wcu-bg-glow {
   position: absolute;
@@ -60,7 +76,7 @@
   height: 600px;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(160px);
+  filter: blur(150px);
   z-index: 1;
 }
 
@@ -74,6 +90,171 @@
   top: 10%;
   left: -150px;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+}
+
+/* 3D Floating Diamond Octahedrons */
+.wcu-3d-diamond {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.diamond-pos-1 {
+  top: 15%;
+  left: 48%;
+  width: 95px;
+  height: 110px;
+  animation: wcuDiamondFloat1 18s ease-in-out infinite alternate;
+}
+
+.diamond-pos-2 {
+  bottom: 12%;
+  right: 28%;
+  width: 80px;
+  height: 95px;
+  animation: wcuDiamondFloat2 15s ease-in-out infinite alternate-reverse;
+}
+
+.wcu-diamond-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 25px rgba(234, 88, 12, 0.45));
+}
+
+.diamond-face.diamond-top {
+  fill: #ea580c;
+  opacity: 0.85;
+}
+
+.diamond-face.diamond-bot-l {
+  fill: #f59e0b;
+  opacity: 0.7;
+}
+
+.diamond-face.diamond-bot-r {
+  fill: #d97706;
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .diamond-face.diamond-top {
+  fill: #a855f7;
+}
+
+[data-theme="dark"] .diamond-face.diamond-bot-l {
+  fill: #6366f1;
+}
+
+[data-theme="dark"] .diamond-face.diamond-bot-r {
+  fill: #38bdf8;
+}
+
+[data-theme="dark"] .wcu-diamond-svg {
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 25px rgba(168, 85, 247, 0.45));
+}
+
+@keyframes wcuDiamondFloat1 {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(-35px) rotate(20deg) scale(1.12);
+  }
+
+  100% {
+    transform: translateY(25px) rotate(-15deg) scale(0.95);
+  }
+}
+
+@keyframes wcuDiamondFloat2 {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(40px) rotate(-25deg) scale(1.15);
+  }
+
+  100% {
+    transform: translateY(-30px) rotate(20deg) scale(0.9);
+  }
+}
+
+/* 3D Orbital Gyroscope Double Rings */
+.wcu-3d-gyro-wrapper {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gyro-pos-1 {
+  top: 42%;
+  left: 36%;
+  width: 140px;
+  height: 140px;
+}
+
+.wcu-gyro-svg {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.gyro-ring-outer {
+  transform-origin: 75px 75px;
+  animation: wcuGyroSpinOuter 18s linear infinite;
+}
+
+.gyro-ring-inner {
+  transform-origin: 75px 75px;
+  animation: wcuGyroSpinInner 14s linear infinite reverse;
+}
+
+@keyframes wcuGyroSpinOuter {
+  0% {
+    transform: rotateX(65deg) rotateY(30deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(65deg) rotateY(30deg) rotateZ(360deg);
+  }
+}
+
+@keyframes wcuGyroSpinInner {
+  0% {
+    transform: rotateX(30deg) rotateY(65deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(30deg) rotateY(65deg) rotateZ(360deg);
+  }
+}
+
+/* Flowing Neon Splines */
+.wcu-neon-splines-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wcu-spline-dash-1 {
+  animation: wcuSplineFlow 16s linear infinite;
+}
+
+.wcu-spline-dash-2 {
+  animation: wcuSplineFlow 22s linear infinite reverse;
+}
+
+@keyframes wcuSplineFlow {
+  to {
+    stroke-dashoffset: -400;
+  }
 }
 
 .wcu-main-container {
@@ -120,8 +301,18 @@
 }
 
 @keyframes sparkPulse {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
-  50% { transform: scale(1.3) rotate(25deg); opacity: 1; filter: drop-shadow(0 0 8px var(--wcu-accent-purple)); }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: scale(1.3) rotate(25deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 8px var(--wcu-accent-purple));
+  }
 }
 
 .wcu-tag-label {
@@ -453,8 +644,13 @@
 }
 
 @keyframes crescentSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Circular Team Image Frame */
@@ -585,13 +781,36 @@
   background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.6), rgba(245, 158, 11, 0.6) 60%, rgba(217, 119, 6, 0.8) 100%);
 }
 
-.disc-1 { bottom: 0; right: 0; }
-.disc-2 { bottom: 8px; right: 18px; opacity: 0.85; }
-.disc-3 { bottom: 16px; right: 36px; opacity: 0.65; }
-.disc-4 { bottom: 24px; right: 54px; opacity: 0.45; }
+.disc-1 {
+  bottom: 0;
+  right: 0;
+}
 
-.wcu-circular-portal-wrapper:hover .disc-1 { transform: rotateX(60deg) rotateZ(-30deg) translateY(-6px); }
-.wcu-circular-portal-wrapper:hover .disc-2 { transform: rotateX(60deg) rotateZ(-30deg) translateY(-12px); }
+.disc-2 {
+  bottom: 8px;
+  right: 18px;
+  opacity: 0.85;
+}
+
+.disc-3 {
+  bottom: 16px;
+  right: 36px;
+  opacity: 0.65;
+}
+
+.disc-4 {
+  bottom: 24px;
+  right: 54px;
+  opacity: 0.45;
+}
+
+.wcu-circular-portal-wrapper:hover .disc-1 {
+  transform: rotateX(60deg) rotateZ(-30deg) translateY(-6px);
+}
+
+.wcu-circular-portal-wrapper:hover .disc-2 {
+  transform: rotateX(60deg) rotateZ(-30deg) translateY(-12px);
+}
 
 /* ==========================================================================
    Comprehensive Responsive Breakpoints (All Screen Sizes)

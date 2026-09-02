@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Services.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ScrollTitle from './ScrollTitle';
 
 // Register GSAP Plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -154,15 +155,27 @@ const Services = () => {
 
       <div className="clean-services-container">
         {/* Top Header */}
-        <div className="services-header-clean">
+        <div className="services-header-clean" data-reveal="fade-up">
           <div className="services-tag-badge">
             <span className="tag-sparkle">✦</span>
             <span className="tag-title">Our Premium Capabilities</span>
           </div>
-          <h2 className="services-main-heading">
-            Engineering High-Impact Solutions{' '}
-            <span className="heading-gradient-word">That Fuel Growth</span>
-          </h2>
+          <ScrollTitle
+            as="h2"
+            className="services-main-heading"
+            lines={[
+              [
+                { text: 'Engineering', type: 'normal' },
+                { text: 'High-Impact', type: 'normal' },
+                { text: 'Solutions', type: 'normal' },
+              ],
+              [
+                { text: 'That', type: 'gradient' },
+                { text: 'Fuel', type: 'gradient' },
+                { text: 'Growth', type: 'gradient' },
+              ],
+            ]}
+          />
           <p className="services-sub-heading">
             Explore our core specializations. Scroll through to see each capability come to life.
           </p>
@@ -173,13 +186,15 @@ const Services = () => {
           {/* =================================================================
               LEFT SIDE: STREAM OF SERVICES (Scrolling Naturally One by One)
               ================================================================= */}
-          <div className="clean-services-list">
+          <div className="clean-services-list" data-reveal="fade-right">
             {servicesList.map((service, index) => {
               const isFocused = activeCard === index;
               return (
                 <div
                   key={service.id}
                   className={`clean-service-item ${isFocused ? 'is-in-focus' : ''}`}
+                  data-reveal="fade-right"
+                  data-reveal-delay={`${index * 100}`}
                 >
                   <div className="clean-service-header">
                     <span className="clean-service-num">{service.id}</span>
@@ -213,7 +228,7 @@ const Services = () => {
           {/* =================================================================
               RIGHT SIDE: STATIC FIXED / STICKY CANVAS (Locked in Viewport Center)
               ================================================================= */}
-          <div className="clean-canvas-sticky-col">
+          <div className="clean-canvas-sticky-col" data-reveal="fade-left">
             <div className="clean-canvas-wrapper">
               <div className="clean-canvas-aura" />
               

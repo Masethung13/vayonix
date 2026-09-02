@@ -1,0 +1,896 @@
+/* ==========================================================================
+   Ourvalues Component Stylesheet (Card-Free Ultra-Modern Architecture)
+   Exact Cyber Colors from Abt.css & Mission.css for Dark & Light Themes
+   Fully Responsive for Large Laptop, Small Laptop, Tablet, and Mobile
+   ========================================================================== */
+
+:root {
+  /* Dark Theme Variables (Matches Abt.css) */
+  --ov-bg: #03040f;
+  --ov-text-main: #ffffff;
+  --ov-text-muted: #94a3b8;
+  --ov-text-sub: #cbd5e1;
+  --ov-accent-cyan: #38bdf8;
+  --ov-accent-purple: #a855f7;
+  --ov-accent-pink: #ec4899;
+  --ov-accent-indigo: #6366f1;
+  --ov-highlight-grad: linear-gradient(135deg, #38bdf8 0%, #818cf8 35%, #a855f7 70%, #ec4899 100%);
+  --ov-btn-grad: linear-gradient(135deg, #2563eb 0%, #6366f1 45%, #9333ea 100%);
+  --ov-btn-hover: linear-gradient(135deg, #3b82f6 0%, #818cf8 45%, #a855f7 100%);
+  --ov-glow-blue: rgba(56, 189, 248, 0.45);
+  --ov-glow-purple: rgba(168, 85, 247, 0.55);
+  --ov-divider: rgba(255, 255, 255, 0.1);
+  --ov-tag-bg: rgba(15, 23, 42, 0.75);
+  --ov-tag-border: rgba(56, 189, 248, 0.4);
+}
+
+[data-theme="light"],
+body.theme-light {
+  /* Light Theme Variables (Matches Abt.css) */
+  --ov-bg: #ffffff;
+  --ov-text-main: #0f172a;
+  --ov-text-muted: #64748b;
+  --ov-text-sub: #334155;
+  --ov-accent-cyan: #d97706;
+  --ov-accent-purple: #ea580c;
+  --ov-accent-pink: #f59e0b;
+  --ov-accent-indigo: #d97706;
+  --ov-highlight-grad: linear-gradient(135deg, #ea580c 0%, #d97706 40%, #b45309 100%);
+  --ov-btn-grad: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #ea580c 100%);
+  --ov-btn-hover: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+  --ov-glow-blue: rgba(217, 119, 6, 0.35);
+  --ov-glow-purple: rgba(234, 88, 12, 0.45);
+  --ov-divider: rgba(0, 0, 0, 0.08);
+  --ov-tag-bg: rgba(248, 250, 252, 0.9);
+  --ov-tag-border: rgba(217, 119, 6, 0.4);
+}
+
+/* ==========================================================================
+   Master Section & Background
+   ========================================================================== */
+
+.ov-section-wrapper {
+  position: relative;
+  width: 100%;
+  background: var(--ov-bg);
+  padding: clamp(4.5rem, 7vw, 7.5rem) 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: background 0.4s ease;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 3D Background Canvas */
+.ov-3d-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ambient Radial Glows */
+.ov-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.ov-glow-cyan {
+  width: 650px;
+  height: 650px;
+  top: 10%;
+  right: 5%;
+  background: radial-gradient(circle, var(--ov-glow-blue) 0%, transparent 70%);
+  animation: ovGlowFloat1 18s ease-in-out infinite alternate;
+}
+
+.ov-glow-purple {
+  width: 580px;
+  height: 580px;
+  top: 45%;
+  left: 5%;
+  background: radial-gradient(circle, var(--ov-glow-purple) 0%, transparent 70%);
+  animation: ovGlowFloat2 20s ease-in-out infinite alternate-reverse;
+}
+
+.ov-glow-pink {
+  width: 480px;
+  height: 480px;
+  bottom: 10%;
+  right: 35%;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.25) 0%, transparent 70%);
+}
+
+@keyframes ovGlowFloat1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-45px, 35px) scale(1.15); }
+}
+
+@keyframes ovGlowFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, -40px) scale(1.12); }
+}
+
+/* 3D Twinkle Star Prisms System */
+.ov-3d-star-prism {
+  position: absolute;
+  font-size: 1.8rem;
+  color: var(--ov-accent-cyan);
+  filter: drop-shadow(0 0 12px var(--ov-accent-cyan));
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+.star-1 {
+  top: 12%;
+  left: 35%;
+  font-size: 2.2rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.9));
+  animation: ovStarTwinkle1 6s ease-in-out infinite alternate;
+}
+
+.star-2 {
+  top: 45%;
+  right: 12%;
+  font-size: 1.65rem;
+  color: #ec4899;
+  filter: drop-shadow(0 0 14px rgba(236, 72, 153, 0.85));
+  animation: ovStarTwinkle2 7.5s ease-in-out infinite alternate-reverse;
+}
+
+.star-3 {
+  bottom: 25%;
+  left: 10%;
+  font-size: 2rem;
+  color: #a855f7;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.9));
+  animation: ovStarTwinkle3 8s ease-in-out infinite alternate;
+}
+
+.star-4 {
+  top: 25%;
+  right: 38%;
+  font-size: 1.4rem;
+  color: #818cf8;
+  filter: drop-shadow(0 0 12px rgba(129, 140, 248, 0.8));
+  animation: ovStarTwinkle1 6.5s ease-in-out infinite alternate-reverse;
+}
+
+.star-5 {
+  bottom: 15%;
+  right: 28%;
+  font-size: 1.85rem;
+  color: #c084fc;
+  filter: drop-shadow(0 0 14px rgba(192, 132, 252, 0.85));
+  animation: ovStarTwinkle2 7s ease-in-out infinite alternate;
+}
+
+.star-6 {
+  top: 68%;
+  left: 28%;
+  font-size: 1.3rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
+  animation: ovStarTwinkle3 5.8s ease-in-out infinite alternate-reverse;
+}
+
+.star-7 {
+  top: 36%;
+  left: 8%;
+  font-size: 1.7rem;
+  color: #ec4899;
+  filter: drop-shadow(0 0 14px rgba(236, 72, 153, 0.85));
+  animation: ovStarTwinkle1 8.5s ease-in-out infinite alternate;
+}
+
+.star-8 {
+  bottom: 8%;
+  left: 45%;
+  font-size: 1.5rem;
+  color: #818cf8;
+  filter: drop-shadow(0 0 12px rgba(129, 140, 248, 0.8));
+  animation: ovStarTwinkle2 6.8s ease-in-out infinite alternate-reverse;
+}
+
+[data-theme="light"] .star-1,
+[data-theme="light"] .star-6 {
+  color: #d97706;
+  filter: drop-shadow(0 0 12px rgba(217, 119, 6, 0.7));
+}
+
+[data-theme="light"] .star-2,
+[data-theme="light"] .star-7 {
+  color: #ea580c;
+  filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.7));
+}
+
+[data-theme="light"] .star-3,
+[data-theme="light"] .star-5 {
+  color: #f59e0b;
+  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.7));
+}
+
+[data-theme="light"] .star-4,
+[data-theme="light"] .star-8 {
+  color: #b45309;
+  filter: drop-shadow(0 0 10px rgba(180, 83, 9, 0.6));
+}
+
+@keyframes ovStarTwinkle1 {
+  0% { transform: scale(0.7) rotate(0deg); opacity: 0.35; }
+  50% { transform: scale(1.35) rotate(45deg); opacity: 1; }
+  100% { transform: scale(0.8) rotate(90deg); opacity: 0.45; }
+}
+
+@keyframes ovStarTwinkle2 {
+  0% { transform: scale(0.85) rotate(0deg); opacity: 0.45; }
+  50% { transform: scale(1.4) rotate(-45deg); opacity: 1; }
+  100% { transform: scale(0.75) rotate(-90deg); opacity: 0.35; }
+}
+
+@keyframes ovStarTwinkle3 {
+  0% { transform: scale(0.75) rotate(15deg); opacity: 0.4; }
+  50% { transform: scale(1.3) rotate(60deg); opacity: 0.95; }
+  100% { transform: scale(0.8) rotate(105deg); opacity: 0.45; }
+}
+
+/* ==========================================================================
+   Main Content Layout & Seamless Blocks
+   ========================================================================== */
+
+.ov-main-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 6vw, 6rem);
+}
+
+.ov-tier-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--ov-divider) 20%, var(--ov-accent-cyan) 50%, var(--ov-divider) 80%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   Seamless Block Layouts (Our Values & Our Process)
+   ========================================================================== */
+
+.ov-seamless-block {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 3.5vw, 3.5rem);
+}
+
+.ov-seamless-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+}
+
+.ov-block-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 650px;
+}
+
+.ov-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.95rem;
+  background: var(--ov-tag-bg);
+  border: 1px solid var(--ov-tag-border);
+  border-radius: 9999px;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .ov-tag-pill {
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.15);
+}
+
+.ov-tag-spark {
+  color: var(--ov-accent-cyan);
+  font-size: 0.85rem;
+  animation: sparkPulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes sparkPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.25) rotate(20deg); opacity: 1; filter: drop-shadow(0 0 6px var(--ov-accent-cyan)); }
+}
+
+.ov-tag-label {
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  color: var(--ov-accent-cyan);
+  text-transform: uppercase;
+}
+
+.ov-block-title {
+  font-size: clamp(2rem, 3vw, 2.85rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--ov-text-main);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+/* Header Flow Decor Line */
+.ov-header-flow-decor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  max-width: 420px;
+  margin-bottom: 0.8rem;
+}
+
+.ov-decor-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--ov-accent-cyan) 50%, var(--ov-accent-purple) 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px var(--ov-glow-blue);
+}
+
+.ov-decor-spark {
+  color: var(--ov-accent-cyan);
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 8px var(--ov-accent-cyan));
+}
+
+/* ==========================================================================
+   Seamless 4 Items Grid (Consistent across Large & Small Laptops)
+   ========================================================================== */
+
+.ov-seamless-items-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.25rem, 2.2vw, 2.75rem);
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.ov-seamless-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.ov-seamless-item:hover {
+  transform: translateY(-6px);
+}
+
+/* Minimal Luminous Icon Node */
+.ov-item-icon-node {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ov-accent-cyan);
+  margin-bottom: 1.35rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+.ov-seamless-item:hover .ov-item-icon-node {
+  transform: scale(1.15) translateY(-3px);
+  color: var(--ov-accent-purple);
+}
+
+.ov-icon-svg {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 0 10px var(--ov-glow-blue));
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.ov-seamless-item:hover .ov-icon-svg {
+  filter: drop-shadow(0 0 18px var(--ov-accent-purple));
+}
+
+.ov-node-aura {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ov-glow-blue) 0%, transparent 70%);
+  opacity: 0;
+  filter: blur(14px);
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.ov-seamless-item:hover .ov-node-aura {
+  opacity: 0.85;
+}
+
+/* Titles & Descriptions */
+.ov-item-title {
+  font-size: clamp(1.2rem, 1.4vw, 1.45rem);
+  font-weight: 750;
+  color: var(--ov-text-main);
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.015em;
+  transition: color 0.3s ease;
+}
+
+.ov-seamless-item:hover .ov-item-title {
+  color: var(--ov-accent-cyan);
+}
+
+.ov-item-desc {
+  font-size: 0.94rem;
+  line-height: 1.68;
+  color: var(--ov-text-muted);
+  margin: 0 0 1.25rem 0;
+  transition: color 0.3s ease;
+}
+
+.ov-seamless-item:hover .ov-item-desc {
+  color: var(--ov-text-sub);
+}
+
+/* Expanding Underline Accent */
+.ov-item-hover-line {
+  width: 32px;
+  height: 2.5px;
+  background: var(--ov-highlight-grad);
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  box-shadow: 0 0 8px var(--ov-glow-blue);
+  margin: 0 auto;
+}
+
+.ov-seamless-item:hover .ov-item-hover-line {
+  width: 80px;
+  box-shadow: 0 0 16px var(--ov-accent-cyan);
+}
+
+/* ==========================================================================
+   Block 2: Our Process Track with Continuous Horizontal Line
+   ========================================================================== */
+
+.ov-process-track-container {
+  position: relative;
+  width: 100%;
+}
+
+.ov-process-continuous-line {
+  position: absolute;
+  top: 4.8rem;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--ov-accent-cyan) 25%, var(--ov-accent-purple) 50%, var(--ov-accent-pink) 75%, transparent 100%);
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: 0 0 12px var(--ov-glow-blue);
+  z-index: 1;
+}
+
+.ov-process-line-pulse {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  animation: processPulseFlow 4s ease-in-out infinite;
+}
+
+@keyframes processPulseFlow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(1200%); }
+}
+
+.ov-process-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ov-bg);
+  border: 1.5px solid var(--ov-accent-cyan);
+  box-shadow: 0 0 12px var(--ov-glow-blue);
+  margin-bottom: 0.9rem;
+  position: relative;
+  z-index: 3;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ov-step-digit {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--ov-accent-cyan);
+  letter-spacing: -0.01em;
+}
+
+.ov-seamless-item:hover .ov-process-step-badge {
+  transform: scale(1.15);
+  border-color: var(--ov-accent-pink);
+  box-shadow: 0 0 18px var(--ov-accent-pink);
+}
+
+.ov-seamless-item:hover .ov-step-digit {
+  color: var(--ov-accent-pink);
+}
+
+/* ==========================================================================
+   Block 3: CTA HERO BANNER (Seamless Floating Layout)
+   ========================================================================== */
+
+.ov-cta-seamless-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.ov-cta-split-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(2.5rem, 4.5vw, 5rem);
+  align-items: center;
+}
+
+.ov-cta-content-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.ov-cta-headline {
+  font-size: clamp(2.2rem, 3.4vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  color: var(--ov-text-main);
+  margin: 0 0 1.35rem 0;
+  transition: color 0.3s ease;
+}
+
+.ov-cta-subtext {
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  line-height: 1.75;
+  color: var(--ov-text-muted);
+  max-width: 580px;
+  margin: 0 0 2.2rem 0;
+  transition: color 0.3s ease;
+}
+
+/* Luxury Consultation Button */
+.ov-cta-consult-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 1rem 2.4rem;
+  background: var(--ov-btn-grad);
+  border-radius: 9999px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 750;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  box-sizing: border-box;
+  max-width: 100%;
+  box-shadow: 0 15px 35px var(--ov-glow-blue), 0 0 25px var(--ov-glow-purple);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s ease,
+              background 0.35s ease;
+  overflow: hidden;
+}
+
+.ov-cta-consult-btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  background: var(--ov-btn-hover);
+  box-shadow: 0 22px 50px var(--ov-glow-blue), 0 0 40px var(--ov-accent-cyan);
+}
+
+.ov-btn-arrow {
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.ov-cta-consult-btn:hover .ov-btn-arrow {
+  transform: translateX(5px);
+}
+
+.ov-btn-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+}
+
+.ov-cta-consult-btn:hover .ov-btn-shimmer {
+  left: 140%;
+}
+
+/* Right 3D Pedestal Stage */
+.ov-cta-visual-col {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.ov-cta-pedestal-stage {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.ov-pedestal-ambient-glow {
+  position: absolute;
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ov-glow-blue) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: 1;
+  animation: pedestalGlowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes pedestalGlowPulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.ov-pedestal-seamless-blend {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 0 60px var(--ov-glow-blue);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.ov-cta-pedestal-stage:hover .ov-pedestal-seamless-blend {
+  transform: scale(1.04) translateY(-6px);
+  box-shadow: 0 0 80px var(--ov-accent-cyan);
+}
+
+.ov-pedestal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ov-cta-pedestal-stage:hover .ov-pedestal-img {
+  transform: scale(1.08);
+}
+
+.ov-pedestal-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+[data-theme="light"] .ov-pedestal-vignette {
+  background: radial-gradient(circle at center, transparent 65%, rgba(255, 255, 255, 0.35) 100%);
+}
+
+.ov-cta-spark {
+  position: absolute;
+  color: var(--ov-accent-cyan);
+  filter: drop-shadow(0 0 10px var(--ov-accent-cyan));
+  font-size: 1.3rem;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.spark-p1 {
+  top: 15%;
+  right: 15%;
+  animation: sparkPulse 2s ease-in-out infinite alternate;
+}
+
+.spark-p2 {
+  bottom: 20%;
+  left: 10%;
+  color: var(--ov-accent-pink);
+  filter: drop-shadow(0 0 10px var(--ov-accent-pink));
+  animation: sparkPulse 2.5s ease-in-out infinite alternate-reverse;
+}
+
+/* ==========================================================================
+   Comprehensive Responsive Breakpoints
+   Large Laptop (1440px+), Small Laptop (1024px-1366px), Tablet (768px-1023px), Mobile (<768px)
+   ========================================================================== */
+
+/* Small Laptops (1024px to 1280px) */
+@media (max-width: 1280px) and (min-width: 1024px) {
+  .ov-seamless-items-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ov-item-title {
+    font-size: 1.22rem;
+  }
+
+  .ov-item-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+}
+
+/* Tablet Landscape & Portrait (768px to 1023px) */
+@media (max-width: 1023px) {
+  .ov-seamless-items-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 2rem;
+  }
+
+  .ov-process-continuous-line {
+    display: none;
+  }
+
+  .ov-seamless-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .ov-header-flow-decor {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ov-cta-split-layout {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3.5rem;
+  }
+
+  .ov-cta-content-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .ov-cta-subtext {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ov-cta-pedestal-stage {
+    max-width: 340px;
+    margin: 0 auto;
+  }
+}
+
+/* Mobile Devices (<= 767px) */
+@media (max-width: 767px) {
+  .ov-section-wrapper {
+    padding: 3.5rem 0 5rem 0;
+  }
+
+  .ov-main-container {
+    padding: 0 1.25rem;
+    gap: 3.5rem;
+  }
+
+  .ov-block-header {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .ov-block-title {
+    font-size: 1.85rem;
+    text-align: center;
+  }
+
+  .ov-seamless-header-row {
+    align-items: center;
+    text-align: center;
+  }
+
+  .ov-seamless-items-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .ov-item-icon-node {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .ov-icon-svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ov-cta-headline {
+    font-size: 1.85rem;
+    text-align: center;
+  }
+
+  .ov-cta-subtext {
+    font-size: 0.95rem;
+  }
+
+  .ov-cta-consult-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.95rem 1.6rem;
+    font-size: 0.98rem;
+  }
+
+  .ov-cta-pedestal-stage {
+    max-width: 270px;
+  }
+}
+
+/* Extra Small Mobile (<= 380px) */
+@media (max-width: 380px) {
+  .ov-block-title {
+    font-size: 1.65rem;
+  }
+
+  .ov-cta-headline {
+    font-size: 1.65rem;
+  }
+
+  .ov-cta-pedestal-stage {
+    max-width: 220px;
+  }
+}

@@ -5,9 +5,8 @@ import heroBgLight from '../assets/hero-bg-light.png';
 import SocialOrbit from './SocialOrbit';
 
 const Home = () => {
-  const [counts, setCounts] = useState({ launched: 0, satisfaction: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
+
   // Theme State (Dark / Light) with LocalStorage persistence
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('vayonix_theme') || 'dark';
@@ -25,30 +24,6 @@ const Home = () => {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
-
-  // Smooth Animated Numbers on Mount
-  useEffect(() => {
-    const duration = 1800;
-    const steps = 40;
-    const stepTime = duration / steps;
-    let step = 0;
-
-    const timer = setInterval(() => {
-      step++;
-      const progress = step / steps;
-      setCounts({
-        launched: Math.floor(progress * 250),
-        satisfaction: Math.floor(progress * 98),
-      });
-
-      if (step >= steps) {
-        clearInterval(timer);
-        setCounts({ launched: 250, satisfaction: 98 });
-      }
-    }, stepTime);
-
-    return () => clearInterval(timer);
-  }, []);
 
   // Scroll Progress and Bottom-to-Top Button Visibility
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -146,10 +121,10 @@ const Home = () => {
     >
       {/* Full Size Background Image */}
       <div className="cosmic-bg">
-        <img 
-          src={currentBg} 
-          alt="Digital Marketing Hero Background" 
-          className="hero-bg-img" 
+        <img
+          src={currentBg}
+          alt="Digital Marketing Hero Background"
+          className="hero-bg-img"
           key={theme}
         />
         {theme === 'dark' && (
@@ -167,6 +142,7 @@ const Home = () => {
           ================================================================= */}
       <div
         className="home-top-right-orbit"
+        data-reveal="fade-left"
         style={{
           transform: `translate3d(${mousePos.x * 12}px, ${mousePos.y * 12}px, 0)`,
         }}
@@ -182,18 +158,19 @@ const Home = () => {
               ================================================================= */}
           <div
             className="hero-left-content"
+            data-reveal="fade-right"
             style={{
               transform: `translate3d(${mousePos.x * -10}px, ${mousePos.y * -10}px, 0)`,
             }}
           >
             {/* Top Announcement Badge */}
-            <div className="announcement-badge animate-fade-down">
+            <div className="announcement-badge animate-fade-down" data-reveal="fade-up">
               <span className="badge-icon">🚀</span>
               <span className="badge-text">We Build Brands. We Grow Businesses.</span>
             </div>
 
             {/* Main Bold Headline */}
-            <h1 className="hero-heading">
+            <h1 className="hero-heading" data-reveal="fade-right">
               <span className="heading-line-1 animate-slide-right-1">DIGITAL MARKETING</span>
               <span className="heading-line-2 animate-slide-right-2">WEB DESIGN &amp;</span>
               <span className="heading-line-3 animate-slide-right-3">APP DEVELOPMENT</span>
@@ -213,13 +190,13 @@ const Home = () => {
             </h1>
 
             {/* Subtitle Description */}
-            <p className="hero-subtext animate-fade-in-delayed">
+            <p className="hero-subtext" data-reveal="fade-up" data-reveal-delay="100">
               We help businesses launch, grow, and scale online with result-driven digital strategies,
               stunning websites, and powerful mobile apps.
             </p>
 
             {/* 4 Feature Badges Grid */}
-            <div className="services-grid animate-fade-in-delayed">
+            <div className="services-grid" data-reveal="fade-up" data-reveal-delay="200">
               {services.map((service, index) => (
                 <div
                   key={service.id}
@@ -235,27 +212,12 @@ const Home = () => {
             </div>
 
             {/* CTA & Stats Card Row */}
-            <div className="cta-action-row animate-fade-in-delayed">
+            <div className="cta-action-row" data-reveal="fade-up" data-reveal-delay="300">
               <a href="#launch" className="primary-launch-btn">
                 <span>Let's Launch Your Brand</span>
                 <span className="btn-arrow">→</span>
               </a>
 
-              {/* Your Growth, Our Mission Stats Card */}
-              <div className="inline-mission-card">
-                <span className="mission-title">Your Growth, Our Mission</span>
-                <div className="mission-stats-row">
-                  <div className="mission-stat">
-                    <span className="stat-num">{counts.launched}+</span>
-                    <span className="stat-label">Projects Launched</span>
-                  </div>
-                  <div className="mission-stat-divider"></div>
-                  <div className="mission-stat">
-                    <span className="stat-num">{counts.satisfaction}%</span>
-                    <span className="stat-label">Client Satisfaction</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

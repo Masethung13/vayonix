@@ -1,228 +1,449 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import ScrollTitle from './ScrollTitle';
 import '../styles/Abt.css';
-import aboutMainImg from '../assets/about-team-main.jpg';
-import aboutSmallImg from '../assets/about-team-small.jpg';
+import bannerBg from '../assets/abt-banner-bg.jpg';
+import abtBg from '../assets/abt-bg.png';
+import abtBgLight from '../assets/abt-bg-light1.png';
 
 const Abt = () => {
-  const [scrollProgress, setScrollProgress] = useState(0.5);
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [inView, setInView] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const sectionRef = useRef(null);
-  const imageCardRef = useRef(null);
 
-  // Intersection Observer for Scroll Trigger
+  // Theme State (Dark / Light) with LocalStorage persistence
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('vayonix_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
+  });
+
+  // Apply theme to document element on change
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-        }
-      },
-      { threshold: 0.15 }
-    );
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = `theme-${theme}`;
+    localStorage.setItem('vayonix_theme', theme);
+    window.dispatchEvent(new Event('theme_change'));
+  }, [theme]);
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+  // Sync theme changes across tabs / other components
+  useEffect(() => {
+    const handleThemeSync = () => {
+      const currentTheme = localStorage.getItem('vayonix_theme') || 'dark';
+      setTheme(currentTheme);
+    };
+    window.addEventListener('theme_change', handleThemeSync);
+    window.addEventListener('storage', handleThemeSync);
+    return () => {
+      window.removeEventListener('theme_change', handleThemeSync);
+      window.removeEventListener('storage', handleThemeSync);
+    };
   }, []);
 
-  // Smooth Scroll Parallax Calculation for Interior Image
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  // Scroll Progress and Bottom-to-Top Button Visibility
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (sectionRef.current) {
-            const rect = sectionRef.current.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              const rawProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
-              const clamped = Math.max(0, Math.min(1, rawProgress));
-              setScrollProgress(clamped);
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        const currentProgress = (window.scrollY / totalScroll) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, currentProgress)));
       }
+      setShowScrollTop(window.scrollY > 220);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Initial call
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 3D Perspective Mouse Tilt & Cursor Follower on Left Image Frame
-  const handleImageMouseMove = (e) => {
-    if (!imageCardRef.current) return;
-    const rect = imageCardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMouseOffset({ x: x * 10, y: y * -10 });
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleImageMouseEnter = () => {
-    setIsHovered(true);
+  // Parallax mouse movement for 3D floating background spheres & neon splines
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 2;
+      const y = (e.clientY / innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // 3D Perspective Card Tilt
+  const handleTilt = (e, setTilt) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
+    setTilt({ x, y });
   };
 
-  const handleImageMouseLeave = () => {
-    setIsHovered(false);
-    setMouseOffset({ x: 0, y: 0 });
+  const resetTilt = (setTilt) => {
+    setTilt({ x: 0, y: 0 });
   };
 
-  // Interior Image downward parallax calculation
-  const interiorTranslateY = (scrollProgress - 0.5) * 70;
+  // Close video modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsVideoOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
-  const features = [
-    { id: 1, text: 'Creativity Meets Strategy' },
-    { id: 2, text: 'Innovative Development' },
-    { id: 3, text: 'Design. Develop. Deliver.' },
-    { id: 4, text: 'Unleashing Digital Power.' },
+  const brandLogos = [
+    {
+      name: 'Slack',
+      icon: (
+        <svg viewBox="0 0 120 30" fill="currentColor" className="abt-brand-svg">
+          <path d="M14.2 17.8a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8V15h2.8a2.8 2.8 0 0 1 2.8 2.8zm1.4 0a2.8 2.8 0 0 1 2.8-2.8 2.8 2.8 0 0 1 2.8 2.8v7a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8v-7zM21.2 12.2a2.8 2.8 0 0 1-2.8-2.8 2.8 2.8 0 0 1 2.8-2.8h2.8v2.8a2.8 2.8 0 0 1-2.8 2.8zm0 1.4a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8h-7a2.8 2.8 0 0 1-2.8-2.8 2.8 2.8 0 0 1 2.8-2.8h7zM15.6 5.2a2.8 2.8 0 0 1 2.8-2.8 2.8 2.8 0 0 1 2.8 2.8v2.8h-2.8a2.8 2.8 0 0 1-2.8-2.8zm-1.4 0a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8V-1.8A2.8 2.8 0 0 1 11.4-4.6a2.8 2.8 0 0 1 2.8 2.8v7zM8.6 10.8a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8H5.8V13.6a2.8 2.8 0 0 1 2.8-2.8zm0-1.4A2.8 2.8 0 0 1 5.8 6.6 2.8 2.8 0 0 1 8.6 3.8h7a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8h-7z" />
+          <text x="32" y="21" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="800" fill="currentColor">slack</text>
+        </svg>
+      ),
+    },
+    {
+      name: 'Google',
+      icon: (
+        <svg viewBox="0 0 90 28" fill="currentColor" className="abt-brand-svg">
+          <text x="0" y="21" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="700" letterSpacing="-0.5px" fill="currentColor">Google</text>
+        </svg>
+      ),
+    },
+    {
+      name: 'Notion',
+      icon: (
+        <svg viewBox="0 0 90 28" fill="currentColor" className="abt-brand-svg">
+          <rect x="2" y="4" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2.2" fill="none" />
+          <text x="7" y="18" fontFamily="Georgia, serif" fontSize="15" fontWeight="900" fill="currentColor">N</text>
+          <text x="26" y="19" fontFamily="system-ui, sans-serif" fontSize="16" fontWeight="700" fill="currentColor">Notion</text>
+        </svg>
+      ),
+    },
+    {
+      name: 'Airbnb',
+      icon: (
+        <svg viewBox="0 0 95 28" fill="currentColor" className="abt-brand-svg">
+          <path d="M12 4C8 4 5 10 5 14c0 4 3 8 7 8s7-4 7-8c0-4-3-10-7-10zm0 13a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" stroke="currentColor" strokeWidth="2" fill="none" />
+          <text x="24" y="20" fontFamily="system-ui, sans-serif" fontSize="17" fontWeight="800" letterSpacing="-0.5px" fill="currentColor">airbnb</text>
+        </svg>
+      ),
+    },
+    {
+      name: 'HubSpot',
+      icon: (
+        <svg viewBox="0 0 100 28" fill="currentColor" className="abt-brand-svg">
+          <text x="0" y="20" fontFamily="system-ui, sans-serif" fontSize="17" fontWeight="800" fill="currentColor">HubSp<tspan fill="#ff7a59">o</tspan>t</text>
+        </svg>
+      ),
+    },
   ];
 
   return (
-    <section className={`abt-section ${inView ? 'abt-in-view' : ''}`} id="about" ref={sectionRef}>
-      <div className="abt-ambient-glow abt-glow-left" />
-      <div className="abt-ambient-glow abt-glow-right" />
+    <div className="abt-page-wrapper" id="about" ref={sectionRef}>
 
-      <div className="abt-container">
-        {/* =================================================================
-            LEFT SIDE: DUAL-ARCH FRAME WITH SMOOTH INTERIOR IMAGE DOWNWARD GLIDE
-            ================================================================= */}
-        <div className="abt-left-col">
-          <div
-            className={`abt-image-wrapper ${inView ? 'image-loaded' : ''}`}
-            ref={imageCardRef}
-            onMouseMove={handleImageMouseMove}
-            onMouseEnter={handleImageMouseEnter}
-            onMouseLeave={handleImageMouseLeave}
-            style={{
-              transform: `perspective(1000px) rotateX(${mouseOffset.y}deg) rotateY(${mouseOffset.x}deg) scale(${isHovered ? 1.02 : 1})`,
-            }}
-          >
-            {/* Ambient Background Aura */}
-            <div className="abt-img-aura" />
-
-            {/* Unique Dual-Arched Shaped Mask Container */}
-            <div className="abt-arch-mask">
-              {/* Interior Image that smoothly moves downward on scroll */}
-              <img
-                src={aboutMainImg}
-                alt="Vayonix Creative Digital Agency Team Collaborating"
-                className="abt-main-img"
-                style={{
-                  transform: `translate3d(0, ${interiorTranslateY}px, 0) scale(${isHovered ? 1.08 : 1.04})`,
-                }}
-              />
-              <div className="abt-img-shine-overlay" />
-            </div>
-
-            {/* Floating Decorative Glow Orb */}
-            <div className="abt-floating-orb" />
-          </div>
+      {/* =====================================================================
+          1. TOP BANNER: HERO HEADER WITH BREADCRUMB & CINEMATIC TEAM BACKGROUND
+          ===================================================================== */}
+      <section className="abt-top-banner">
+        <div className="abt-banner-bg-wrap">
+          <img
+            src={bannerBg}
+            alt="Vayonix digital agency creative team collaborating in glass boardroom"
+            className="abt-banner-bg-img"
+          />
+          <div className="abt-banner-dark-overlay" />
+          <div className="abt-banner-radial-glow" />
         </div>
 
-        {/* =================================================================
-            RIGHT SIDE: COMPANY CONTENT & INTERACTIVE METRICS
-            ================================================================= */}
-        <div className="abt-right-col">
-          {/* Subtitle Badge */}
-          <div className="abt-tag-wrap">
-            <span className="abt-sparkle">✦</span>
-            <span className="abt-tag-text">Who We Are</span>
-          </div>
+        <div className="abt-banner-container" data-reveal="fade-up">
+          <h1 className="abt-banner-title">About Us</h1>
+          <nav className="abt-breadcrumbs" aria-label="Breadcrumb">
+            <Link to="/" className="abt-crumb-link">Home</Link>
+            <span className="abt-crumb-sep">›</span>
+            <span className="abt-crumb-current">About Us</span>
+          </nav>
+        </div>
+      </section>
 
-          {/* Main Headline */}
-          <h2 className="abt-heading">
-            A Creative Digital Agency{' '}
-            <span className="abt-heading-accent">Focused <span className="abt-accent-gradient">on Real Results</span></span>
-          </h2>
+      {/* =====================================================================
+          2. MAIN SECTION: ABOUT US CONTENT & 3D FLOATING COMPOSITION CARDS
+          ===================================================================== */}
+      <section className="abt-main-section">
+        {/* Continuous 3D Moving Loop Twinkle Star Prisms */}
+        <div
+          className="abt-3d-loop-canvas"
+          style={{
+            transform: `translate3d(${mousePos.x * 14}px, ${mousePos.y * 14}px, 0)`,
+          }}
+          aria-hidden="true"
+        >
+          {/* Ambient Deep Radial Glows */}
+          <div className="abt-glow abt-glow-1" />
+          <div className="abt-glow abt-glow-2" />
+          <div className="abt-glow abt-glow-3" />
 
-          {/* Descriptive Body Copy */}
-          <p className="abt-description">
-            We are a forward-thinking digital agency specializing in custom web design, high-performance mobile apps, and data-driven marketing strategies. We transform ambitious ideas into high-converting digital realities that accelerate your brand's growth and scale your business.
-          </p>
+          {/* 3D Floating Twinkle Star Elements */}
+          <div className="abt-3d-star-prism star-1" style={{ transform: `translate3d(${mousePos.x * -18}px, ${mousePos.y * -18}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-2" style={{ transform: `translate3d(${mousePos.x * 22}px, ${mousePos.y * 22}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-3" style={{ transform: `translate3d(${mousePos.x * -14}px, ${mousePos.y * 16}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-4" style={{ transform: `translate3d(${mousePos.x * 18}px, ${mousePos.y * -14}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-5" style={{ transform: `translate3d(${mousePos.x * -24}px, ${mousePos.y * 20}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-6" style={{ transform: `translate3d(${mousePos.x * 15}px, ${mousePos.y * 25}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-7" style={{ transform: `translate3d(${mousePos.x * -10}px, ${mousePos.y * -22}px, 0)` }}>✦</div>
+          <div className="abt-3d-star-prism star-8" style={{ transform: `translate3d(${mousePos.x * 26}px, ${mousePos.y * -18}px, 0)` }}>✦</div>
 
-          {/* 4-Item Checklist Card */}
-          <div className="abt-checklist-card">
-            <div className="abt-checklist-grid">
-              {features.map((feature) => (
-                <div key={feature.id} className="abt-check-item">
-                  <div className="abt-check-icon-wrap">
-                    <svg viewBox="0 0 20 20" fill="none" className="abt-check-svg">
-                      <circle cx="10" cy="10" r="9" className="abt-check-circle" fill="url(#abtBrandCheckGrad)" />
-                      <path
-                        d="M6 10.2L8.8 13L14 7.5"
-                        stroke="#ffffff"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <defs>
-                        <linearGradient id="abtBrandCheckGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" className="abt-grad-stop-1" stopColor="var(--abt-grad-1)" />
-                          <stop offset="100%" className="abt-grad-stop-2" stopColor="var(--abt-grad-2)" />
-                        </linearGradient>
-                      </defs>
+          {/* Flowing Vector Neon Splines */}
+          <svg className="abt-neon-splines-svg" viewBox="0 0 1200 800" fill="none">
+            <path
+              d="M 100,200 C 350,50 650,450 1100,180"
+              stroke="url(#abtSplineGrad1)"
+              strokeWidth="2.5"
+              strokeDasharray="8 6"
+              className="abt-spline-anim-1"
+            />
+            <path
+              d="M 200,650 C 500,400 800,750 1150,450"
+              stroke="url(#abtSplineGrad2)"
+              strokeWidth="2"
+              className="abt-spline-anim-2"
+            />
+            <defs>
+              <linearGradient id="abtSplineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
+                <stop offset="50%" stopColor="#818cf8" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#c084fc" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="abtSplineGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a855f7" stopOpacity="0.7" />
+                <stop offset="50%" stopColor="#6366f1" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.1" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div className="abt-main-container">
+          <div className="abt-content-grid">
+
+            {/* ===============================================================
+                LEFT COLUMN: HEADINGS, SUBTEXT, DUAL CTAS & TRUST BAR
+                =============================================================== */}
+            <div className="abt-left-content" data-reveal="fade-right">
+
+              {/* Glowing Tag Pill */}
+              <div className="abt-tag-pill" data-reveal="fade-up">
+                <span className="abt-tag-spark">✦</span>
+                <span className="abt-tag-text">ABOUT US</span>
+              </div>
+
+              {/* Main Headline with Smooth Word-by-Word ScrollTitle */}
+              <div data-reveal="fade-right">
+                <ScrollTitle
+                  className="abt-hero-heading"
+                  lines={[
+                    [{ text: 'We', type: 'normal' }, { text: 'Are', type: 'normal' }, { text: 'Creative', type: 'normal' }],
+                    [{ text: 'Thinkers', type: 'normal' }, { text: '&', type: 'accent' }, { text: 'Digital', type: 'gradient' }],
+                    [{ text: 'Growth', type: 'gradient' }, { text: 'Experts', type: 'gradient' }],
+                  ]}
+                />
+              </div>
+
+              {/* Subtext Description */}
+              <p className="abt-sub-description" data-reveal="fade-up" data-reveal-delay="100">
+                We blend creativity, technology, and strategy to deliver digital experiences that drive real results and grow your brand.
+              </p>
+
+              {/* Dual Action CTAs */}
+              <div className="abt-cta-row" data-reveal="fade-up" data-reveal-delay="200">
+
+                {/* Primary Pill Button: "Our Journey →" */}
+                <a href="#about" className="abt-primary-btn">
+                  <span className="abt-btn-text">Our Journey</span>
+                  <span className="abt-btn-arrow">→</span>
+                  <div className="abt-btn-glow" />
+                </a>
+
+                {/* Secondary Video Trigger Button: "Watch Our Story" */}
+                <button
+                  type="button"
+                  className="abt-video-btn"
+                  onClick={() => setIsVideoOpen(true)}
+                  aria-label="Watch our 2:45 min story video"
+                >
+                  <div className="abt-play-ring">
+                    <div className="abt-play-pulse-1" />
+                    <div className="abt-play-pulse-2" />
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="abt-play-icon">
+                      <path d="M8 5V19L19 12L8 5Z" />
                     </svg>
                   </div>
-                  <span className="abt-check-text">{feature.text}</span>
+                  <div className="abt-video-text-group">
+                    <span className="abt-video-label">Watch Our Story</span>
+                    <span className="abt-video-duration">2:45 Min</span>
+                  </div>
+                </button>
+
+              </div>
+
+              {/* Trust Bar with Brand Logos */}
+              <div className="abt-trust-section" data-reveal="fade-up" data-reveal-delay="300">
+                <span className="abt-trust-label">Trusted by 200+ brands worldwide</span>
+                <div className="abt-brands-row">
+                  {brandLogos.map((brand, idx) => (
+                    <div key={idx} className="abt-brand-logo-item" title={brand.name}>
+                      {brand.icon}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Dual Card: Thumbnail Image + 92% Stat */}
-          <div className="abt-stat-card">
-            {/* Left Thumbnail Box */}
-            <div className="abt-thumb-box">
-              <img
-                src={aboutSmallImg}
-                alt="Vayonix Team Collaborating on Laptops"
-                className="abt-thumb-img"
-              />
-              <div className="abt-thumb-sheen" />
-            </div>
-
-            {/* Right Metric Box */}
-            <div className="abt-metric-box">
-              <div className="abt-metric-number">98%</div>
-              <div className="abt-metric-label">
-                Satisfied Clients<br />Returning Often
               </div>
-            </div>
-          </div>
 
-          {/* CTA Button */}
-          <div className="abt-cta-wrap">
-            <a href="#services" className="abt-discover-btn">
-              <span className="abt-btn-text">Discover More</span>
-              <div className="abt-btn-arrow-circle">
-                <svg
-                  className="abt-arrow-svg"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.33334 8H12.6667M12.6667 8L8.66668 4M12.6667 8L8.66668 12"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+            </div>
+
+            {/* ===============================================================
+                RIGHT COLUMN: 3D GLASS CARD CONTAINER AROUND BIG COMPOSITION IMAGE
+                =============================================================== */}
+            <div className="abt-right-composition" data-reveal="fade-left">
+              <div
+                className="abt-glass-card-frame"
+                onMouseMove={(e) => handleTilt(e, setTilt)}
+                onMouseLeave={() => resetTilt(setTilt)}
+                style={{
+                  transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) translate3d(${mousePos.x * 6}px, ${mousePos.y * 6}px, 0)`,
+                }}
+              >
+                {/* Ambient Glow Aura Behind Card */}
+                <div className="abt-card-glow-aura" />
+
+                {/* Image Content Frame with Instant Theme Switch */}
+                <div className="abt-card-image-box">
+                  <img
+                    src={theme === 'light' ? abtBgLight : abtBg}
+                    alt="Vayonix digital growth experts showcase"
+                    className="abt-big-photo"
+                    key={theme}
                   />
-                </svg>
+                  <div className="abt-card-specular-light" />
+                </div>
               </div>
-            </a>
+            </div>
+
           </div>
         </div>
+      </section>
+
+      {/* =====================================================================
+          3. FULLSCREEN STORY VIDEO MODAL
+          ===================================================================== */}
+      {isVideoOpen && (
+        <div className="abt-video-modal-backdrop" onClick={() => setIsVideoOpen(false)}>
+          <div className="abt-video-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="abt-modal-close-btn"
+              onClick={() => setIsVideoOpen(false)}
+              aria-label="Close video player"
+            >
+              ✕
+            </button>
+            <div className="abt-video-iframe-wrap">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="Vayonix Agency Story Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          4. RIGHT BOTTOM FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME TOGGLE)
+          ===================================================================== */}
+      <div className="floating-action-cluster">
+        {/* Bottom to Top Button with Circular SVG Scroll Progress Loader */}
+        <button
+          className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
+          onClick={scrollToTop}
+          aria-label="Scroll back to top"
+          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+        >
+          {/* Circular SVG Progress Ring */}
+          <svg className="scroll-progress-svg" viewBox="0 0 48 48">
+            <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
+            <circle
+              className="scroll-progress-bar"
+              cx="24"
+              cy="24"
+              r="20"
+              style={{
+                strokeDasharray: 125.66,
+                strokeDashoffset: 125.66 - (scrollProgress / 100) * 125.66,
+              }}
+            />
+          </svg>
+
+          {/* Centered Upward Arrow Icon */}
+          <div className="scroll-arrow-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
+              <path
+                d="M12 19V5M5 12L12 5L19 12"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* Ambient Glow */}
+          <div className="scroll-btn-glow" />
+        </button>
+
+        {/* Theme Toggle Button */}
+        <button
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+        >
+          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : 'dark-active'}`}>
+            {/* Sun Icon */}
+            <div className="theme-icon sun-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" fill="#f59e0b"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+
+            {/* Moon Icon */}
+            <div className="theme-icon moon-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#f59e0b"></path>
+              </svg>
+            </div>
+          </div>
+          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+        </button>
       </div>
-    </section>
+
+    </div>
   );
 };
 
