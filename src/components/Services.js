@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollTitle from './ScrollTitle';
 
-// Register GSAP Plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const servicesList = [
@@ -71,15 +70,17 @@ const servicesList = [
 ];
 
 const Services = () => {
-  const sectionRef = useRef(null);
+  const outerWrapperRef = useRef(null); // Stable outer root
+  const pinnedSectionRef = useRef(null); // Pinned target
   const cubeRef = useRef(null);
   const [activeCard, setActiveCard] = useState(0);
 
   useEffect(() => {
+    // Wrap inside gsap.context so all animations and pin-spacers revert on unmount
     const ctx = gsap.context(() => {
-      const section = sectionRef.current;
+      const pinnedSection = pinnedSectionRef.current;
       const cube = cubeRef.current;
-      if (!section || !cube) return;
+      if (!pinnedSection || !cube) return;
 
       const totalLayers = servicesList.length;
 
@@ -92,12 +93,12 @@ const Services = () => {
         });
       });
 
-      // 2. Master Pinned Timeline (Runs smoothly on Desktop, Tablet & Mobile)
+      // 2. Pinned Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: section,
+          trigger: pinnedSection,
           start: 'top top',
-          end: `+=${(totalLayers - 1) * 100}%`, // 300% scroll distance for 4 layers
+          end: `+=${(totalLayers - 1) * 100}%`,
           pin: true,
           scrub: 0.8,
           snap: {
@@ -121,7 +122,6 @@ const Services = () => {
         const next = i + 1;
         const targetRotation = next * 90;
 
-        // Rotate 3D Cube
         tl.to(
           cube,
           {
@@ -132,7 +132,6 @@ const Services = () => {
           i
         );
 
-        // Fade OUT current text layer
         tl.to(
           `.text-layer-${i}`,
           {
@@ -145,7 +144,6 @@ const Services = () => {
           i
         );
 
-        // Fade IN next text layer
         tl.fromTo(
           `.text-layer-${next}`,
           {
@@ -163,161 +161,155 @@ const Services = () => {
           i + 0.3
         );
       }
-
-      ScrollTrigger.refresh();
-    }, sectionRef);
-
-    const handleResize = () => ScrollTrigger.refresh();
-    window.addEventListener('resize', handleResize);
+    }, outerWrapperRef); // Scope to outerWrapperRef
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      // Revert completely restores the DOM tree before React unmounts it
       ctx.revert();
     };
   }, []);
 
   return (
-    <section className="pinned-services-section" id="services" ref={sectionRef}>
-      <div className="services-ambient-glow services-glow-1" />
-      <div className="services-ambient-glow services-glow-2" />
+    // Stable outer wrapper prevents React from losing track of children
+    <div className="services-outer-wrapper" ref={outerWrapperRef}>
+      <section className="pinned-services-section" id="services" ref={pinnedSectionRef}>
+        <div className="services-ambient-glow services-glow-1" />
+        <div className="services-ambient-glow services-glow-2" />
 
-      <div className="pinned-services-container">
-        
-        {/* Top Header Banner */}
-        <div className="services-header-clean">
-          <div className="services-tag-badge">
-            <span className="tag-sparkle">✦</span>
-            <span className="tag-title">Our Premium Capabilities</span>
+        <div className="pinned-services-container">
+          {/* Top Header Banner */}
+          <div className="services-header-clean">
+            <div className="services-tag-badge">
+              <span className="tag-sparkle">✦</span>
+              <span className="tag-title">Our Premium Capabilities</span>
+            </div>
+            <ScrollTitle
+              as="h2"
+              className="services-main-heading"
+              lines={[
+                [
+                  { text: 'Engineering', type: 'normal' },
+                  { text: 'High-Impact', type: 'normal' },
+                  { text: 'Solutions', type: 'normal' },
+                ],
+                [
+                  { text: 'That', type: 'gradient' },
+                  { text: 'Fuel', type: 'gradient' },
+                  { text: 'Growth', type: 'gradient' },
+                ],
+              ]}
+            />
           </div>
-          <ScrollTitle
-            as="h2"
-            className="services-main-heading"
-            lines={[
-              [
-                { text: 'Engineering', type: 'normal' },
-                { text: 'High-Impact', type: 'normal' },
-                { text: 'Solutions', type: 'normal' },
-              ],
-              [
-                { text: 'That', type: 'gradient' },
-                { text: 'Fuel', type: 'gradient' },
-                { text: 'Growth', type: 'gradient' },
-              ],
-            ]}
-          />
-        </div>
 
-        {/* =================================================================
-            2-COLUMN STAGE: LEFT (TEXT LAYERS) + RIGHT (3D CUBE SHOWCASE)
-            ================================================================= */}
-        <div className="services-stage-body">
-          
-          {/* 1. TEXT VIEWPORT (Desktop Left / Mobile Bottom) */}
-          <div className="services-text-viewport">
-            {servicesList.map((service, index) => (
-              <div
-                key={service.id}
-                className={`service-text-layer text-layer-${index}`}
-              >
-                <div className="clean-service-header">
-                  <span className="clean-service-num">{service.id}</span>
-                  <span className="clean-service-badge">{service.badge}</span>
-                </div>
-
-                <h3 className="clean-service-title">{service.title}</h3>
-                <h4
-                  className="clean-service-tagline"
-                  style={{ color: service.accentColor }}
+          {/* =================================================================
+              2-COLUMN STAGE: LEFT (TEXT LAYERS) + RIGHT (3D CUBE SHOWCASE)
+              ================================================================= */}
+          <div className="services-stage-body">
+            {/* 1. TEXT VIEWPORT (Left) */}
+            <div className="services-text-viewport">
+              {servicesList.map((service, index) => (
+                <div
+                  key={service.id}
+                  className={`service-text-layer text-layer-${index}`}
                 >
-                  {service.tagline}
-                </h4>
-                <p className="clean-service-desc">{service.desc}</p>
+                  <div className="clean-service-header">
+                    <span className="clean-service-num">{service.id}</span>
+                    <span className="clean-service-badge">{service.badge}</span>
+                  </div>
 
-                <div className="clean-features-list">
-                  {service.features.map((feat, idx) => (
-                    <div key={idx} className="clean-feature-row">
-                      <span
-                        className="clean-feature-bullet"
-                        style={{ color: service.accentColor }}
-                      >
-                        ✦
-                      </span>
-                      <span className="clean-feature-text">{feat}</span>
-                    </div>
-                  ))}
-                </div>
+                  <h3 className="clean-service-title">{service.title}</h3>
+                  <h4
+                    className="clean-service-tagline"
+                    style={{ color: service.accentColor }}
+                  >
+                    {service.tagline}
+                  </h4>
+                  <p className="clean-service-desc">{service.desc}</p>
 
-                <div className="clean-service-action">
-                  <a href="#contact" className="clean-action-btn">
-                    <span>Explore Capability</span>
-                    <span className="clean-btn-arrow">→</span>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 2. 3D CUBE VIEWPORT (Desktop Right / Mobile Top) */}
-          <div className="services-cube-viewport">
-            <div className="cube-scene-wrapper">
-              <div
-                className="clean-cube-aura"
-                style={{
-                  background: `radial-gradient(circle at 50% 50%, ${servicesList[activeCard].accentColor}77 0%, rgba(56, 189, 248, 0.18) 50%, transparent 80%)`,
-                }}
-              />
-
-              {/* 3D Rotator Box */}
-              <div className="cube-3d-stage">
-                <div className="cube-3d-rotator" ref={cubeRef}>
-                  {servicesList.map((item, idx) => (
-                    <div
-                      key={item.id}
-                      className={`cube-face face-${idx + 1}`}
-                      style={{ '--face-accent': item.accentColor }}
-                    >
-                      <div className="face-image-container">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="face-bg-image"
-                          loading="lazy"
-                        />
-                        <div className="face-glass-overlay" />
-                        <div className="face-content">
-                          <div className="face-top-row">
-                            <span className="face-badge-pill">{item.badge}</span>
-                            <span className="face-num-pill">{item.id}</span>
-                          </div>
-                          <h4 className="face-title">{item.title}</h4>
-                          <p className="face-tagline">{item.tagline}</p>
-                        </div>
+                  <div className="clean-features-list">
+                    {service.features.map((feat, idx) => (
+                      <div key={idx} className="clean-feature-row">
+                        <span
+                          className="clean-feature-bullet"
+                          style={{ color: service.accentColor }}
+                        >
+                          ✦
+                        </span>
+                        <span className="clean-feature-text">{feat}</span>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    ))}
+                  </div>
 
-              {/* Dynamic Status Pill */}
-              <div className="clean-canvas-pill">
-                <span
-                  className="pill-dot"
+                  <div className="clean-service-action">
+                    <a href="#contact" className="clean-action-btn">
+                      <span>Explore Capability</span>
+                      <span className="clean-btn-arrow">→</span>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 2. 3D CUBE VIEWPORT (Right) */}
+            <div className="services-cube-viewport">
+              <div className="cube-scene-wrapper">
+                <div
+                  className="clean-cube-aura"
                   style={{
-                    backgroundColor: servicesList[activeCard].accentColor,
-                    boxShadow: `0 0 10px ${servicesList[activeCard].accentColor}`,
+                    background: `radial-gradient(circle at 50% 50%, ${servicesList[activeCard].accentColor}77 0%, rgba(56, 189, 248, 0.18) 50%, transparent 80%)`,
                   }}
                 />
-                <span>
-                  {servicesList[activeCard].id} / {servicesList[activeCard].badge}
-                </span>
+
+                {/* 3D Rotator Box */}
+                <div className="cube-3d-stage">
+                  <div className="cube-3d-rotator" ref={cubeRef}>
+                    {servicesList.map((item, idx) => (
+                      <div
+                        key={item.id}
+                        className={`cube-face face-${idx + 1}`}
+                        style={{ '--face-accent': item.accentColor }}
+                      >
+                        <div className="face-image-container">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="face-bg-image"
+                            loading="lazy"
+                          />
+                          <div className="face-glass-overlay" />
+                          <div className="face-content">
+                            <div className="face-top-row">
+                              <span className="face-badge-pill">{item.badge}</span>
+                              <span className="face-num-pill">{item.id}</span>
+                            </div>
+                            <h4 className="face-title">{item.title}</h4>
+                            <p className="face-tagline">{item.tagline}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Status Pill */}
+                <div className="clean-canvas-pill">
+                  <span
+                    className="pill-dot"
+                    style={{
+                      backgroundColor: servicesList[activeCard].accentColor,
+                      boxShadow: `0 0 10px ${servicesList[activeCard].accentColor}`,
+                    }}
+                  />
+                  <span>
+                    {servicesList[activeCard].id} / {servicesList[activeCard].badge}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
-
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

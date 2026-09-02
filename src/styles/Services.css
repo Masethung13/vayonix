@@ -690,3 +690,8 @@ body.theme-light {
     font-size: 0.82rem;
   }
 }
+.services-outer-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
