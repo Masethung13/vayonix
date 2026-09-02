@@ -5,9 +5,7 @@ import { useLocation } from 'react-router-dom';
  * useScrollReveal Hook
  * Automatically watches all elements with `data-reveal="fade-up"`, `data-reveal="fade-left"`,
  * `data-reveal="fade-right"`, `data-reveal="zoom-in"`, or `.reveal-*` classes
- * and triggers smooth entrance animations every time they scroll into view.
- * 
- * Safely reveals all initial viewport elements on page load & route transitions immediately.
+ * and triggers smooth entrance animations every time they scroll into view or dynamic filters change.
  */
 export const useScrollReveal = (threshold = 0.05) => {
   let location = null;
@@ -36,8 +34,11 @@ export const useScrollReveal = (threshold = 0.05) => {
         if (!el) return;
         const rect = el.getBoundingClientRect();
         // If element is in viewport, reveal it immediately
-        if (rect.top < windowHeight * 0.96 && rect.bottom > -50) {
+        if (rect.top < windowHeight * 0.98 && rect.bottom > -50) {
           el.classList.add('is-revealed');
+        }
+        if (observer) {
+          observer.observe(el);
         }
       });
     };
@@ -72,16 +73,21 @@ export const useScrollReveal = (threshold = 0.05) => {
         }
       });
 
-      // Run multiple initial passes so headers/banners are never black or delayed
+      // Run multiple initial passes so headers/banners and filtered items are never black or delayed
       revealInViewElements();
       requestAnimationFrame(revealInViewElements);
       const timer1 = setTimeout(revealInViewElements, 60);
-      const timer2 = setTimeout(revealInViewElements, 250);
+      const timer2 = setTimeout(revealInViewElements, 200);
+
+      window.addEventListener('scroll', revealInViewElements, { passive: true });
+      window.addEventListener('resize', revealInViewElements, { passive: true });
 
       return () => {
         isMounted = false;
         clearTimeout(timer1);
         clearTimeout(timer2);
+        window.removeEventListener('scroll', revealInViewElements);
+        window.removeEventListener('resize', revealInViewElements);
         if (observer) {
           observer.disconnect();
           observer = null;

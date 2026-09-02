@@ -11,13 +11,14 @@ const Header = () => {
 
   const isAboutPage = location.pathname === '/about';
   const isServicesPage = location.pathname === '/services';
-  const isDedicatedPage = isAboutPage || isServicesPage;
+  const isBlogsPage = location.pathname === '/blogs' || location.pathname === '/blog';
+  const isDedicatedPage = isAboutPage || isServicesPage || isBlogsPage;
 
   const navLinks = [
     { name: 'Home', path: '/', isHash: false },
     { name: 'About Us', path: '/about', isHash: false },
     { name: 'Services', path: '/services', isHash: false },
-    { name: 'Blogs', path: isDedicatedPage ? '/#working-process' : '#working-process', isHash: !isDedicatedPage },
+    { name: 'Blogs', path: '/blogs', isHash: false },
     { name: 'Contact', path: isDedicatedPage ? '/#contact' : '#contact', isHash: !isDedicatedPage },
   ];
 
@@ -119,6 +120,8 @@ const Header = () => {
                     ? isAboutPage
                     : link.path === '/services'
                     ? isServicesPage
+                    : link.path === '/blogs'
+                    ? isBlogsPage
                     : link.path === '/'
                     ? location.pathname === '/' && !location.hash
                     : false;

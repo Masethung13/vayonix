@@ -10,6 +10,7 @@ import Services from './components/Services';
 import Workingprocess from './components/Workingprocess';
 import Whychooseus from './components/Whychooseus';
 import ServicePg from './components/ServicePg';
+import BlogsPg from './components/BlogsPg';
 import Footer from './components/Footer';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import './styles/ScrollReveal.css';
@@ -62,6 +63,8 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicePg />} />
+          <Route path="/blogs" element={<BlogsPg />} />
+          <Route path="/blog" element={<BlogsPg />} />
           {/* Catch-all fallback */}
           <Route path="*" element={<HomePage />} />
         </Routes>

@@ -222,16 +222,14 @@ const Ourvalues = () => {
           },
         });
 
-        // Step-by-Step Card Illuminations & Scale Momentum
+        // Step-by-Step Card Illuminations (Badge center stays perfectly anchored)
         PROCESS_DATA.forEach((_, idx) => {
           if (idx > 0) {
             tl.to(
               `.ov-proc-card-${idx}`,
               {
                 opacity: 1,
-                y: 0,
-                scale: 1.03,
-                duration: 0.6,
+                duration: 0.5,
                 ease: 'power2.out',
               },
               (idx - 0.5) * 0.8
