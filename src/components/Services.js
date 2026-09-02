@@ -83,23 +83,23 @@ const Services = () => {
 
       const totalLayers = servicesList.length;
 
-      // 1. Initial State: Layer 0 active, Layers 1-3 hidden
+      // 1. Initial State for all 4 Layers
       servicesList.forEach((_, i) => {
         gsap.set(`.text-layer-${i}`, {
           opacity: i === 0 ? 1 : 0,
-          y: i === 0 ? 0 : 40,
+          y: i === 0 ? 0 : 30,
           pointerEvents: i === 0 ? 'auto' : 'none',
         });
       });
 
-      // 2. Master Pinned Timeline: Pin the entire section for 4 scroll units
+      // 2. Master Pinned Timeline (Runs smoothly on Desktop, Tablet & Mobile)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: `+=${(totalLayers - 1) * 100}%`, // 300% scroll distance for 4 layers
           pin: true,
-          scrub: 0.8, // Smooth momentum scroll scrub
+          scrub: 0.8,
           snap: {
             snapTo: 1 / (totalLayers - 1),
             duration: { min: 0.2, max: 0.5 },
@@ -116,12 +116,12 @@ const Services = () => {
         },
       });
 
-      // 3. Build step-by-step 3D cube rotation + text transitions for each layer
+      // 3. Step-by-Step 3D Cube Rotation & Text Layer Crossfade
       for (let i = 0; i < totalLayers - 1; i++) {
         const next = i + 1;
-        const targetRotation = next * 90; // 90deg, 180deg, 270deg
+        const targetRotation = next * 90;
 
-        // Step transition: Layer i -> Layer next
+        // Rotate 3D Cube
         tl.to(
           cube,
           {
@@ -137,7 +137,7 @@ const Services = () => {
           `.text-layer-${i}`,
           {
             opacity: 0,
-            y: -40,
+            y: -30,
             pointerEvents: 'none',
             ease: 'power2.inOut',
             duration: 0.7,
@@ -150,7 +150,7 @@ const Services = () => {
           `.text-layer-${next}`,
           {
             opacity: 0,
-            y: 40,
+            y: 30,
             pointerEvents: 'none',
           },
           {
@@ -184,7 +184,7 @@ const Services = () => {
       <div className="pinned-services-container">
         
         {/* Top Header Banner */}
-        <div className="services-header-clean" data-reveal="fade-up">
+        <div className="services-header-clean">
           <div className="services-tag-badge">
             <span className="tag-sparkle">✦</span>
             <span className="tag-title">Our Premium Capabilities</span>
@@ -208,11 +208,11 @@ const Services = () => {
         </div>
 
         {/* =================================================================
-            2-COLUMN STAGE: LEFT (4 TEXT LAYERS) + RIGHT (3D CUBE ROTATOR)
+            2-COLUMN STAGE: LEFT (TEXT LAYERS) + RIGHT (3D CUBE SHOWCASE)
             ================================================================= */}
         <div className="services-stage-body">
           
-          {/* 1. LEFT SIDE: 4 TEXT LAYERS */}
+          {/* 1. TEXT VIEWPORT (Desktop Left / Mobile Bottom) */}
           <div className="services-text-viewport">
             {servicesList.map((service, index) => (
               <div
@@ -257,7 +257,7 @@ const Services = () => {
             ))}
           </div>
 
-          {/* 2. RIGHT SIDE: 3D CUBE TARGET */}
+          {/* 2. 3D CUBE VIEWPORT (Desktop Right / Mobile Top) */}
           <div className="services-cube-viewport">
             <div className="cube-scene-wrapper">
               <div
