@@ -36,7 +36,159 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Header Sticky Main Frame
+   TOP-FIXED GLOWING QUANTUM LASER PROGRESS LOADER (SMOOTH ANIMATED)
+   ========================================================================== */
+
+.header-scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  max-width: 100%;
+  height: 3.5px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: visible;
+  pointer-events: none;
+  z-index: 999999;
+}
+
+[data-theme="light"] .header-scroll-progress-container {
+  background: rgba(217, 119, 6, 0.08);
+}
+
+/* Fluid Ambient Underglow Bloom */
+.header-progress-ambient-bloom {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 14px;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 35%, #a855f7 70%, #ec4899 100%);
+  filter: blur(10px);
+  opacity: 0.8;
+  pointer-events: none;
+  will-change: width;
+  transition: width 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="light"] .header-progress-ambient-bloom {
+  background: linear-gradient(90deg, #ea580c 0%, #f59e0b 50%, #fbbf24 100%);
+  opacity: 0.75;
+  filter: blur(8px);
+}
+
+/* Primary Laser Core Bar with Smooth Animated Color Waves */
+.header-scroll-progress-bar {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #38bdf8 0%,
+    #6366f1 20%,
+    #8b5cf6 45%,
+    #d946ef 70%,
+    #ec4899 90%,
+    #f97316 100%
+  );
+  background-size: 200% 100%;
+  animation: laserSpectrumWave 4s linear infinite;
+  border-radius: 0 9999px 9999px 0;
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.95), 0 0 4px #ffffff;
+  will-change: width;
+  transition: width 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes laserSpectrumWave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+[data-theme="light"] .header-scroll-progress-bar {
+  background: linear-gradient(90deg, #f59e0b 0%, #ea580c 35%, #d97706 70%, #b45309 100%);
+  background-size: 200% 100%;
+  animation: laserSpectrumWave 4s linear infinite;
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.9), 0 0 3px #ffffff;
+}
+
+/* Flowing Plasma Energy Wave */
+.header-progress-laser-pulse {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 50%, transparent 100%);
+  animation: laserPulseFlow 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  border-radius: 0 9999px 9999px 0;
+}
+
+@keyframes laserPulseFlow {
+  0% { left: -100%; }
+  55%, 100% { left: 200%; }
+}
+
+/* Glowing Diamond Prism Star Tip (✦) */
+.header-progress-prism-edge {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.6);
+  opacity: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.header-progress-prism-edge.is-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.prism-spark-svg {
+  width: 14px;
+  height: 14px;
+  color: #ffffff;
+  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px rgba(139, 92, 246, 0.95));
+  animation: prismTwinkleRotate 3s infinite ease-in-out;
+}
+
+[data-theme="light"] .prism-spark-svg {
+  color: #ffffff;
+  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgba(234, 88, 12, 0.95));
+}
+
+@keyframes prismTwinkleRotate {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.35) rotate(35deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #ffffff);
+  }
+}
+
+.prism-glow-burst {
+  position: absolute;
+  width: 24px;
+  height: 8px;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(139, 92, 246, 0.85) 50%, transparent 80%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+[data-theme="light"] .prism-glow-burst {
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(234, 88, 12, 0.85) 50%, transparent 80%);
+}
+
+/* ==========================================================================
+   Header Main Sticky Frame
    ========================================================================== */
 
 .site-header {
@@ -57,146 +209,6 @@ body.theme-light {
 .site-header.header-scrolled {
   background: var(--nav-bg-scrolled);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  border-bottom-color: var(--nav-border);
-}
-
-.site-header * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==========================================================================
-   Advanced Futuristic Quantum Plasma Scroll Progress Loader
-   ========================================================================== */
-
-.header-scroll-progress-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3.5px;
-  background: rgba(255, 255, 255, 0.05);
-  overflow: visible;
-  pointer-events: none;
-  z-index: 1002;
-}
-
-[data-theme="light"] .header-scroll-progress-container {
-  background: rgba(217, 119, 6, 0.1);
-}
-
-/* Continuous Ambient Underglow Bloom */
-.header-progress-ambient-bloom {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  height: 14px;
-  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 35%, #a855f7 70%, #ec4899 100%);
-  filter: blur(8px);
-  opacity: 0.65;
-  pointer-events: none;
-  transition: width 0.08s linear;
-}
-
-[data-theme="light"] .header-progress-ambient-bloom {
-  background: linear-gradient(90deg, #ea580c 0%, #f59e0b 50%, #fbbf24 100%);
-  opacity: 0.55;
-  filter: blur(7px);
-}
-
-/* Primary Laser Core Bar */
-.header-scroll-progress-bar {
-  position: relative;
-  height: 100%;
-  background: linear-gradient(90deg, #38bdf8 0%, #6366f1 25%, #8b5cf6 50%, #d946ef 75%, #f97316 100%);
-  border-radius: 0 9999px 9999px 0;
-  box-shadow: 0 0 14px rgba(139, 92, 246, 0.8), 0 0 4px #ffffff;
-  transition: width 0.08s linear;
-}
-
-[data-theme="light"] .header-scroll-progress-bar {
-  background: linear-gradient(90deg, #f59e0b 0%, #ea580c 45%, #d97706 75%, #b45309 100%);
-  box-shadow: 0 0 12px rgba(234, 88, 12, 0.7);
-}
-
-/* Running Plasma Pulse Wave Along Active Track */
-.header-progress-laser-pulse {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 50%, transparent 100%);
-  animation: laserPulseWave 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  border-radius: 0 9999px 9999px 0;
-}
-
-@keyframes laserPulseWave {
-  0% {
-    left: -100%;
-  }
-
-  60%,
-  100% {
-    left: 200%;
-  }
-}
-
-/* Glowing Diamond Prism Star Tip (✦) */
-.header-progress-prism-edge {
-  position: absolute;
-  right: -7px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.prism-spark-svg {
-  width: 13px;
-  height: 13px;
-  color: #ffffff;
-  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px rgba(139, 92, 246, 0.9));
-  animation: prismSparkTwinkle 2.5s infinite ease-in-out;
-}
-
-[data-theme="light"] .prism-spark-svg {
-  color: #ffffff;
-  filter: drop-shadow(0 0 5px #ffffff) drop-shadow(0 0 8px rgba(234, 88, 12, 0.9));
-}
-
-@keyframes prismSparkTwinkle {
-
-  0%,
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 0.9;
-  }
-
-  50% {
-    transform: scale(1.3) rotate(25deg);
-    opacity: 1;
-    filter: drop-shadow(0 0 10px #ffffff);
-  }
-}
-
-.prism-glow-burst {
-  position: absolute;
-  width: 22px;
-  height: 6px;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(139, 92, 246, 0.8) 50%, transparent 80%);
-  filter: blur(2px);
-  pointer-events: none;
-}
-
-[data-theme="light"] .prism-glow-burst {
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(234, 88, 12, 0.8) 50%, transparent 80%);
 }
 
 .header-container {
@@ -274,7 +286,7 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   CLEAN OPEN CENTER NAVIGATION (No Box / No Border)
+   Navigation
    ========================================================================== */
 
 .header-nav {
@@ -294,7 +306,6 @@ body.theme-light {
   position: relative;
 }
 
-/* Open Link Styling with Floating Aurora Bar & Glow Bloom */
 .nav-link {
   position: relative;
   display: inline-flex;
@@ -317,7 +328,6 @@ body.theme-light {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
 }
 
-/* Soft Ambient Radial Glow Bloom behind Hovered Link */
 .nav-glow-bloom {
   position: absolute;
   inset: -10px -15px;
@@ -330,7 +340,6 @@ body.theme-light {
   z-index: 0;
 }
 
-/* Animated Floating Aurora Underline Bar */
 .nav-hover-bar {
   position: absolute;
   bottom: 0px;
@@ -348,7 +357,6 @@ body.theme-light {
   z-index: 2;
 }
 
-/* Hover Interactions */
 .nav-link:hover {
   color: var(--nav-text-hover);
 }
@@ -367,7 +375,6 @@ body.theme-light {
   opacity: 0.25;
 }
 
-/* Active Link State */
 .nav-link.active {
   color: #ffffff;
   font-weight: 700;
@@ -388,7 +395,7 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Advanced Interactive CTA Button ("Get Started")
+   CTA Button
    ========================================================================== */
 
 .header-action {
@@ -403,7 +410,7 @@ body.theme-light {
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
-  padding: 0.55rem 0.65rem 0.55rem 1.35rem;
+  padding: 0.65rem 1.45rem;
   background: var(--btn-gradient);
   color: #ffffff;
   font-size: 0.92rem;
@@ -418,7 +425,6 @@ body.theme-light {
   overflow: hidden;
 }
 
-/* Shimmer Light Beam */
 .cta-button::before {
   content: '';
   position: absolute;
@@ -434,24 +440,6 @@ body.theme-light {
   left: 100%;
 }
 
-.cta-button-text {
-  position: relative;
-  z-index: 2;
-  letter-spacing: 0.01em;
-}
-
-.cta-icon-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 2;
-}
-
 .cta-arrow-icon {
   width: 14px;
   height: 14px;
@@ -465,15 +453,8 @@ body.theme-light {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
-.cta-button:hover .cta-icon-circle {
-  background: #ffffff;
-  color: var(--nav-accent);
-  transform: translateX(2px) rotate(45deg);
-}
-
 .cta-button:hover .cta-arrow-icon {
-  transform: scale(1.1);
-  stroke: var(--nav-accent);
+  transform: translateX(3px);
 }
 
 .cta-button:active {
@@ -481,7 +462,7 @@ body.theme-light {
 }
 
 /* ============================================================
-   Mobile Menu Toggle Button & Animated Drawer
+   Mobile Toggle Button & Drawer
    ============================================================ */
 
 .mobile-toggle-btn {
@@ -526,14 +507,13 @@ body.theme-light {
 }
 
 /* ============================================================
-   Responsive Media Queries
+   Responsive Breakpoints
    ============================================================ */
 
 @media (max-width: 1100px) {
   .header-container {
     padding: 0 1.75rem;
   }
-
   .nav-list {
     gap: 1.5rem;
   }
