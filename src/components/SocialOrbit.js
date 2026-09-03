@@ -9,7 +9,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import "../styles/SocialOrbit.css";
-import logo from "../assets/vayonix-logo1.png";
+import logo from "../assets/vayonix-logo-og.png";
 
 export default function SocialOrbit() {
   return (

@@ -1,0 +1,711 @@
+/* ==========================================================================
+   ServiceDeliveryCycle Component Stylesheet
+   Silky-Smooth Interactive Execution Engine with 3D Background Elements
+   ========================================================================== */
+
+:root {
+  --sdc-bg: #03040f;
+  --sdc-text-main: #ffffff;
+  --sdc-text-sub: #cbd5e1;
+  --sdc-text-muted: #94a3b8;
+  --sdc-accent-cyan: #38bdf8;
+  --sdc-accent-indigo: #818cf8;
+  --sdc-accent-purple: #a855f7;
+  --sdc-accent-pink: #ec4899;
+  --sdc-highlight-grad: linear-gradient(135deg, #38bdf8 0%, #818cf8 35%, #a855f7 70%, #ec4899 100%);
+  --sdc-glow-blue: rgba(56, 189, 248, 0.45);
+  --sdc-glow-purple: rgba(168, 85, 247, 0.55);
+  --sdc-card-bg: rgba(13, 17, 45, 0.65);
+  --sdc-card-border: rgba(255, 255, 255, 0.12);
+  --sdc-pill-bg: rgba(15, 23, 42, 0.85);
+  --sdc-pill-border: rgba(56, 189, 248, 0.35);
+}
+
+[data-theme="light"],
+body.theme-light {
+  --sdc-bg: #ffffff;
+  --sdc-text-main: #0f172a;
+  --sdc-text-sub: #334155;
+  --sdc-text-muted: #64748b;
+  --sdc-accent-cyan: #d97706;
+  --sdc-accent-indigo: #ea580c;
+  --sdc-accent-purple: #f59e0b;
+  --sdc-accent-pink: #d97706;
+  --sdc-highlight-grad: linear-gradient(135deg, #ea580c 0%, #d97706 40%, #b45309 100%);
+  --sdc-glow-blue: rgba(217, 119, 6, 0.35);
+  --sdc-glow-purple: rgba(234, 88, 12, 0.45);
+  --sdc-card-bg: rgba(248, 250, 252, 0.92);
+  --sdc-card-border: rgba(217, 119, 6, 0.22);
+  --sdc-pill-bg: rgba(255, 255, 255, 0.95);
+  --sdc-pill-border: rgba(217, 119, 6, 0.35);
+}
+
+/* ==========================================================================
+   Master Section
+   ========================================================================== */
+
+.sdc-section-wrapper {
+  position: relative;
+  width: 100%;
+  padding: clamp(3.5rem, 5.5vw, 6rem) 0;
+  background-color: var(--sdc-bg);
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  transition: background-color 0.4s ease;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  z-index: 2;
+}
+
+/* 3D Background Canvas */
+.sdc-3d-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glowing Ambient Nebulae */
+.sdc-ambient-glow {
+  position: absolute;
+  width: min(580px, 85vw);
+  height: min(580px, 85vw);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(140px);
+  opacity: 0.55;
+}
+
+.sdc-glow-top {
+  top: 8%;
+  left: -80px;
+  background: radial-gradient(circle, var(--sdc-glow-blue) 0%, transparent 70%);
+  animation: sdcFloatGlow1 16s ease-in-out infinite alternate;
+}
+
+.sdc-glow-bottom {
+  bottom: 8%;
+  right: -80px;
+  background: radial-gradient(circle, var(--sdc-glow-purple) 0%, transparent 70%);
+  animation: sdcFloatGlow2 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes sdcFloatGlow1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(35px, 25px) scale(1.1); }
+}
+
+@keyframes sdcFloatGlow2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, -25px) scale(1.08); }
+}
+
+/* Floating 3D Star Prisms */
+.sdc-3d-star {
+  position: absolute;
+  font-size: 1.8rem;
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.sdc-star-1 {
+  top: 14%;
+  left: 18%;
+  font-size: 2.2rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.85));
+  animation: sdcTwinkle1 6s ease-in-out infinite alternate;
+}
+
+.sdc-star-2 {
+  top: 32%;
+  right: 12%;
+  font-size: 1.65rem;
+  color: #ec4899;
+  filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.85));
+  animation: sdcTwinkle2 7s ease-in-out infinite alternate-reverse;
+}
+
+.sdc-star-3 {
+  bottom: 22%;
+  left: 8%;
+  font-size: 2rem;
+  color: #a855f7;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
+  animation: sdcTwinkle1 8s ease-in-out infinite alternate;
+}
+
+.sdc-star-4 {
+  top: 20%;
+  right: 32%;
+  font-size: 1.4rem;
+  color: #818cf8;
+  filter: drop-shadow(0 0 12px rgba(129, 140, 248, 0.8));
+  animation: sdcTwinkle2 6.5s ease-in-out infinite alternate-reverse;
+}
+
+.sdc-star-5 {
+  bottom: 15%;
+  right: 22%;
+  font-size: 1.8rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.85));
+  animation: sdcTwinkle1 7.2s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] .sdc-star-1, [data-theme="light"] .sdc-star-5 { color: #d97706; filter: drop-shadow(0 0 12px rgba(217, 119, 6, 0.7)); }
+[data-theme="light"] .sdc-star-2 { color: #ea580c; filter: drop-shadow(0 0 12px rgba(234, 88, 12, 0.7)); }
+[data-theme="light"] .sdc-star-3 { color: #f59e0b; filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.7)); }
+[data-theme="light"] .sdc-star-4 { color: #b45309; filter: drop-shadow(0 0 10px rgba(180, 83, 9, 0.6)); }
+
+@keyframes sdcTwinkle1 {
+  0% { transform: scale(0.7) rotate(0deg); opacity: 0.35; }
+  50% { transform: scale(1.35) rotate(45deg); opacity: 1; }
+  100% { transform: scale(0.8) rotate(90deg); opacity: 0.45; }
+}
+
+@keyframes sdcTwinkle2 {
+  0% { transform: scale(0.85) rotate(0deg); opacity: 0.45; }
+  50% { transform: scale(1.35) rotate(-45deg); opacity: 1; }
+  100% { transform: scale(0.75) rotate(-90deg); opacity: 0.35; }
+}
+
+/* Cyber Subtle Grid Lines */
+.sdc-cyber-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 55px 55px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 20%, transparent 75%);
+  pointer-events: none;
+}
+
+[data-theme="light"] .sdc-cyber-grid-overlay {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+/* ==========================================================================
+   Main Container & Header Block
+   ========================================================================== */
+
+.sdc-main-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3.5vw, 3.5rem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.sdc-header-block {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: clamp(2rem, 3.5vw, 3.5rem);
+}
+
+.sdc-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 1rem;
+  background: var(--sdc-pill-bg);
+  border: 1px solid var(--sdc-pill-border);
+  border-radius: 9999px;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme="light"] .sdc-tag-pill {
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.14);
+}
+
+.sdc-tag-spark {
+  color: var(--sdc-accent-cyan);
+  font-size: 0.85rem;
+}
+
+.sdc-tag-label {
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  color: var(--sdc-accent-cyan);
+  text-transform: uppercase;
+}
+
+.sdc-main-title {
+  font-size: clamp(1.85rem, 3.2vw, 3rem);
+  font-weight: 900;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  color: var(--sdc-text-main);
+  margin: 0 0 0.85rem 0;
+  transition: color 0.3s ease;
+}
+
+.sdc-title-grad {
+  background: var(--sdc-highlight-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px var(--sdc-glow-purple));
+}
+
+.sdc-subtitle {
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--sdc-text-muted);
+  max-width: 620px;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+/* ==========================================================================
+   2-Column Desktop Grid
+   ========================================================================== */
+
+.sdc-stage-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+  width: 100%;
+}
+
+/* Left Column: 80-Frame Canvas */
+.sdc-canvas-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.sdc-canvas-frame {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdc-canvas-aura-backlight {
+  position: absolute;
+  inset: -15px;
+  border-radius: 32px;
+  filter: blur(40px);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sdc-sequence-canvas {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  background-color: #030712;
+  border: 1.5px solid var(--sdc-card-border);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.6);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+[data-theme="light"] .sdc-sequence-canvas {
+  background-color: #ffffff;
+  border-color: rgba(217, 119, 6, 0.25);
+  box-shadow: 0 18px 45px rgba(217, 119, 6, 0.16);
+}
+
+.sdc-status-pill {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+  padding: 0.4rem 1.15rem;
+  background: var(--sdc-pill-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--sdc-pill-border);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--sdc-text-main);
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  transition: all 0.35s ease;
+}
+
+.sdc-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Mobile Tabs Switcher (Hidden on Desktop) */
+.sdc-mobile-tabs {
+  display: none;
+}
+
+/* ==========================================================================
+   Right Column: Smoothly Auto-Translating Milestones Viewport
+   ========================================================================== */
+
+.sdc-milestones-viewport {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Subtle Top/Bottom Fade Gradients */
+.sdc-milestones-viewport::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--sdc-bg) 0%, transparent 100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.sdc-milestones-viewport::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: linear-gradient(to top, var(--sdc-bg) 0%, transparent 100%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.sdc-milestones-track {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  will-change: transform;
+}
+
+.sdc-phase-card {
+  position: relative;
+  background: var(--sdc-card-bg);
+  border: 1.5px solid var(--sdc-card-border);
+  border-radius: 20px;
+  padding: 1.35rem 1.6rem;
+  box-sizing: border-box;
+  opacity: 0.38;
+  transform: scale(0.97);
+  cursor: pointer;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease,
+              box-shadow 0.4s ease,
+              background 0.4s ease;
+  will-change: transform, opacity;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+[data-theme="light"] .sdc-phase-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
+  border-color: rgba(217, 119, 6, 0.18);
+}
+
+.sdc-phase-card:hover {
+  opacity: 0.75;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Active Highlighted Phase Card */
+.sdc-phase-card.is-phase-active {
+  opacity: 1 !important;
+  transform: scale(1.02) !important;
+  border-color: var(--phase-accent) !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45), 0 0 24px var(--phase-accent);
+}
+
+[data-theme="light"] .sdc-phase-card.is-phase-active {
+  border-color: var(--phase-accent) !important;
+  box-shadow: 0 14px 35px rgba(217, 119, 6, 0.22);
+}
+
+.sdc-phase-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sdc-phase-num {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--phase-accent);
+  letter-spacing: -0.02em;
+}
+
+.sdc-phase-badge {
+  font-size: 0.7rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.22rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--sdc-text-main);
+}
+
+[data-theme="light"] .sdc-phase-badge {
+  background: rgba(0, 0, 0, 0.04);
+  color: #0f172a;
+}
+
+.sdc-phase-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--sdc-text-main);
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.015em;
+  transition: color 0.3s ease;
+}
+
+.sdc-phase-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--sdc-text-muted);
+  margin: 0 0 0.65rem 0;
+  transition: color 0.3s ease;
+}
+
+/* Key Service Deliverables Chips */
+.sdc-phase-deliverables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sdc-deliverable-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--sdc-text-sub);
+}
+
+[data-theme="light"] .sdc-deliverable-chip {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+  color: #1e293b;
+}
+
+.sdc-chip-dot {
+  color: var(--phase-accent);
+  font-size: 0.75rem;
+}
+
+.sdc-phase-indicator-bar {
+  position: absolute;
+  bottom: 0;
+  left: 1.6rem;
+  width: 0;
+  height: 2.5px;
+  background: var(--phase-accent);
+  transition: width 0.45s ease;
+  border-radius: 9999px;
+  box-shadow: 0 0 10px var(--phase-accent);
+}
+
+.sdc-phase-card.is-phase-active .sdc-phase-indicator-bar {
+  width: 65px;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints (Mobile & Tablet)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .sdc-stage-grid {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .sdc-canvas-frame {
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  /* Show mobile segmented tabs */
+  .sdc-mobile-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 580px;
+    margin-top: 1rem;
+    z-index: 4;
+  }
+
+  .sdc-mobile-tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.35rem;
+    background: var(--sdc-card-bg);
+    border: 1px solid var(--sdc-card-border);
+    border-radius: 12px;
+    color: var(--sdc-text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .sdc-mobile-tab-btn.is-active {
+    border-color: var(--tab-accent);
+    color: var(--tab-accent);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 14px var(--tab-accent);
+  }
+
+  [data-theme="light"] .sdc-mobile-tab-btn.is-active {
+    background: rgba(217, 119, 6, 0.08);
+  }
+
+  .sdc-tab-num {
+    font-size: 0.92rem;
+    font-weight: 850;
+  }
+
+  .sdc-tab-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+
+  /* Mobile Milestones: Stacked In-Place Clean Card View */
+  .sdc-milestones-viewport {
+    height: auto;
+    min-height: 220px;
+    overflow: visible;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .sdc-milestones-viewport::before,
+  .sdc-milestones-viewport::after {
+    display: none;
+  }
+
+  .sdc-milestones-track {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    transform: none !important;
+  }
+
+  .sdc-phase-card {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(14px) scale(0.96);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.4s ease;
+  }
+
+  .sdc-phase-card.is-phase-active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
+    z-index: 5;
+  }
+}
+
+/* Mobile Screens (<= 767px) */
+@media (max-width: 767px) {
+  .sdc-section-wrapper {
+    padding: 2.8rem 0 3.8rem 0;
+  }
+
+  .sdc-main-title {
+    font-size: 1.75rem;
+  }
+
+  .sdc-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .sdc-sequence-canvas {
+    border-radius: 16px;
+  }
+
+  .sdc-status-pill {
+    padding: 0.35rem 0.95rem;
+    font-size: 0.74rem;
+    margin-top: 0.75rem;
+  }
+
+  .sdc-phase-card {
+    padding: 1.15rem 1.25rem;
+    border-radius: 18px;
+  }
+
+  .sdc-phase-num {
+    font-size: 1.2rem;
+  }
+
+  .sdc-phase-title {
+    font-size: 1.05rem;
+  }
+
+  .sdc-phase-desc {
+    font-size: 0.84rem;
+  }
+
+  .sdc-tab-label {
+    display: none;
+  }
+
+  .sdc-mobile-tab-btn {
+    padding: 0.45rem;
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
-import logo from '../assets/vayonix-logo1.png';
+import logo from '../assets/vayonix-footer-img.png';
 
 const Footer = () => {
   const [email, setEmail] = useState('');

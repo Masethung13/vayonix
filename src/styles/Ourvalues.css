@@ -509,16 +509,23 @@ body.theme-light {
   padding-top: 1rem;
 }
 
+.ov-process-grid {
+  --proc-grid-gap: clamp(1.25rem, 2.2vw, 2.75rem);
+  gap: var(--proc-grid-gap);
+  position: relative;
+  z-index: 3;
+}
+
 .ov-process-continuous-line {
   position: absolute;
   top: 4rem; /* Exactly 1rem (track pad) + 1.5rem (card pad) + 24px (half badge) = 64px (4rem) */
-  left: calc(12.5% - 8px);
-  right: calc(12.5% - 8px);
+  left: calc((100% - 3 * var(--proc-grid-gap, 2rem)) / 8);
+  right: calc((100% - 3 * var(--proc-grid-gap, 2rem)) / 8);
   height: 4px;
   background: var(--ov-divider);
   border-radius: 9999px;
   overflow: visible;
-  z-index: 3; /* Rendered above card backgrounds and borders */
+  z-index: 1; /* Rendered below badge nodes (z-index: 5) so badges cleanly sit on top */
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -567,20 +574,24 @@ body.theme-light {
 /* Process Step Cards */
 .ov-process-step-item {
   position: relative;
-  z-index: 1; /* Below the laser track so borders never cut the line */
+  z-index: 3;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 24px;
   padding: 1.5rem 1rem;
-  opacity: 0.55;
-  filter: blur(0.2px);
-  transform: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.4s ease,
-              background 0.4s ease,
+  transform: none !important; /* Never translate vertically to keep badge & line aligned */
+  transition: background 0.4s ease,
               border-color 0.4s ease,
               box-shadow 0.4s ease;
-  will-change: opacity, filter;
+}
+
+.ov-seamless-item.ov-process-step-item:hover {
+  transform: none !important;
+}
+
+.ov-seamless-item.ov-process-step-item:hover .ov-item-icon-node {
+  transform: scale(1.15) translateY(-2px);
+  color: var(--proc-accent);
 }
 
 .ov-card-ambient-glow {
@@ -596,8 +607,6 @@ body.theme-light {
 }
 
 .ov-process-step-item.is-illuminated {
-  opacity: 1 !important;
-  filter: blur(0px) !important;
   transform: none !important;
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.14);
@@ -614,6 +623,25 @@ body.theme-light {
   opacity: 0.5;
 }
 
+/* Card Body (Icon, Title, Desc, Line) with Smooth Fade */
+.ov-proc-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 0.45;
+  filter: blur(0.2px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.4s ease;
+}
+
+.ov-process-step-item.is-illuminated .ov-proc-card-body,
+.ov-process-step-item.is-completed .ov-proc-card-body {
+  opacity: 1;
+  filter: blur(0px);
+}
+
+/* Circular Step Badge Node - Topmost layer sitting cleanly ON TOP of the connecting line */
 .ov-process-step-badge {
   display: inline-flex;
   align-items: center;
@@ -621,14 +649,17 @@ body.theme-light {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--ov-bg);
+  background: var(--ov-bg) !important; /* CRITICAL: 100% opaque to mask the line behind it */
   border: 1.5px solid var(--ov-divider);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   margin-bottom: 1rem;
   position: relative;
-  z-index: 5; /* Topmost layer so circular badge cleanly sits on top of line */
+  z-index: 5; /* Rendered ON TOP of the continuous line */
   transform-origin: center center;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease,
+              box-shadow 0.4s ease,
+              background 0.3s ease;
 }
 
 .ov-step-digit {
@@ -636,13 +667,15 @@ body.theme-light {
   font-weight: 800;
   color: var(--ov-text-muted);
   letter-spacing: -0.01em;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
+/* Active illuminated badge */
 .ov-process-step-item.is-illuminated .ov-process-step-badge {
   transform: scale(1.15);
   border-color: var(--proc-accent);
-  box-shadow: 0 0 25px var(--proc-accent);
+  background: var(--ov-bg) !important;
+  box-shadow: 0 0 25px var(--proc-accent), inset 0 0 8px rgba(255, 255, 255, 0.05);
 }
 
 .ov-process-step-item.is-illuminated .ov-step-digit {
@@ -652,11 +685,14 @@ body.theme-light {
 
 [data-theme="light"] .ov-process-step-item.is-illuminated .ov-step-digit {
   color: var(--proc-accent);
+  text-shadow: none;
 }
 
+/* Completed step badge */
 .ov-process-step-item.is-completed:not(.is-illuminated) .ov-process-step-badge {
   border-color: var(--ov-accent-cyan);
-  background: rgba(56, 189, 248, 0.1);
+  background: var(--ov-bg) !important; /* Mask the line completely */
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35), inset 0 0 8px rgba(56, 189, 248, 0.12);
 }
 
 .ov-process-step-item.is-completed:not(.is-illuminated) .ov-step-digit {
@@ -897,6 +933,11 @@ body.theme-light {
     gap: clamp(1rem, 1.8vw, 1.8rem);
   }
 
+  .ov-process-grid {
+    --proc-grid-gap: clamp(1rem, 1.8vw, 1.8rem);
+    gap: var(--proc-grid-gap);
+  }
+
   .ov-item-title {
     font-size: clamp(1.15rem, 1.3vw, 1.3rem);
   }
@@ -908,8 +949,8 @@ body.theme-light {
 
   .ov-process-continuous-line {
     top: 4rem;
-    left: 12.5%;
-    right: 12.5%;
+    left: calc((100% - 3 * var(--proc-grid-gap)) / 8);
+    right: calc((100% - 3 * var(--proc-grid-gap)) / 8);
     transform: translateY(-50%);
   }
 }

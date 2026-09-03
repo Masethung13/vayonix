@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
-import logo from '../assets/vayonix-logo1.png';
+import logo from '../assets/vayonix-logo-og.png';
 
 const Header = () => {
   const location = useLocation();

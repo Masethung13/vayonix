@@ -137,11 +137,47 @@ const Ourvalues = () => {
   const sectionRef = useRef(null);
   const processPinRef = useRef(null);
   const processTrackRef = useRef(null);
+  const trackContainerRef = useRef(null);
+  const continuousLineRef = useRef(null);
   const progressBarRef = useRef(null);
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredValue, setHoveredValue] = useState(null);
   const [activeProcessStep, setActiveProcessStep] = useState(0);
+
+  // Dynamic geometry alignment: ensures the connecting line starts and ends
+  // at the exact pixel center of step 01 and step 04 badge circles, and stays
+  // vertically centered through all 4 badges regardless of screen width or zoom.
+  const updateLineGeometry = () => {
+    const isDesktop = window.innerWidth >= 1024;
+    const container = trackContainerRef.current;
+    const line = continuousLineRef.current;
+    if (!container || !line) return;
+
+    if (!isDesktop) {
+      line.style.left = '';
+      line.style.width = '';
+      line.style.right = '';
+      line.style.top = '';
+      return;
+    }
+
+    const badges = container.querySelectorAll('.ov-process-step-badge');
+    if (badges.length < 4) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const firstBadgeRect = badges[0].getBoundingClientRect();
+    const lastBadgeRect = badges[badges.length - 1].getBoundingClientRect();
+
+    const startX = firstBadgeRect.left + firstBadgeRect.width / 2 - containerRect.left;
+    const endX = lastBadgeRect.left + lastBadgeRect.width / 2 - containerRect.left;
+    const centerY = firstBadgeRect.top + firstBadgeRect.height / 2 - containerRect.top;
+
+    line.style.left = `${startX}px`;
+    line.style.width = `${endX - startX}px`;
+    line.style.right = 'auto';
+    line.style.top = `${centerY}px`;
+  };
 
   // Theme State (Dark / Light) with LocalStorage persistence & live sync
   const [theme, setTheme] = useState(() => {
@@ -178,6 +214,9 @@ const Ourvalues = () => {
 
   // GSAP ScrollTrigger: Horizontal Timeline & Step Illumination
   useEffect(() => {
+    // Initial line alignment
+    updateLineGeometry();
+
     const ctx = gsap.context(() => {
       const pinContainer = processPinRef.current;
       const track = processTrackRef.current;
@@ -191,6 +230,7 @@ const Ourvalues = () => {
         // Master Pinned Scroll Timeline for Process Section
         const tl = gsap.timeline({
           scrollTrigger: {
+            id: 'ov-process-pin',
             trigger: pinContainer,
             start: 'top top+=60',
             end: '+=240%', // Dedicated scroll distance to scrub through all 4 steps
@@ -222,13 +262,14 @@ const Ourvalues = () => {
           },
         });
 
-        // Step-by-Step Card Illuminations (Badge center stays perfectly anchored)
+        // Step-by-Step Card Illuminations
         PROCESS_DATA.forEach((_, idx) => {
           if (idx > 0) {
             tl.to(
-              `.ov-proc-card-${idx}`,
+              `.ov-proc-card-${idx} .ov-proc-card-body`,
               {
                 opacity: 1,
+                filter: 'blur(0px)',
                 duration: 0.5,
                 ease: 'power2.out',
               },
@@ -252,12 +293,21 @@ const Ourvalues = () => {
       }
 
       ScrollTrigger.refresh();
+      updateLineGeometry();
     }, sectionRef);
 
-    const handleResize = () => ScrollTrigger.refresh();
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+      updateLineGeometry();
+    };
+
     window.addEventListener('resize', handleResize);
 
+    // Double check alignment once all web fonts and styles are fully applied
+    const alignTimer = setTimeout(updateLineGeometry, 150);
+
     return () => {
+      clearTimeout(alignTimer);
       window.removeEventListener('resize', handleResize);
       ctx.revert();
     };
@@ -379,10 +429,10 @@ const Ourvalues = () => {
             </div>
 
             {/* Continuous Glowing Progress Track & Step Nodes */}
-            <div className="ov-process-track-container">
+            <div className="ov-process-track-container" ref={trackContainerRef}>
               
               {/* Continuous Base Track */}
-              <div className="ov-process-continuous-line">
+              <div className="ov-process-continuous-line" ref={continuousLineRef}>
                 {/* Laser Progress Fill Scrubbed by GSAP */}
                 <div className="ov-process-line-fill" ref={progressBarRef} />
                 <div className="ov-process-line-pulse" />
@@ -403,8 +453,8 @@ const Ourvalues = () => {
                       style={{ '--proc-accent': proc.accent }}
                       onClick={() => {
                         const isDesktop = window.innerWidth >= 1024;
-                        if (isDesktop && processPinRef.current) {
-                          const st = ScrollTrigger.getById(processPinRef.current);
+                        if (isDesktop) {
+                          const st = ScrollTrigger.getById('ov-process-pin');
                           if (st) {
                             st.scroll(st.start + (idx / 3) * (st.end - st.start));
                           }
@@ -414,26 +464,29 @@ const Ourvalues = () => {
                       {/* Ambient Halo Glow */}
                       <div className="ov-card-ambient-glow" />
 
-                      {/* Step Number Badge Node */}
+                      {/* Step Number Badge Node (Renders on top of connecting line) */}
                       <div className="ov-process-step-badge">
                         <span className="ov-step-digit">{proc.step}</span>
                         <div className="ov-step-halo" />
                       </div>
 
-                      {/* Icon Node */}
-                      <div className="ov-item-icon-node">
-                        <div className="ov-node-aura" />
-                        {proc.icon}
+                      {/* Card Body with Step-by-Step Illumination */}
+                      <div className="ov-proc-card-body">
+                        {/* Icon Node */}
+                        <div className="ov-item-icon-node">
+                          <div className="ov-node-aura" />
+                          {proc.icon}
+                        </div>
+
+                        {/* Title with Line-by-Line Illumination */}
+                        <h3 className="ov-item-title">{proc.title}</h3>
+
+                        {/* Description */}
+                        <p className="ov-item-desc">{proc.desc}</p>
+
+                        {/* Expanding Glowing Accent Underline */}
+                        <div className="ov-item-hover-line" />
                       </div>
-
-                      {/* Title with Line-by-Line Illumination */}
-                      <h3 className="ov-item-title">{proc.title}</h3>
-
-                      {/* Description */}
-                      <p className="ov-item-desc">{proc.desc}</p>
-
-                      {/* Expanding Glowing Accent Underline */}
-                      <div className="ov-item-hover-line" />
                     </div>
                   );
                 })}

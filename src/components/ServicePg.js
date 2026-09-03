@@ -6,6 +6,7 @@ import ScrollTitle from './ScrollTitle';
 import AnimatedNumber from './AnimatedNumber';
 import useScrollReveal from '../hooks/useScrollReveal';
 import Whatweoffer from './Whatweoffer';
+import ServiceDeliveryCycle from './ServiceDeliveryCycle';
 import '../styles/ServicePg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import serviceDarkImg from '../assets/service-dark.jpg';
@@ -13,50 +14,6 @@ import serviceLightImg from '../assets/service-light1.jpg';
 
 // Register GSAP ScrollTrigger Plugin
 gsap.registerPlugin(ScrollTrigger);
-
-const FRAME_COUNT = 80;
-
-// Helper to resolve 80 image frame paths dynamically from /assets/gsap/
-const getFrameSrc = (index) => {
-  const padded = String(index).padStart(3, '0');
-  try {
-    return require(`../assets/gsap/ezgif-frame-${padded}.jpg`);
-  } catch (e) {
-    return null;
-  }
-};
-
-// 4 Service Delivery Stages Scrubbed with the 80-frame sequence
-const servicePhases = [
-  {
-    id: '01',
-    badge: 'Stage 01 / Strategy',
-    title: 'Omni-Channel Market Discovery',
-    desc: 'Deep audience segmentation, competitor intelligence, and comprehensive keyword mapping to architect your tailored acquisition roadmap.',
-    accent: '#38bdf8'
-  },
-  {
-    id: '02',
-    badge: 'Stage 02 / Creative & UX',
-    title: 'High-Converting Digital Real Estate',
-    desc: 'Developing high-converting landing pages, interactive 3D assets, and persuasive copy designed to maximize visitor-to-lead ratios.',
-    accent: '#818cf8'
-  },
-  {
-    id: '03',
-    badge: 'Stage 03 / Performance Ads',
-    title: 'Multi-Network Media Scaling',
-    desc: 'Deploying laser-targeted Meta, Google, and LinkedIn ad funnels with continuous A/B creative testing to slash acquisition costs.',
-    accent: '#a855f7'
-  },
-  {
-    id: '04',
-    badge: 'Stage 04 / Automation & AI',
-    title: 'Automated Retention & ROI Scaling',
-    desc: 'Integrating AI-driven lead routing, automated CRM drip sequences, and real-time revenue analytics for compounding monthly growth.',
-    accent: '#ec4899'
-  }
-];
 
 const metricsStats = [
   {
@@ -115,15 +72,6 @@ const ServicePg = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-
-  // GSAP 80-Frame Sequence State & Refs
-  const sequenceSectionRef = useRef(null);
-  const sequenceCanvasRef = useRef(null);
-  const milestonesViewportRef = useRef(null);
-  const milestonesTrackRef = useRef(null);
-  const imagesRef = useRef([]);
-  const [framesLoaded, setFramesLoaded] = useState(false);
-  const [activeSeqPhase, setActiveSeqPhase] = useState(0);
 
   // Theme synchronization with LocalStorage & Document Element
   const [theme, setTheme] = useState(() => {
@@ -193,152 +141,6 @@ const ServicePg = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // =========================================================================
-  // PRELOAD 80 GSAP FRAMES INTO MEMORY BUFFER
-  // =========================================================================
-  useEffect(() => {
-    const loadedImgs = [];
-    let loadedCount = 0;
-
-    const handleImgLoad = () => {
-      loadedCount++;
-      if (loadedCount >= FRAME_COUNT - 5) {
-        setFramesLoaded(true);
-      }
-    };
-
-    for (let i = 1; i <= FRAME_COUNT; i++) {
-      const img = new Image();
-      const src = getFrameSrc(i);
-      if (src) {
-        img.src = src;
-        img.onload = handleImgLoad;
-      }
-      loadedImgs.push(img);
-    }
-    imagesRef.current = loadedImgs;
-  }, []);
-
-  // Draw current frame onto 16:9 canvas
-  const renderSequenceFrame = (frameIndex) => {
-    const canvas = sequenceCanvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const img = imagesRef.current[frameIndex];
-
-    if (img && img.complete) {
-      canvas.width = 1280;
-      canvas.height = 720;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-  };
-
-  // =========================================================================
-  // GSAP MATCHMEDIA FOR DESKTOP (PINNED + TRANSLATE) & MOBILE (PINNED + IN-PLACE OVERLAY)
-  // =========================================================================
-  useEffect(() => {
-    const mm = gsap.matchMedia(sequenceSectionRef);
-
-    mm.add(
-      {
-        isDesktop: '(min-width: 1024px)',
-        isMobile: '(max-width: 1023px)',
-      },
-      (context) => {
-        const { isDesktop } = context.conditions;
-        const section = sequenceSectionRef.current;
-        const canvas = sequenceCanvasRef.current;
-        const viewport = milestonesViewportRef.current;
-        const track = milestonesTrackRef.current;
-
-        if (!section || !canvas) return;
-
-        renderSequenceFrame(0);
-        const frameObj = { frame: 0 };
-
-        if (isDesktop && viewport && track) {
-          // 🚀 DESKTOP: PINNED 80-FRAME SEQUENCE + AUTO-TRANSLATING TRACK
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: section,
-              start: 'top top+=70',
-              end: '+=280%',
-              pin: true,
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
-                renderSequenceFrame(currentIdx);
-
-                const phaseIndex = Math.min(
-                  Math.floor(self.progress * servicePhases.length),
-                  servicePhases.length - 1
-                );
-                setActiveSeqPhase(phaseIndex);
-              },
-            },
-          });
-
-          // Scrub 80 Frames
-          tl.to(
-            frameObj,
-            {
-              frame: FRAME_COUNT - 1,
-              snap: 'frame',
-              ease: 'none',
-              duration: 1,
-            },
-            0
-          );
-
-          // Translate milestones track to 100% reveal Phase 04
-          tl.to(
-            track,
-            {
-              y: () => {
-                const scrollDistance = track.scrollHeight - viewport.clientHeight;
-                return -Math.max(0, scrollDistance);
-              },
-              ease: 'none',
-              duration: 1,
-            },
-            0
-          );
-        } else {
-          // 📱 MOBILE / TABLET: PINNED IN-PLACE OVERLAY CARDS + FRAME SCRUB
-          gsap.to(frameObj, {
-            frame: FRAME_COUNT - 1,
-            snap: 'frame',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top top+=30',
-              end: '+=220%',
-              pin: true,
-              scrub: 0.5,
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
-                renderSequenceFrame(currentIdx);
-
-                // Smoothly swap overlapping active card in place
-                const phaseIndex = Math.min(
-                  Math.floor(self.progress * servicePhases.length),
-                  servicePhases.length - 1
-                );
-                setActiveSeqPhase(phaseIndex);
-              },
-            },
-          });
-        }
-
-        ScrollTrigger.refresh();
-      }
-    );
-
-    return () => mm.revert();
-  }, [framesLoaded]);
 
   return (
     <div className="svc-page-wrapper" onMouseMove={handleMouseMove}>
@@ -502,87 +304,9 @@ const ServicePg = () => {
       </section>
 
       {/* =====================================================================
-          🔥 GSAP SCROLLTRIGGER 80-FRAME SERVICE PIPELINE SEQUENCE
+          🔥 GSAP SCROLLTRIGGER 80-FRAME SERVICE DELIVERY CYCLE COMPONENT
           ===================================================================== */}
-      <section className="svc-gsap-sequence-section" id="services-sequence" ref={sequenceSectionRef}>
-        <div className="svc-sequence-ambient-glow glow-top" />
-        <div className="svc-sequence-ambient-glow glow-bottom" />
-
-        <div className="svc-sequence-container">
-          
-          {/* Header */}
-          <div className="svc-sequence-header">
-            <div className="svc-tag-pill">
-              <span className="svc-tag-spark">✦</span>
-              <span className="svc-tag-label">INTERACTIVE EXECUTION ENGINE</span>
-            </div>
-            <h2 className="svc-sequence-title">
-              Scroll To Watch Our <span className="svc-grad-cyber-sweep">Service Delivery Cycle</span>
-            </h2>
-            <p className="svc-sequence-subtitle">
-              Every campaign and application moves through a rigorous 4-stage engineering pipeline scrubbed frame-by-frame.
-            </p>
-          </div>
-
-          {/* 2-Column Split: Canvas (Left) + Sliding/Stacked Milestones (Right) */}
-          <div className="svc-sequence-stage-grid">
-            
-            {/* Left: 80-Frame HTML5 Canvas */}
-            <div className="svc-sequence-canvas-col">
-              <div className="svc-sequence-canvas-frame">
-                <div
-                  className="svc-canvas-aura-backlight"
-                  style={{
-                    background: `radial-gradient(circle, ${servicePhases[activeSeqPhase].accent}88 0%, rgba(56, 189, 248, 0.2) 50%, transparent 75%)`,
-                  }}
-                />
-                
-                <canvas ref={sequenceCanvasRef} className="svc-sequence-canvas" />
-
-                {/* Floating Status Pill */}
-                <div className="svc-sequence-status-pill">
-                  <span
-                    className="status-dot"
-                    style={{
-                      backgroundColor: servicePhases[activeSeqPhase].accent,
-                      boxShadow: `0 0 10px ${servicePhases[activeSeqPhase].accent}`,
-                    }}
-                  />
-                  <span>
-                    PHASE {servicePhases[activeSeqPhase].id} : {servicePhases[activeSeqPhase].badge}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Milestones Viewport (Sliding on Desktop / Overlapping in Place on Mobile) */}
-            <div className="svc-sequence-milestones-viewport" ref={milestonesViewportRef}>
-              <div className="svc-sequence-milestones-track" ref={milestonesTrackRef}>
-                {servicePhases.map((phase, idx) => {
-                  const isActive = activeSeqPhase === idx;
-                  return (
-                    <div
-                      key={phase.id}
-                      className={`svc-seq-phase-card ${isActive ? 'is-phase-active' : ''}`}
-                      style={{ '--phase-accent': phase.accent }}
-                    >
-                      <div className="phase-card-top">
-                        <span className="phase-num">{phase.id}</span>
-                        <span className="phase-badge">{phase.badge}</span>
-                      </div>
-                      <h3 className="phase-title">{phase.title}</h3>
-                      <p className="phase-desc">{phase.desc}</p>
-                      <div className="phase-indicator-bar" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
+      <ServiceDeliveryCycle />
 
       {/* =====================================================================
           3. "WHAT WE OFFER" SECTION (Dedicated Alternating Zig-Zag Component)
