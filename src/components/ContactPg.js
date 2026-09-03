@@ -4,7 +4,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { db } from '../firebase';
-import ScrollTitle from '../components/ScrollTitle';
+import ScrollTitle from './ScrollTitle';
 import useScrollReveal from '../hooks/useScrollReveal';
 import '../styles/ContactPg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
@@ -377,7 +377,7 @@ const ContactPg = () => {
 
         <div className="cnt-main-container">
           <div className="cnt-header-center" data-reveal="fade-up">
-            <div className="cnt-tag-pill">
+            <div className="cnt-tag-pill" data-reveal="fade-up">
               <span className="cnt-tag-spark">✦</span>
               <span className="cnt-tag-label">LET'S CONNECT</span>
             </div>
@@ -399,7 +399,7 @@ const ContactPg = () => {
               ]}
             />
 
-            <p className="cnt-sub-description">
+            <p className="cnt-sub-description" data-reveal="fade-up" data-reveal-delay="150">
               Ready to accelerate your revenue pipeline or build bespoke digital infrastructure? Connect directly with our strategy team in India or submit your project details below.
             </p>
           </div>
@@ -411,6 +411,7 @@ const ContactPg = () => {
                 className="cnt-action-card"
                 style={{ '--card-accent': card.accent }}
                 data-reveal="fade-up"
+                data-reveal-delay={`${(idx + 1) * 100}`}
               >
                 <div className="cnt-card-glow-aura" />
                 <div className="cnt-card-top">
@@ -437,15 +438,28 @@ const ContactPg = () => {
           <div className="cnt-form-split-layout">
             
             {/* Left Column: Glass Form Container */}
-            <div className="cnt-form-glass-box" data-reveal="fade-right">
+            <div className="cnt-form-glass-box" data-reveal="fade-up">
               <div className="cnt-form-box-aura" />
 
-              <div className="cnt-form-head">
+              <div className="cnt-form-head" data-reveal="fade-up">
                 <span className="cnt-form-pill-tag">PROJECT ESTIMATION & INQUIRY</span>
-                <h3 className="cnt-form-title">
-                  Send Us A <span className="cnt-grad-text">Project Brief</span>
-                </h3>
-                <p className="cnt-form-desc">
+                
+                {/* ScrollTitle for Form Section */}
+                <ScrollTitle
+                  as="h3"
+                  className="cnt-form-title"
+                  lines={[
+                    [
+                      { text: 'Send', type: 'normal' },
+                      { text: 'Us', type: 'normal' },
+                      { text: 'A', type: 'normal' },
+                      { text: 'Project', type: 'gradient' },
+                      { text: 'Brief', type: 'accent' }
+                    ]
+                  ]}
+                />
+
+                <p className="cnt-form-desc" data-reveal="fade-up" data-reveal-delay="100">
                   Fill in your requirements. All submissions are automatically saved and delivered to our senior consulting directors.
                 </p>
               </div>
@@ -453,7 +467,7 @@ const ContactPg = () => {
               <form onSubmit={handleFormSubmit} className="cnt-interactive-form" noValidate>
                 
                 {/* Row 1: Name & Email */}
-                <div className="cnt-form-row">
+                <div className="cnt-form-row" data-reveal="fade-up" data-reveal-delay="100">
                   <div className="cnt-input-group">
                     <label className="cnt-input-label">
                       Full Name <span className="req-star">*</span>
@@ -486,7 +500,7 @@ const ContactPg = () => {
                 </div>
 
                 {/* Row 2: Indian Mobile Number (Full-Width Clean Layout) */}
-                <div className="cnt-input-group">
+                <div className="cnt-input-group" data-reveal="fade-up" data-reveal-delay="150">
                   <label className="cnt-input-label">
                     Mobile Number (India)
                   </label>
@@ -506,7 +520,7 @@ const ContactPg = () => {
                 </div>
 
                 {/* Row 3: Service Selection Chips */}
-                <div className="cnt-input-group">
+                <div className="cnt-input-group" data-reveal="fade-up" data-reveal-delay="200">
                   <label className="cnt-input-label">Select Primary Service Requirement</label>
                   <div className="cnt-services-pill-wrap">
                     {serviceOptions.map((svc) => (
@@ -523,7 +537,7 @@ const ContactPg = () => {
                 </div>
 
                 {/* Row 4: Message Box */}
-                <div className="cnt-input-group">
+                <div className="cnt-input-group" data-reveal="fade-up" data-reveal-delay="250">
                   <label className="cnt-input-label">
                     Project Goals & Requirements <span className="req-star">*</span>
                   </label>
@@ -543,6 +557,8 @@ const ContactPg = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className={`cnt-submit-btn ${isSubmitting ? 'is-btn-loading' : ''}`}
+                  data-reveal="fade-up"
+                  data-reveal-delay="300"
                 >
                   <span className="cnt-btn-text">
                     {isSubmitting ? 'Submitting & Emailing Brief...' : 'Submit Project Brief'}
@@ -554,17 +570,30 @@ const ContactPg = () => {
             </div>
 
             {/* Right Column: Direct Corporate Channels & SLA Guarantee */}
-            <div className="cnt-sidebar-col" data-reveal="fade-left">
+            <div className="cnt-sidebar-col" data-reveal="fade-up" data-reveal-delay="150">
               
               {/* Direct Channels Card */}
-              <div className="cnt-sidebar-glass-card">
-                <h4 className="cnt-side-title">Direct Corporate Channels</h4>
-                <p className="cnt-side-desc">
+              <div className="cnt-sidebar-glass-card" data-reveal="fade-up" data-reveal-delay="200">
+                
+                {/* ScrollTitle for Sidebar Channels */}
+                <ScrollTitle
+                  as="h4"
+                  className="cnt-side-title"
+                  lines={[
+                    [
+                      { text: 'Direct', type: 'normal' },
+                      { text: 'Corporate', type: 'gradient' },
+                      { text: 'Channels', type: 'accent' }
+                    ]
+                  ]}
+                />
+
+                <p className="cnt-side-desc" data-reveal="fade-up" data-reveal-delay="220">
                   Have an urgent requirement or prefer direct communication? Connect immediately with our technical heads:
                 </p>
 
                 <div className="cnt-channel-list">
-                  <a href="mailto:hello.vayonixinfotech@gmail.com" className="cnt-channel-item">
+                  <a href="mailto:hello.vayonixinfotech@gmail.com" className="cnt-channel-item" data-reveal="fade-up" data-reveal-delay="240">
                     <div className="cnt-ch-icon-wrap email-aura">
                       <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -577,7 +606,7 @@ const ContactPg = () => {
                     </div>
                   </a>
 
-                  <a href="tel:+919092007731" className="cnt-channel-item">
+                  <a href="tel:+919092007731" className="cnt-channel-item" data-reveal="fade-up" data-reveal-delay="280">
                     <div className="cnt-ch-icon-wrap phone-aura">
                       <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -592,21 +621,31 @@ const ContactPg = () => {
               </div>
 
               {/* SLA & NDA Guarantee Card */}
-              <div className="cnt-sidebar-glass-card cnt-guarantee-card">
-                <div className="cnt-guarantee-head">
+              <div className="cnt-sidebar-glass-card cnt-guarantee-card" data-reveal="fade-up" data-reveal-delay="300">
+                <div className="cnt-guarantee-head" data-reveal="fade-up">
                   <span className="cnt-guarantee-spark">✦</span>
-                  <h5>The Vayonix Assurance</h5>
+                  <ScrollTitle
+                    as="h5"
+                    className="cnt-guarantee-title"
+                    lines={[
+                      [
+                        { text: 'The', type: 'normal' },
+                        { text: 'Vayonix', type: 'gradient' },
+                        { text: 'Assurance', type: 'accent' }
+                      ]
+                    ]}
+                  />
                 </div>
                 <ul className="cnt-guarantee-list">
-                  <li>
+                  <li data-reveal="fade-up" data-reveal-delay="340">
                     <span className="list-dot" />
                     <span><strong>100% Confidentiality:</strong> Strict non-disclosure protection for your intellectual property.</span>
                   </li>
-                  <li>
+                  <li data-reveal="fade-up" data-reveal-delay="380">
                     <span className="list-dot" />
                     <span><strong>Tailored Architecture:</strong> Zero cookie-cutter packages; every strategy is customized to your ROI metrics.</span>
                   </li>
-                  <li>
+                  <li data-reveal="fade-up" data-reveal-delay="420">
                     <span className="list-dot" />
                     <span><strong>24-Hour SLA:</strong> Dedicated strategic response from senior engineering leads within one business day.</span>
                   </li>

@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollTitle from './ScrollTitle';
 import AnimatedNumber from './AnimatedNumber';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -11,9 +9,6 @@ import '../styles/ServicePg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import serviceDarkImg from '../assets/service-dark.jpg';
 import serviceLightImg from '../assets/service-light1.jpg';
-
-// Register GSAP ScrollTrigger Plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const metricsStats = [
   {

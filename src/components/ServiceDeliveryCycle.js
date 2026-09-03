@@ -149,13 +149,11 @@ const ServiceDeliveryCycle = () => {
   };
 
   // =========================================================================
-  // SILKY SMOOTH GSAP SCROLLTRIGGER PINNED ANIMATION
+  // SILKY SMOOTH GSAP SCROLLTRIGGER PINNED ANIMATION (ALL VIEWPORT SIZES)
   // =========================================================================
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
-    const track = trackRef.current;
-    const viewport = viewportRef.current;
 
     if (!section || !canvas) return;
 
@@ -164,86 +162,147 @@ const ServiceDeliveryCycle = () => {
     const frameObj = frameObjRef.current;
     frameObj.frame = 0;
 
-    const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth >= 1024;
+    const mm = gsap.matchMedia(sectionRef);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          id: 'sdc-scroll-timeline',
-          trigger: section,
-          start: isDesktop ? 'top top+=70' : 'top top+=30',
-          end: isDesktop ? '+=260%' : '+=200%',
-          pin: true,
-          scrub: 0.8, // Fluid dampening for buttery smooth scrolling
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const progress = self.progress;
+    mm.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        isMobileOrTablet: '(max-width: 1023px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions;
+        const track = trackRef.current;
+        const viewport = viewportRef.current;
 
-            // 1. Draw frame smoothly
-            const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
-            drawFrame(currentIdx);
+        if (isDesktop && track && viewport) {
+          // Dynamic calculation of card y-offsets to keep the active card perfectly visible
+          const calculateStageY = (stageIndex) => {
+            const cards = track.querySelectorAll('.sdc-phase-card');
+            const maxScroll = Math.max(0, track.scrollHeight - viewport.clientHeight);
+            if (!cards || cards.length === 0) return 0;
 
-            // 2. Determine active stage (0, 1, 2, 3)
-            const stageIdx = Math.min(
-              Math.floor(progress * SERVICE_STAGES.length),
-              SERVICE_STAGES.length - 1
-            );
+            if (stageIndex === 0) return 0;
+            if (stageIndex === SERVICE_STAGES.length - 1) return -maxScroll;
 
-            // Only trigger state update when stage actually changes (prevents scroll hitching!)
-            if (stageIdx !== lastStageRef.current) {
-              lastStageRef.current = stageIdx;
-              setActiveStage(stageIdx);
-            }
-          },
-        },
-      });
+            const targetCard = cards[stageIndex];
+            if (!targetCard) return 0;
 
-      // Scrub 80 Frames
-      tl.to(
-        frameObj,
-        {
-          frame: FRAME_COUNT - 1,
-          ease: 'none',
-          duration: 1,
-        },
-        0
-      );
+            // Perfectly center the active card within the matched viewport height
+            const cardCenter = targetCard.offsetTop + targetCard.clientHeight / 2;
+            const viewportCenter = viewport.clientHeight / 2;
+            const targetOffset = cardCenter - viewportCenter;
+            return -Math.min(Math.max(0, targetOffset), maxScroll);
+          };
 
-      // On desktop, smoothly translate the cards track to maintain perfect eye alignment
-      if (isDesktop && track && viewport) {
-        tl.to(
-          track,
-          {
-            y: () => {
-              const scrollDistance = track.scrollHeight - viewport.clientHeight;
-              return -Math.max(0, scrollDistance);
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              id: 'sdc-scroll-timeline',
+              trigger: section,
+              start: 'top top+=75',
+              end: '+=240%',
+              pin: true,
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const progress = self.progress;
+
+                // 1. Draw frame smoothly
+                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
+                drawFrame(currentIdx);
+
+                // 2. Determine active stage (0, 1, 2, 3)
+                const stageIdx = Math.min(
+                  Math.floor(progress * SERVICE_STAGES.length),
+                  SERVICE_STAGES.length - 1
+                );
+
+                if (stageIdx !== lastStageRef.current) {
+                  lastStageRef.current = stageIdx;
+                  setActiveStage(stageIdx);
+                }
+              },
             },
+          });
+
+          // Scrub 80 Frames
+          tl.to(
+            frameObj,
+            {
+              frame: FRAME_COUNT - 1,
+              ease: 'none',
+              duration: 1,
+            },
+            0
+          );
+
+          // Staged Glide: Holds each active card steady in full view, then smoothly glides
+          // to the next card right around the phase transition, eliminating top/bottom card clipping!
+          tl.to(
+            track,
+            {
+              keyframes: {
+                '0%': { y: () => calculateStageY(0) },
+                '20%': { y: () => calculateStageY(0) },
+                '28%': { y: () => calculateStageY(1), ease: 'power2.inOut' },
+                '45%': { y: () => calculateStageY(1) },
+                '53%': { y: () => calculateStageY(2), ease: 'power2.inOut' },
+                '70%': { y: () => calculateStageY(2) },
+                '78%': { y: () => calculateStageY(3), ease: 'power2.inOut' },
+                '100%': { y: () => calculateStageY(3) },
+              },
+              duration: 1,
+              ease: 'none',
+            },
+            0
+          );
+        } else {
+          // 📱 TABLET & MOBILE: PINNED IN-PLACE STACKED OVERLAY CARDS + FRAME SCRUB
+          gsap.to(frameObj, {
+            frame: FRAME_COUNT - 1,
             ease: 'none',
-            duration: 1,
-          },
-          0
-        );
+            scrollTrigger: {
+              id: 'sdc-scroll-timeline',
+              trigger: section,
+              start: 'top top+=72',
+              end: '+=180%',
+              pin: true,
+              scrub: 0.5,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const progress = self.progress;
+
+                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
+                drawFrame(currentIdx);
+
+                const stageIdx = Math.min(
+                  Math.floor(progress * SERVICE_STAGES.length),
+                  SERVICE_STAGES.length - 1
+                );
+
+                if (stageIdx !== lastStageRef.current) {
+                  lastStageRef.current = stageIdx;
+                  setActiveStage(stageIdx);
+                }
+              },
+            },
+          });
+        }
+
+        ScrollTrigger.refresh();
       }
+    );
 
-      ScrollTrigger.refresh();
-    }, sectionRef);
-
-    const handleResize = () => ScrollTrigger.refresh();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      ctx.revert();
-    };
+    return () => mm.revert();
   }, [framesReady]);
 
-  // Click on stage to jump smoothly
+  // Click on stage tab/card to jump smoothly into the center of that stage
   const handleStageClick = (index) => {
     setActiveStage(index);
     lastStageRef.current = index;
     const st = ScrollTrigger.getById('sdc-scroll-timeline');
     if (st) {
-      const targetScroll = st.start + (index / (SERVICE_STAGES.length - 1)) * (st.end - st.start);
+      const stageCenterProgress = (index + 0.5) / SERVICE_STAGES.length;
+      const targetScroll = st.start + stageCenterProgress * (st.end - st.start);
       window.scrollTo({
         top: targetScroll,
         behavior: 'smooth',

@@ -47,7 +47,7 @@ body.theme-light {
 .sdc-section-wrapper {
   position: relative;
   width: 100%;
-  padding: clamp(3.5rem, 5.5vw, 6rem) 0;
+  padding: clamp(1.75rem, 3.5vh, 3.25rem) 0;
   background-color: var(--sdc-bg);
   box-sizing: border-box;
   overflow: hidden;
@@ -216,7 +216,7 @@ body.theme-light {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: clamp(2rem, 3.5vw, 3.5rem);
+  margin-bottom: clamp(1.25rem, 2.5vh, 2.25rem);
 }
 
 .sdc-tag-pill {
@@ -379,10 +379,10 @@ body.theme-light {
 .sdc-milestones-viewport {
   position: relative;
   width: 100%;
-  height: clamp(480px, 34vw, 530px);
+  height: clamp(375px, 40vh, 415px);
   overflow: hidden;
   box-sizing: border-box;
-  padding: 6px 0;
+  padding: 8px 10px;
 }
 
 /* Subtle Fade Gradients */
@@ -423,7 +423,7 @@ body.theme-light {
   background: var(--sdc-card-bg);
   border: 1.5px solid var(--sdc-card-border);
   border-radius: 20px;
-  padding: 1.35rem 1.6rem;
+  padding: clamp(1.1rem, 1.4vw, 1.35rem) clamp(1.25rem, 1.6vw, 1.55rem);
   box-sizing: border-box;
   opacity: 0.38;
   transform: scale(0.97);
@@ -560,14 +560,51 @@ body.theme-light {
    Responsive Breakpoints (Mobile & Tablet)
    ========================================================================== */
 
+/* Small Laptops (1024px to 1280px) */
+@media (max-width: 1280px) and (min-width: 1024px) {
+  .sdc-stage-grid {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2.25rem;
+  }
+
+  .sdc-milestones-viewport {
+    height: 410px;
+    padding: 8px 8px;
+  }
+
+  .sdc-phase-card {
+    padding: 1.05rem 1.25rem;
+  }
+
+  .sdc-phase-title {
+    font-size: 1.08rem;
+  }
+
+  .sdc-phase-desc {
+    font-size: 0.84rem;
+  }
+}
+
+/* Tablet & Mobile Devices (< 1024px): Stacked In-Place Overlay */
 @media (max-width: 1023px) {
+  .sdc-section-wrapper {
+    padding: clamp(1.6rem, 3vh, 2.6rem) 0;
+  }
+
+  .sdc-header-block {
+    margin-bottom: 1.1rem;
+  }
+
   .sdc-stage-grid {
     grid-template-columns: 1fr;
-    gap: 1.8rem;
+    gap: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .sdc-canvas-frame {
-    max-width: 580px;
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
   }
 
@@ -577,8 +614,8 @@ body.theme-light {
     grid-template-columns: repeat(4, 1fr);
     gap: 0.5rem;
     width: 100%;
-    max-width: 580px;
-    margin-top: 1rem;
+    max-width: 100%;
+    margin-top: 0.85rem;
     z-index: 4;
   }
 
@@ -622,10 +659,12 @@ body.theme-light {
   /* Mobile Milestones: Stacked In-Place Clean Card View */
   .sdc-milestones-viewport {
     height: auto;
-    min-height: 220px;
+    min-height: 235px;
     overflow: visible;
-    max-width: 580px;
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
+    padding: 0;
   }
 
   .sdc-milestones-viewport::before,
@@ -646,10 +685,10 @@ body.theme-light {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: translateY(14px) scale(0.96);
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0.4s ease;
+    transform: translateY(12px) scale(0.97);
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.35s ease;
   }
 
   .sdc-phase-card.is-phase-active {
@@ -664,15 +703,29 @@ body.theme-light {
 /* Mobile Screens (<= 767px) */
 @media (max-width: 767px) {
   .sdc-section-wrapper {
-    padding: 2.8rem 0 3.8rem 0;
+    padding: clamp(1.4rem, 2.5vh, 2.2rem) 0;
+  }
+
+  .sdc-main-container {
+    padding: 0 1rem;
+  }
+
+  .sdc-header-block {
+    margin-bottom: 0.85rem;
   }
 
   .sdc-main-title {
-    font-size: 1.75rem;
+    font-size: clamp(1.45rem, 5.2vw, 1.95rem);
+    margin-bottom: 0.45rem;
   }
 
   .sdc-subtitle {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .sdc-stage-grid {
+    gap: 0.85rem;
   }
 
   .sdc-sequence-canvas {
@@ -680,26 +733,91 @@ body.theme-light {
   }
 
   .sdc-status-pill {
-    padding: 0.35rem 0.95rem;
-    font-size: 0.74rem;
-    margin-top: 0.75rem;
+    padding: 0.32rem 0.85rem;
+    font-size: 0.72rem;
+    margin-top: 0.65rem;
+  }
+
+  .sdc-mobile-tabs {
+    gap: 0.4rem;
+    margin-top: 0.65rem;
+  }
+
+  .sdc-mobile-tab-btn {
+    padding: 0.4rem 0.25rem;
+    border-radius: 10px;
+  }
+
+  .sdc-tab-num {
+    font-size: 0.85rem;
+  }
+
+  .sdc-tab-label {
+    font-size: 0.64rem;
+  }
+
+  .sdc-milestones-viewport {
+    min-height: 250px;
   }
 
   .sdc-phase-card {
-    padding: 1.15rem 1.25rem;
-    border-radius: 18px;
+    padding: 1.05rem 1.15rem;
+    border-radius: 16px;
   }
 
   .sdc-phase-num {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+  }
+
+  .sdc-phase-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.65rem;
   }
 
   .sdc-phase-title {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
+    margin-bottom: 0.25rem;
   }
 
   .sdc-phase-desc {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 0.55rem;
+  }
+
+  .sdc-phase-deliverables {
+    gap: 0.3rem;
+  }
+
+  .sdc-deliverable-chip {
+    font-size: 0.68rem;
+    padding: 0.18rem 0.48rem;
+    border-radius: 5px;
+  }
+}
+
+/* Extra Small Screens (<= 420px) */
+@media (max-width: 420px) {
+  .sdc-tag-pill {
+    padding: 0.28rem 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .sdc-tag-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .sdc-main-title {
+    font-size: 1.35rem;
+  }
+
+  .sdc-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .sdc-mobile-tabs {
+    gap: 0.3rem;
   }
 
   .sdc-tab-label {
@@ -707,6 +825,31 @@ body.theme-light {
   }
 
   .sdc-mobile-tab-btn {
-    padding: 0.45rem;
+    padding: 0.45rem 0.2rem;
+  }
+
+  .sdc-tab-num {
+    font-size: 0.85rem;
+  }
+
+  .sdc-milestones-viewport {
+    min-height: 265px;
+  }
+
+  .sdc-phase-card {
+    padding: 0.9rem 0.95rem;
+  }
+
+  .sdc-phase-title {
+    font-size: 0.94rem;
+  }
+
+  .sdc-phase-desc {
+    font-size: 0.78rem;
+  }
+
+  .sdc-deliverable-chip {
+    font-size: 0.64rem;
+    padding: 0.15rem 0.4rem;
   }
 }
