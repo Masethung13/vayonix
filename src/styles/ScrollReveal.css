@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Global Scroll-Triggered Reveal Animations (Fade Up, Fade Left, Fade Right, Zoom In)
+   Fluid GPU acceleration with cubic-bezier easing curves & Mobile Safe Transforms
+   ========================================================================== */
+
+[data-reveal],
+.reveal-fade-up,
+.reveal-fade-down,
+.reveal-fade-left,
+.reveal-fade-right,
+.reveal-zoom-in {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Fade Up (Glides up smoothly from bottom) */
+[data-reveal="fade-up"],
+.reveal-fade-up {
+  transform: translate3d(0, 32px, 0);
+}
+
+/* 2. Fade Down (Glides down smoothly from top) */
+[data-reveal="fade-down"],
+.reveal-fade-down {
+  transform: translate3d(0, -32px, 0);
+}
+
+/* 3. Fade Left (Glides in from Right towards Left) */
+[data-reveal="fade-left"],
+.reveal-fade-left {
+  transform: translate3d(32px, 0, 0);
+}
+
+/* 4. Fade Right (Glides in from Left towards Right) */
+[data-reveal="fade-right"],
+.reveal-fade-right {
+  transform: translate3d(-32px, 0, 0);
+}
+
+/* 5. Zoom In (Scales smoothly up from center) */
+[data-reveal="zoom-in"],
+.reveal-zoom-in {
+  transform: scale(0.92) translate3d(0, 16px, 0);
+}
+
+/* ==========================================================================
+   Active / In-View State
+   ========================================================================== */
+
+[data-reveal].is-revealed,
+.reveal-fade-up.is-revealed,
+.reveal-fade-down.is-revealed,
+.reveal-fade-left.is-revealed,
+.reveal-fade-right.is-revealed,
+.reveal-zoom-in.is-revealed {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+/* Staggered Delay Utilities */
+[data-reveal-delay="50"]  { transition-delay: 0.05s; }
+[data-reveal-delay="100"] { transition-delay: 0.1s; }
+[data-reveal-delay="150"] { transition-delay: 0.15s; }
+[data-reveal-delay="200"] { transition-delay: 0.2s; }
+[data-reveal-delay="250"] { transition-delay: 0.25s; }
+[data-reveal-delay="300"] { transition-delay: 0.3s; }
+[data-reveal-delay="350"] { transition-delay: 0.35s; }
+[data-reveal-delay="400"] { transition-delay: 0.4s; }
+[data-reveal-delay="500"] { transition-delay: 0.5s; }
+[data-reveal-delay="600"] { transition-delay: 0.6s; }
+
+/* ==========================================================================
+   Mobile Responsive Safe Animation (Prevents Horizontal Overflow)
+   ========================================================================== */
+@media (max-width: 767px) {
+  [data-reveal="fade-left"],
+  .reveal-fade-left {
+    transform: translate3d(12px, 16px, 0);
+  }
+
+  [data-reveal="fade-right"],
+  .reveal-fade-right {
+    transform: translate3d(-12px, 16px, 0);
+  }
+}

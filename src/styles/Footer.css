@@ -1,0 +1,669 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   Design Tokens (Exact Home & Top Section Brand Colors)
+   ========================================================================== */
+
+:root {
+  --ft-bg: #03040f;
+  --ft-card-bg: rgba(10, 14, 38, 0.85);
+  --ft-card-border: rgba(255, 255, 255, 0.1);
+  --ft-card-hover-border: rgba(139, 92, 246, 0.6);
+  --ft-text-title: #ffffff;
+  --ft-text-sub: #94a3b8;
+  --ft-text-dim: #64748b;
+  --ft-accent-purple: #8b5cf6;
+  --ft-accent-cyan: #38bdf8;
+  --ft-accent-grad: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+  --ft-accent-hover: linear-gradient(135deg, #8b5cf6 0%, #7042f8 50%, #60a5fa 100%);
+  --ft-glow-halo: rgba(139, 92, 246, 0.55);
+  --ft-icon-bg: rgba(139, 92, 246, 0.12);
+  --ft-icon-border: rgba(139, 92, 246, 0.3);
+  --ft-input-bg: rgba(15, 23, 42, 0.8);
+  --ft-input-border: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"], body.theme-light {
+  --ft-bg: #ffffff;
+  --ft-card-bg: rgba(255, 255, 255, 0.95);
+  --ft-card-border: rgba(217, 119, 6, 0.22);
+  --ft-card-hover-border: rgba(217, 119, 6, 0.65);
+  --ft-text-title: #0f172a;
+  --ft-text-sub: #475569;
+  --ft-text-dim: #94a3b8;
+  --ft-accent-purple: #d97706;
+  --ft-accent-cyan: #f59e0b;
+  --ft-accent-grad: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --ft-accent-hover: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --ft-glow-halo: rgba(217, 119, 6, 0.45);
+  --ft-icon-bg: rgba(217, 119, 6, 0.1);
+  --ft-icon-border: rgba(217, 119, 6, 0.3);
+  --ft-input-bg: rgba(248, 250, 252, 0.95);
+  --ft-input-border: rgba(217, 119, 6, 0.25);
+}
+
+/* ==========================================================================
+   Master Footer Layout
+   ========================================================================== */
+
+.vyn-footer-section {
+  position: relative;
+  width: 100%;
+  padding: 5rem 0 3rem 0;
+  background-color: var(--ft-bg);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.4s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Ambient Backdrops */
+.vyn-footer-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(160px);
+  z-index: 1;
+}
+
+.vyn-glow-top {
+  top: 0;
+  left: 30%;
+  background: radial-gradient(circle, var(--ft-glow-halo) 0%, transparent 70%);
+}
+
+.vyn-glow-bottom {
+  bottom: -150px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+}
+
+.vyn-footer-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2.25rem;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   TOP CTA BANNER: "READY TO GROW YOUR BUSINESS?"
+   ========================================================================== */
+
+.vyn-cta-banner {
+  position: relative;
+  background: var(--ft-card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid var(--ft-card-border);
+  border-radius: 28px;
+  padding: 2.85rem 3.75rem;
+  margin-bottom: 5.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vyn-cta-banner:hover {
+  border-color: var(--ft-card-hover-border);
+  transform: translateY(-4px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 35px var(--ft-glow-halo);
+}
+
+/* Dynamic Interactive Cursor Spotlight */
+.vyn-cta-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    var(--ft-glow-halo),
+    transparent 65%
+  );
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.vyn-cta-banner:hover .vyn-cta-spotlight {
+  opacity: 0.65;
+}
+
+/* Ambient Wave Texture Overlay */
+.vyn-cta-wave-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100%;
+  background: radial-gradient(circle at 10% 50%, var(--ft-glow-halo) 0%, transparent 75%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.vyn-cta-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+}
+
+.vyn-cta-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.vyn-cta-title {
+  font-size: clamp(1.85rem, 2.8vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--ft-text-title);
+  margin: 0 0 0.45rem 0;
+}
+
+.vyn-title-gradient {
+  background: var(--ft-accent-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px var(--ft-glow-halo));
+}
+
+.vyn-cta-subtitle {
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--ft-text-sub);
+  margin: 0;
+}
+
+.vyn-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 2.25rem;
+  background: var(--ft-accent-grad);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: 9999px;
+  box-shadow: 0 6px 22px var(--ft-glow-halo);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vyn-cta-btn:hover {
+  background: var(--ft-accent-hover);
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 10px 32px var(--ft-glow-halo);
+}
+
+.vyn-cta-arrow {
+  font-size: 1.15rem;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vyn-cta-btn:hover .vyn-cta-arrow {
+  transform: translateX(6px) scale(1.15);
+}
+
+.vyn-btn-glow-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vyn-cta-btn:hover .vyn-btn-glow-ring {
+  opacity: 1;
+}
+
+/* Border Specular Sweep */
+.vyn-cta-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.85s ease;
+  pointer-events: none;
+}
+
+[data-theme="light"] .vyn-cta-shine {
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.35), transparent);
+}
+
+.vyn-cta-banner:hover .vyn-cta-shine {
+  left: 200%;
+}
+
+/* ==========================================================================
+   MAIN 5-COLUMN FOOTER GRID
+   ========================================================================== */
+
+.vyn-footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr 1.5fr 1.5fr;
+  gap: 3rem;
+  margin-bottom: 4.5rem;
+  box-sizing: border-box;
+}
+
+.vyn-footer-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Column */
+.vyn-footer-logo {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vyn-footer-logo:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.vyn-logo-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  max-width: 220px;
+  width: auto;
+}
+
+.vyn-logo-glow-aura {
+  position: absolute;
+  inset: -8px;
+  border-radius: 14px;
+  background: radial-gradient(circle, var(--ft-glow-halo) 0%, transparent 70%);
+  opacity: 0;
+  filter: blur(14px);
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.vyn-footer-logo:hover .vyn-logo-glow-aura {
+  opacity: 1;
+}
+
+.vyn-footer-logo-img {
+  height: 100%;
+  max-height: 46px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vyn-footer-logo:hover .vyn-footer-logo-img {
+  filter: drop-shadow(0 4px 16px var(--ft-glow-halo));
+}
+
+.vyn-brand-desc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--ft-text-sub);
+  margin-bottom: 1.65rem;
+  max-width: 310px;
+}
+
+/* Social Buttons with 3D Magnetic Spring Effect */
+.vyn-social-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vyn-social-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ft-icon-bg);
+  border: 1.5px solid var(--ft-icon-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ft-accent-purple);
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vyn-social-svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+}
+
+.vyn-social-btn:hover {
+  background: var(--ft-accent-grad);
+  color: #ffffff;
+  border-color: transparent;
+  transform: translateY(-5px) scale(1.16);
+  box-shadow: 0 6px 20px var(--ft-glow-halo);
+}
+
+.vyn-social-btn:hover .vyn-social-svg {
+  transform: rotate(8deg) scale(1.1);
+}
+
+/* Column Titles */
+.vyn-col-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ft-text-title);
+  margin-bottom: 1.4rem;
+  letter-spacing: -0.01em;
+}
+
+/* Link Lists with Animated Sparkle Bullets */
+.vyn-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.vyn-link-list a {
+  color: var(--ft-text-sub);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.vyn-link-bullet {
+  font-size: 0.65rem;
+  color: var(--ft-accent-purple);
+  opacity: 0;
+  transform: scale(0.5) translateX(-4px);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vyn-link-list a:hover {
+  color: var(--ft-accent-purple);
+  transform: translateX(6px);
+}
+
+.vyn-link-list a:hover .vyn-link-bullet {
+  opacity: 1;
+  transform: scale(1) translateX(0) rotate(45deg);
+}
+
+/* Contact List with Glowing Icons */
+.vyn-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.vyn-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  color: var(--ft-text-sub);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  transition: transform 0.25s ease;
+  cursor: pointer;
+}
+
+.vyn-contact-item:hover {
+  transform: translateX(4px);
+  color: var(--ft-text-title);
+}
+
+.vyn-contact-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--ft-accent-purple);
+  margin-top: 2px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+
+.vyn-contact-item:hover .vyn-contact-icon {
+  transform: scale(1.2) rotate(6deg);
+  color: var(--ft-accent-cyan);
+}
+
+.vyn-contact-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Newsletter Column */
+.vyn-news-desc {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ft-text-sub);
+  margin-bottom: 1.25rem;
+}
+
+.vyn-subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.vyn-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.vyn-email-input {
+  width: 100%;
+  padding: 0.85rem 3.5rem 0.85rem 1.15rem;
+  background: var(--ft-input-bg);
+  border: 1.5px solid var(--ft-input-border);
+  border-radius: 14px;
+  color: var(--ft-text-title);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.vyn-email-input:focus {
+  border-color: var(--ft-accent-purple);
+  box-shadow: 0 0 20px var(--ft-glow-halo);
+}
+
+.vyn-email-input::placeholder {
+  color: var(--ft-text-dim);
+}
+
+.vyn-send-btn {
+  position: absolute;
+  right: 6px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--ft-accent-grad);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vyn-send-btn:hover {
+  background: var(--ft-accent-hover);
+  transform: scale(1.12);
+  box-shadow: 0 0 18px var(--ft-glow-halo);
+}
+
+.vyn-send-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.vyn-send-btn:hover .vyn-send-icon {
+  transform: rotate(-12deg) scale(1.1);
+}
+
+.vyn-sub-success {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ft-accent-cyan);
+  margin: 0;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   BOTTOM COPYRIGHT BAR
+   ========================================================================== */
+
+.vyn-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ft-card-border);
+  box-sizing: border-box;
+}
+
+.vyn-copyright-text {
+  font-size: 0.84rem;
+  color: var(--ft-text-sub);
+  margin: 0;
+}
+
+.vyn-brand-name {
+  font-weight: 800;
+  color: var(--ft-text-title);
+}
+
+.vyn-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vyn-legal-links a {
+  font-size: 0.82rem;
+  color: var(--ft-text-sub);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.vyn-legal-links a:hover {
+  color: var(--ft-accent-purple);
+  transform: translateY(-1px);
+}
+
+.vyn-legal-sep {
+  color: var(--ft-text-dim);
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .vyn-footer-main {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .vyn-brand-col {
+    grid-column: span 3;
+    max-width: 100%;
+  }
+
+  .vyn-brand-desc {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .vyn-cta-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .vyn-footer-main {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .vyn-brand-col {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .vyn-footer-section {
+    padding: 3.5rem 0 2.5rem 0;
+  }
+
+  .vyn-footer-container {
+    padding: 0 1.25rem;
+  }
+
+  .vyn-cta-banner {
+    padding: 2rem 1.35rem;
+    border-radius: 20px;
+    margin-bottom: 3.5rem;
+  }
+
+  .vyn-footer-main {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .vyn-brand-col {
+    grid-column: span 1;
+  }
+
+  .vyn-footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}

@@ -1,0 +1,697 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+/* ==========================================================================
+   Design Tokens & Mathematical 3D Variables
+   ========================================================================== */
+
+:root {
+  --srv-bg: #03040f;
+  --srv-text-title: #ffffff;
+  --srv-text-sub: #94a3b8;
+  --srv-accent-purple: #8b5cf6;
+  --srv-accent-cyan: #38bdf8;
+  --srv-accent-grad: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+  --srv-accent-hover: linear-gradient(135deg, #8b5cf6 0%, #7042f8 50%, #60a5fa 100%);
+  --srv-glow-halo: rgba(139, 92, 246, 0.55);
+  --srv-tag-bg: rgba(255, 255, 255, 0.05);
+  --srv-tag-border: rgba(255, 255, 255, 0.12);
+  --srv-item-border: rgba(255, 255, 255, 0.08);
+
+  /* Desktop 3D Cube Dimensions */
+  --cube-width: 530px;
+  --cube-height: 340px;
+  --cube-depth: 170px; /* Half of height for centered 3D pivot */
+}
+
+[data-theme="light"],
+body.theme-light {
+  --srv-bg: #ffffff;
+  --srv-text-title: #0f172a;
+  --srv-text-sub: #475569;
+  --srv-accent-purple: #d97706;
+  --srv-accent-cyan: #f59e0b;
+  --srv-accent-grad: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  --srv-accent-hover: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  --srv-glow-halo: rgba(217, 119, 6, 0.45);
+  --srv-tag-bg: rgba(0, 0, 0, 0.04);
+  --srv-tag-border: rgba(217, 119, 6, 0.22);
+  --srv-item-border: rgba(217, 119, 6, 0.15);
+}
+
+/* ==========================================================================
+   1. PINNED MASTER SECTION (100dvh Dynamic Viewport Height)
+   ========================================================================== */
+
+.pinned-services-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* Mobile dynamic viewport safe */
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--srv-bg);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Ambient Neon Glow Backdrops */
+.services-ambient-glow {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(150px);
+  z-index: 1;
+}
+
+.services-glow-1 {
+  top: 15%;
+  right: -100px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
+}
+
+.services-glow-2 {
+  bottom: 10%;
+  left: -100px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+}
+
+.pinned-services-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Section Header
+   ========================================================================== */
+
+.services-header-clean {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+}
+
+.services-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: var(--srv-tag-bg);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--srv-tag-border);
+  border-radius: 9999px;
+  margin-bottom: 0.5rem;
+}
+
+.tag-sparkle {
+  color: var(--srv-accent-purple);
+  font-size: 0.9rem;
+}
+
+.tag-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--srv-text-sub);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.services-main-heading {
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--srv-text-title);
+  margin: 0;
+}
+
+/* ==========================================================================
+   2. 2-COLUMN STAGE (Desktop Layout)
+   ========================================================================== */
+
+.services-stage-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr; /* Left: Text, Right: 3D Cube */
+  gap: 4.5rem;
+  align-items: center;
+  width: 100%;
+  min-height: 460px;
+}
+
+/* ==========================================================================
+   LEFT: 4 TEXT LAYERS (Stacked in exact same position)
+   ========================================================================== */
+
+.services-text-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+}
+
+.service-text-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.clean-service-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+.clean-service-num {
+  font-size: 2.1rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: var(--srv-accent-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px var(--srv-glow-halo));
+}
+
+.clean-service-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.28rem 0.85rem;
+  border-radius: 9999px;
+  background: var(--srv-tag-bg);
+  border: 1px solid var(--srv-tag-border);
+  color: var(--srv-accent-purple);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.clean-service-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--srv-text-title);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.clean-service-tagline {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.clean-service-desc {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--srv-text-sub);
+  margin-bottom: 1.3rem;
+  max-width: 580px;
+}
+
+/* Feature Bullets */
+.clean-features-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.7rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.clean-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.clean-feature-bullet {
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.clean-feature-text {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--srv-text-title);
+}
+
+/* Action Button */
+.clean-service-action {
+  display: flex;
+  align-items: center;
+}
+
+.clean-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.5rem;
+  background: var(--srv-accent-grad);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px var(--srv-glow-halo);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.clean-action-btn:hover {
+  background: var(--srv-accent-hover);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 26px var(--srv-glow-halo);
+}
+
+.clean-btn-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.clean-action-btn:hover .clean-btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   RIGHT: 3D CUBE TARGET
+   ========================================================================== */
+
+.services-cube-viewport {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.cube-scene-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: var(--cube-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ambient Backlight Aura */
+.clean-cube-aura {
+  position: absolute;
+  inset: -25px;
+  border-radius: 40px;
+  filter: blur(55px);
+  opacity: 0.75;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3D Viewport Stage */
+.cube-3d-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: var(--cube-height);
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+
+/* 3D Rotator Box */
+.cube-3d-rotator {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Universal Face Structure */
+.cube-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #030712;
+  border: 1px solid var(--srv-tag-border);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 4-Faced Geometric Offsets (Centered on X-Axis Pivot) */
+.face-1 {
+  transform: rotateX(0deg) translateZ(var(--cube-depth));
+}
+
+.face-2 {
+  transform: rotateX(-90deg) translateZ(var(--cube-depth));
+}
+
+.face-3 {
+  transform: rotateX(-180deg) translateZ(var(--cube-depth));
+}
+
+.face-4 {
+  transform: rotateX(-270deg) translateZ(var(--cube-depth));
+}
+
+/* Face Visual Layout */
+.face-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.face-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.face-glass-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 4, 15, 0.15) 0%,
+    rgba(3, 4, 15, 0.75) 60%,
+    rgba(3, 4, 15, 0.95) 100%
+  );
+  backdrop-filter: blur(1px);
+}
+
+.face-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.65rem;
+  z-index: 5;
+}
+
+.face-top-row {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.face-badge-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.8rem;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 9999px;
+}
+
+.face-num-pill {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--face-accent);
+  text-shadow: 0 0 12px var(--face-accent);
+}
+
+.face-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.face-tagline {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--srv-text-sub);
+  line-height: 1.35;
+}
+
+/* Status Pill */
+.clean-canvas-pill {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+  padding: 0.35rem 1rem;
+  background: var(--srv-tag-bg);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--srv-tag-border);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--srv-text-title);
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ==========================================================================
+   3. RESPONSIVE BREAKPOINTS (Tablets & Mobile Viewports)
+   ========================================================================== */
+
+/* Tablet & Mid-Sized Laptops */
+@media (max-width: 1200px) {
+  :root {
+    --cube-width: 440px;
+    --cube-height: 290px;
+    --cube-depth: 145px;
+  }
+
+  .services-stage-body {
+    gap: 3rem;
+  }
+
+  .clean-service-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* Tablets & Mobile Stack Layout (<= 992px) */
+@media (max-width: 992px) {
+  :root {
+    --cube-width: 100%;
+    --cube-height: 240px;
+    --cube-depth: 120px;
+  }
+
+  .pinned-services-container {
+    padding: 0 1.5rem;
+  }
+
+  .services-header-clean {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Stacked: 3D Cube on Top, Text Layer Below */
+  .services-stage-body {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: auto;
+  }
+
+  .services-text-viewport {
+    min-height: 260px;
+  }
+
+  .services-cube-viewport {
+    width: 100%;
+  }
+
+  .cube-scene-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .clean-service-title {
+    font-size: 1.45rem;
+  }
+
+  .clean-service-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .clean-features-list {
+    margin-bottom: 1.2rem;
+  }
+}
+
+/* Small Mobile Screens (<= 576px) */
+@media (max-width: 576px) {
+  :root {
+    --cube-height: 190px;
+    --cube-depth: 95px; /* Exact 50% radius for 3D centered pivot */
+  }
+
+  .pinned-services-container {
+    padding: 0 1rem;
+  }
+
+  .services-header-clean {
+    margin-bottom: 0.75rem;
+  }
+
+  .services-tag-badge {
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .tag-title {
+    font-size: 0.7rem;
+  }
+
+  .services-main-heading {
+    font-size: 1.4rem;
+  }
+
+  .services-stage-body {
+    gap: 1rem;
+  }
+
+  .cube-face {
+    border-radius: 16px;
+  }
+
+  .face-content {
+    padding: 1rem;
+  }
+
+  .face-top-row {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .face-badge-pill {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .face-num-pill {
+    font-size: 0.9rem;
+  }
+
+  .face-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .face-tagline {
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+
+  .clean-canvas-pill {
+    margin-top: 0.65rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  /* Compact Text Layer on Mobile */
+  .services-text-viewport {
+    min-height: 250px;
+  }
+
+  .clean-service-header {
+    margin-bottom: 0.35rem;
+  }
+
+  .clean-service-num {
+    font-size: 1.5rem;
+  }
+
+  .clean-service-badge {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.65rem;
+  }
+
+  .clean-service-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .clean-service-tagline {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .clean-service-desc {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin-bottom: 0.85rem;
+    /* Limit to 2 lines on small phones to prevent any overflow */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .clean-features-list {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .clean-feature-text {
+    font-size: 0.78rem;
+  }
+
+  .clean-action-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    font-size: 0.82rem;
+  }
+}
+.services-outer-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
