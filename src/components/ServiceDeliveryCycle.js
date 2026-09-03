@@ -104,7 +104,7 @@ const ServiceDeliveryCycle = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Set canvas fixed backbuffer size once
+  // Set canvas fixed backbuffer resolution
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -148,9 +148,7 @@ const ServiceDeliveryCycle = () => {
     }
   };
 
-  // =========================================================================
-  // SILKY SMOOTH GSAP SCROLLTRIGGER PINNED ANIMATION (ALL VIEWPORT SIZES)
-  // =========================================================================
+  // Silky GSAP ScrollTrigger Pinned Animation
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
@@ -175,23 +173,20 @@ const ServiceDeliveryCycle = () => {
         const viewport = viewportRef.current;
 
         if (isDesktop && track && viewport) {
-          // Dynamic calculation of card y-offsets to keep the active card perfectly visible
+          // Dynamic calculation: centers any card (0, 1, 2, 3) directly in the viewport
           const calculateStageY = (stageIndex) => {
             const cards = track.querySelectorAll('.sdc-phase-card');
-            const maxScroll = Math.max(0, track.scrollHeight - viewport.clientHeight);
             if (!cards || cards.length === 0) return 0;
-
-            if (stageIndex === 0) return 0;
-            if (stageIndex === SERVICE_STAGES.length - 1) return -maxScroll;
 
             const targetCard = cards[stageIndex];
             if (!targetCard) return 0;
 
-            // Perfectly center the active card within the matched viewport height
+            // Target card center relative to the top of track
             const cardCenter = targetCard.offsetTop + targetCard.clientHeight / 2;
             const viewportCenter = viewport.clientHeight / 2;
-            const targetOffset = cardCenter - viewportCenter;
-            return -Math.min(Math.max(0, targetOffset), maxScroll);
+            
+            // Translate track so cardCenter aligns exactly with viewportCenter
+            return -(cardCenter - viewportCenter);
           };
 
           const tl = gsap.timeline({
@@ -199,14 +194,14 @@ const ServiceDeliveryCycle = () => {
               id: 'sdc-scroll-timeline',
               trigger: section,
               start: 'top top+=75',
-              end: '+=240%',
+              end: '+=250%',
               pin: true,
               scrub: 0.6,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 const progress = self.progress;
 
-                // 1. Draw frame smoothly
+                // 1. Draw image frame
                 const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
                 drawFrame(currentIdx);
 
@@ -235,8 +230,7 @@ const ServiceDeliveryCycle = () => {
             0
           );
 
-          // Staged Glide: Holds each active card steady in full view, then smoothly glides
-          // to the next card right around the phase transition, eliminating top/bottom card clipping!
+          // Staged Glide: Holds cards steady in full center view, then slides cleanly
           tl.to(
             track,
             {
@@ -256,7 +250,7 @@ const ServiceDeliveryCycle = () => {
             0
           );
         } else {
-          // 📱 TABLET & MOBILE: PINNED IN-PLACE STACKED OVERLAY CARDS + FRAME SCRUB
+          // Mobile & Tablet Pinned Setup
           gsap.to(frameObj, {
             frame: FRAME_COUNT - 1,
             ease: 'none',
@@ -295,7 +289,7 @@ const ServiceDeliveryCycle = () => {
     return () => mm.revert();
   }, [framesReady]);
 
-  // Click on stage tab/card to jump smoothly into the center of that stage
+  // Click on stage tab or card to jump smoothly into that stage
   const handleStageClick = (index) => {
     setActiveStage(index);
     lastStageRef.current = index;
@@ -314,10 +308,7 @@ const ServiceDeliveryCycle = () => {
 
   return (
     <section className="sdc-section-wrapper" id="services-sequence" ref={sectionRef}>
-
-      {/* =====================================================================
-          3D DYNAMIC BACKGROUND ELEMENTS
-          ===================================================================== */}
+      {/* 3D Dynamic Background Elements */}
       <div
         className="sdc-3d-bg-canvas"
         style={{
@@ -328,7 +319,6 @@ const ServiceDeliveryCycle = () => {
         <div className="sdc-ambient-glow sdc-glow-top" />
         <div className="sdc-ambient-glow sdc-glow-bottom" />
 
-        {/* 3D Floating Twinkle Star Prisms */}
         <div className="sdc-3d-star sdc-star-1" style={{ transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -16}px, 0)` }}>✦</div>
         <div className="sdc-3d-star sdc-star-2" style={{ transform: `translate3d(${mousePos.x * 20}px, ${mousePos.y * 20}px, 0)` }}>✦</div>
         <div className="sdc-3d-star sdc-star-3" style={{ transform: `translate3d(${mousePos.x * -12}px, ${mousePos.y * 14}px, 0)` }}>✦</div>
@@ -339,9 +329,8 @@ const ServiceDeliveryCycle = () => {
       </div>
 
       <div className="sdc-main-container">
-
-        {/* Header */}
-        <div className="sdc-header-block" data-reveal="fade-up">
+        {/* Header Block */}
+        <div className="sdc-header-block">
           <div className="sdc-tag-pill">
             <span className="sdc-tag-spark">✦</span>
             <span className="sdc-tag-label">INTERACTIVE EXECUTION ENGINE</span>
@@ -354,10 +343,9 @@ const ServiceDeliveryCycle = () => {
           </p>
         </div>
 
-        {/* 2-Column Split Layout */}
+        {/* 2-Column Split: Symmetrical Heights with Smooth Scroll-Hide Effect */}
         <div className="sdc-stage-grid">
-
-          {/* Left Column: Canvas + Status Pill */}
+          {/* Left Column: Canvas + Status */}
           <div className="sdc-canvas-col">
             <div className="sdc-canvas-frame">
               {/* Dynamic Aura Backlight */}
@@ -386,7 +374,7 @@ const ServiceDeliveryCycle = () => {
               </div>
             </div>
 
-            {/* Mobile Tab Switcher (<= 1023px) */}
+            {/* Mobile Tab Switcher (< 1024px) */}
             <div className="sdc-mobile-tabs">
               {SERVICE_STAGES.map((stg, idx) => (
                 <button
@@ -403,7 +391,7 @@ const ServiceDeliveryCycle = () => {
             </div>
           </div>
 
-          {/* Right Column: Milestones Viewport with Smoothly Sliding/Highlighting Cards */}
+          {/* Right Column: Milestones with Clean Spacing & Scroll-Hide Effect */}
           <div className="sdc-milestones-viewport" ref={viewportRef}>
             <div className="sdc-milestones-track" ref={trackRef}>
               {SERVICE_STAGES.map((stage, idx) => {
@@ -430,7 +418,7 @@ const ServiceDeliveryCycle = () => {
                     <h3 className="sdc-phase-title">{stage.title}</h3>
                     <p className="sdc-phase-desc">{stage.desc}</p>
 
-                    {/* Key Service Deliverables Tags */}
+                    {/* Deliverables */}
                     <div className="sdc-phase-deliverables">
                       {stage.deliverables.map((item, dIdx) => (
                         <span key={dIdx} className="sdc-deliverable-chip">
@@ -439,18 +427,15 @@ const ServiceDeliveryCycle = () => {
                       ))}
                     </div>
 
-                    {/* Active Accent Indicator Bar */}
+                    {/* Active Accent Indicator */}
                     <div className="sdc-phase-indicator-bar" />
                   </div>
                 );
               })}
             </div>
           </div>
-
         </div>
-
       </div>
-
     </section>
   );
 };
