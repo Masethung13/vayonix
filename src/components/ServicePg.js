@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollTitle from './ScrollTitle';
 import AnimatedNumber from './AnimatedNumber';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -8,6 +10,53 @@ import '../styles/ServicePg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import serviceDarkImg from '../assets/service-dark.jpg';
 import serviceLightImg from '../assets/service-light1.jpg';
+
+// Register GSAP ScrollTrigger Plugin
+gsap.registerPlugin(ScrollTrigger);
+
+const FRAME_COUNT = 80;
+
+// Helper to resolve 80 image frame paths dynamically from /assets/gsap/
+const getFrameSrc = (index) => {
+  const padded = String(index).padStart(3, '0');
+  try {
+    return require(`../assets/gsap/ezgif-frame-${padded}.jpg`);
+  } catch (e) {
+    return null;
+  }
+};
+
+// 4 Service Delivery Stages Scrubbed with the 80-frame sequence
+const servicePhases = [
+  {
+    id: '01',
+    badge: 'Stage 01 / Strategy',
+    title: 'Omni-Channel Market Discovery',
+    desc: 'Deep audience segmentation, competitor intelligence, and comprehensive keyword mapping to architect your tailored acquisition roadmap.',
+    accent: '#38bdf8'
+  },
+  {
+    id: '02',
+    badge: 'Stage 02 / Creative & UX',
+    title: 'High-Converting Digital Real Estate',
+    desc: 'Developing high-converting landing pages, interactive 3D assets, and persuasive copy designed to maximize visitor-to-lead ratios.',
+    accent: '#818cf8'
+  },
+  {
+    id: '03',
+    badge: 'Stage 03 / Performance Ads',
+    title: 'Multi-Network Media Scaling',
+    desc: 'Deploying laser-targeted Meta, Google, and LinkedIn ad funnels with continuous A/B creative testing to slash acquisition costs.',
+    accent: '#a855f7'
+  },
+  {
+    id: '04',
+    badge: 'Stage 04 / Automation & AI',
+    title: 'Automated Retention & ROI Scaling',
+    desc: 'Integrating AI-driven lead routing, automated CRM drip sequences, and real-time revenue analytics for compounding monthly growth.',
+    accent: '#ec4899'
+  }
+];
 
 const metricsStats = [
   {
@@ -60,13 +109,21 @@ const metricsStats = [
 ];
 
 const ServicePg = () => {
-  // Activate Scroll Reveal observer for smooth scroll-triggered animations
   useScrollReveal(0.08);
 
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  // GSAP 80-Frame Sequence State & Refs
+  const sequenceSectionRef = useRef(null);
+  const sequenceCanvasRef = useRef(null);
+  const milestonesViewportRef = useRef(null);
+  const milestonesTrackRef = useRef(null);
+  const imagesRef = useRef([]);
+  const [framesLoaded, setFramesLoaded] = useState(false);
+  const [activeSeqPhase, setActiveSeqPhase] = useState(0);
 
   // Theme synchronization with LocalStorage & Document Element
   const [theme, setTheme] = useState(() => {
@@ -80,7 +137,7 @@ const ServicePg = () => {
     window.dispatchEvent(new Event('theme_change'));
   }, [theme]);
 
-  // Sync theme changes across other tabs/components
+  // Sync theme changes across tabs/components
   useEffect(() => {
     const handleThemeSync = () => {
       const currentTheme = localStorage.getItem('vayonix_theme') || 'dark';
@@ -99,6 +156,7 @@ const ServicePg = () => {
   };
 
   const handleMouseMove = (e) => {
+    if (window.innerWidth < 1024) return;
     const { clientX, clientY } = e;
     const x = (clientX / window.innerWidth - 0.5) * 2;
     const y = (clientY / window.innerHeight - 0.5) * 2;
@@ -106,6 +164,7 @@ const ServicePg = () => {
   };
 
   const handleTilt = (e) => {
+    if (window.innerWidth < 1024) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -134,11 +193,158 @@ const ServicePg = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // =========================================================================
+  // PRELOAD 80 GSAP FRAMES INTO MEMORY BUFFER
+  // =========================================================================
+  useEffect(() => {
+    const loadedImgs = [];
+    let loadedCount = 0;
+
+    const handleImgLoad = () => {
+      loadedCount++;
+      if (loadedCount >= FRAME_COUNT - 5) {
+        setFramesLoaded(true);
+      }
+    };
+
+    for (let i = 1; i <= FRAME_COUNT; i++) {
+      const img = new Image();
+      const src = getFrameSrc(i);
+      if (src) {
+        img.src = src;
+        img.onload = handleImgLoad;
+      }
+      loadedImgs.push(img);
+    }
+    imagesRef.current = loadedImgs;
+  }, []);
+
+  // Draw current frame onto 16:9 canvas
+  const renderSequenceFrame = (frameIndex) => {
+    const canvas = sequenceCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const img = imagesRef.current[frameIndex];
+
+    if (img && img.complete) {
+      canvas.width = 1280;
+      canvas.height = 720;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  // =========================================================================
+  // GSAP MATCHMEDIA FOR DESKTOP (PINNED + TRANSLATE) & MOBILE (PINNED + IN-PLACE OVERLAY)
+  // =========================================================================
+  useEffect(() => {
+    const mm = gsap.matchMedia(sequenceSectionRef);
+
+    mm.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        isMobile: '(max-width: 1023px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions;
+        const section = sequenceSectionRef.current;
+        const canvas = sequenceCanvasRef.current;
+        const viewport = milestonesViewportRef.current;
+        const track = milestonesTrackRef.current;
+
+        if (!section || !canvas) return;
+
+        renderSequenceFrame(0);
+        const frameObj = { frame: 0 };
+
+        if (isDesktop && viewport && track) {
+          // 🚀 DESKTOP: PINNED 80-FRAME SEQUENCE + AUTO-TRANSLATING TRACK
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top+=70',
+              end: '+=280%',
+              pin: true,
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
+                renderSequenceFrame(currentIdx);
+
+                const phaseIndex = Math.min(
+                  Math.floor(self.progress * servicePhases.length),
+                  servicePhases.length - 1
+                );
+                setActiveSeqPhase(phaseIndex);
+              },
+            },
+          });
+
+          // Scrub 80 Frames
+          tl.to(
+            frameObj,
+            {
+              frame: FRAME_COUNT - 1,
+              snap: 'frame',
+              ease: 'none',
+              duration: 1,
+            },
+            0
+          );
+
+          // Translate milestones track to 100% reveal Phase 04
+          tl.to(
+            track,
+            {
+              y: () => {
+                const scrollDistance = track.scrollHeight - viewport.clientHeight;
+                return -Math.max(0, scrollDistance);
+              },
+              ease: 'none',
+              duration: 1,
+            },
+            0
+          );
+        } else {
+          // 📱 MOBILE / TABLET: PINNED IN-PLACE OVERLAY CARDS + FRAME SCRUB
+          gsap.to(frameObj, {
+            frame: FRAME_COUNT - 1,
+            snap: 'frame',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top+=30',
+              end: '+=220%',
+              pin: true,
+              scrub: 0.5,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const currentIdx = Math.min(Math.round(frameObj.frame), FRAME_COUNT - 1);
+                renderSequenceFrame(currentIdx);
+
+                // Smoothly swap overlapping active card in place
+                const phaseIndex = Math.min(
+                  Math.floor(self.progress * servicePhases.length),
+                  servicePhases.length - 1
+                );
+                setActiveSeqPhase(phaseIndex);
+              },
+            },
+          });
+        }
+
+        ScrollTrigger.refresh();
+      }
+    );
+
+    return () => mm.revert();
+  }, [framesLoaded]);
+
   return (
     <div className="svc-page-wrapper" onMouseMove={handleMouseMove}>
 
       {/* =====================================================================
-          1. TOP BANNER: HERO HEADER WITH CINEMATIC BREADCRUMBS (Matches Abt.js)
+          1. TOP BANNER: HERO HEADER WITH CINEMATIC BREADCRUMBS
           ===================================================================== */}
       <section className="svc-top-banner">
         <div className="svc-banner-bg-wrap">
@@ -162,11 +368,11 @@ const ServicePg = () => {
       </section>
 
       {/* =====================================================================
-          2. HERO SHOWCASE SECTION (Matches Abt.js Design System & ScrollTitle)
+          2. HERO SHOWCASE SECTION
           ===================================================================== */}
       <section className="svc-hero-section">
 
-        {/* 3D Background Canvas with 8 Parallax Stars & Neon Splines (Matches Abt.js) */}
+        {/* 3D Background Canvas with 8 Parallax Stars & Neon Splines */}
         <div
           className="svc-3d-loop-canvas"
           style={{
@@ -220,22 +426,19 @@ const ServicePg = () => {
 
         <div className="svc-main-container">
 
-          {/* Top Split: Left Content + Right Image Frame (Matches Abt.js) */}
+          {/* Top Split: Left Content + Right Image Frame */}
           <div className="svc-hero-split-grid">
 
             {/* Left Column: Headlines, CTAs */}
             <div className="svc-hero-left-content" data-reveal="fade-right">
 
-              {/* Floating Spark on Left */}
               <span className="svc-hero-spark-decor">✦</span>
 
-              {/* Tag Pill */}
               <div className="svc-tag-pill" data-reveal="fade-up">
                 <span className="svc-tag-spark">✦</span>
                 <span className="svc-tag-label">OUR SERVICES</span>
               </div>
 
-              {/* Hero Headline with ScrollTitle Word-by-Word Animation */}
               <ScrollTitle
                 as="h2"
                 isHero={true}
@@ -257,14 +460,12 @@ const ServicePg = () => {
                 ]}
               />
 
-              {/* Subtext Description */}
               <p className="svc-sub-description" data-reveal="fade-up">
                 From strategy to execution, we provide end-to-end digital marketing solutions that help your brand grow, engage, and convert like never before.
               </p>
 
-              {/* Dual CTAs Row */}
               <div className="svc-cta-row" data-reveal="fade-up">
-                <a href="#services-grid" className="svc-primary-btn">
+                <a href="#services-sequence" className="svc-primary-btn">
                   <span className="svc-btn-text">Explore All Services</span>
                   <span className="svc-btn-arrow">→</span>
                   <div className="svc-btn-shimmer" />
@@ -273,7 +474,7 @@ const ServicePg = () => {
 
             </div>
 
-            {/* Right Column: Glass Card Frame with Theme-Adaptive Image & 3D Tilt */}
+            {/* Right Column: Glass Card Frame with 3D Tilt */}
             <div className="svc-hero-visual-col" data-reveal="fade-left">
               <div
                 className="svc-glass-card-frame"
@@ -296,60 +497,145 @@ const ServicePg = () => {
 
           </div>
 
-          {/* =================================================================
-              3. "WHAT WE OFFER" SECTION (Dedicated Alternating Zig-Zag Component)
-              ================================================================= */}
-          <Whatweoffer />
+        </div>
 
-          {/* =================================================================
-              4. FULL-WIDTH GLOWING CYBER METRICS BANNER
-              ================================================================= */}
-          <div className="svc-cyber-metrics-card" data-reveal="fade-up">
+      </section>
 
-            <div className="svc-metrics-inner-grid">
-              {metricsStats.map((stat, idx) => (
-                <div key={idx} className="svc-cyber-stat-item" data-reveal="zoom-in">
-                  <div className="svc-stat-icon-aura">
-                    {stat.icon}
-                  </div>
-                  <div className="svc-stat-info">
-                    <div className="svc-stat-number">
-                      <AnimatedNumber value={stat.number} duration={1800} delay={idx * 150} once={false} />
-                    </div>
-                    <div className="svc-stat-caption">{stat.caption}</div>
-                  </div>
+      {/* =====================================================================
+          🔥 GSAP SCROLLTRIGGER 80-FRAME SERVICE PIPELINE SEQUENCE
+          ===================================================================== */}
+      <section className="svc-gsap-sequence-section" id="services-sequence" ref={sequenceSectionRef}>
+        <div className="svc-sequence-ambient-glow glow-top" />
+        <div className="svc-sequence-ambient-glow glow-bottom" />
+
+        <div className="svc-sequence-container">
+          
+          {/* Header */}
+          <div className="svc-sequence-header">
+            <div className="svc-tag-pill">
+              <span className="svc-tag-spark">✦</span>
+              <span className="svc-tag-label">INTERACTIVE EXECUTION ENGINE</span>
+            </div>
+            <h2 className="svc-sequence-title">
+              Scroll To Watch Our <span className="svc-grad-cyber-sweep">Service Delivery Cycle</span>
+            </h2>
+            <p className="svc-sequence-subtitle">
+              Every campaign and application moves through a rigorous 4-stage engineering pipeline scrubbed frame-by-frame.
+            </p>
+          </div>
+
+          {/* 2-Column Split: Canvas (Left) + Sliding/Stacked Milestones (Right) */}
+          <div className="svc-sequence-stage-grid">
+            
+            {/* Left: 80-Frame HTML5 Canvas */}
+            <div className="svc-sequence-canvas-col">
+              <div className="svc-sequence-canvas-frame">
+                <div
+                  className="svc-canvas-aura-backlight"
+                  style={{
+                    background: `radial-gradient(circle, ${servicePhases[activeSeqPhase].accent}88 0%, rgba(56, 189, 248, 0.2) 50%, transparent 75%)`,
+                  }}
+                />
+                
+                <canvas ref={sequenceCanvasRef} className="svc-sequence-canvas" />
+
+                {/* Floating Status Pill */}
+                <div className="svc-sequence-status-pill">
+                  <span
+                    className="status-dot"
+                    style={{
+                      backgroundColor: servicePhases[activeSeqPhase].accent,
+                      boxShadow: `0 0 10px ${servicePhases[activeSeqPhase].accent}`,
+                    }}
+                  />
+                  <span>
+                    PHASE {servicePhases[activeSeqPhase].id} : {servicePhases[activeSeqPhase].badge}
+                  </span>
                 </div>
-              ))}
+              </div>
             </div>
 
-            {/* Bottom Radiant Laser Wave Spline */}
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="svc-metrics-wave-svg">
-              <path
-                d="M0,80 C300,120 600,20 900,90 C1050,110 1150,60 1200,80 L1200,120 L0,120 Z"
-                fill="url(#svcWaveGradient)"
-                opacity="0.5"
-              />
-              <path
-                d="M0,90 C350,40 700,110 1000,50 C1100,30 1180,70 1200,60"
-                fill="none"
-                stroke="rgba(192, 132, 252, 0.85)"
-                strokeWidth="2.5"
-                filter="drop-shadow(0 0 8px rgba(168, 85, 247, 0.9))"
-              />
-              <defs>
-                <linearGradient id="svcWaveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="rgba(99, 102, 241, 0.4)" />
-                  <stop offset="50%" stopColor="rgba(168, 85, 247, 0.7)" />
-                  <stop offset="100%" stopColor="rgba(236, 72, 153, 0.4)" />
-                </linearGradient>
-              </defs>
-            </svg>
+            {/* Right: Milestones Viewport (Sliding on Desktop / Overlapping in Place on Mobile) */}
+            <div className="svc-sequence-milestones-viewport" ref={milestonesViewportRef}>
+              <div className="svc-sequence-milestones-track" ref={milestonesTrackRef}>
+                {servicePhases.map((phase, idx) => {
+                  const isActive = activeSeqPhase === idx;
+                  return (
+                    <div
+                      key={phase.id}
+                      className={`svc-seq-phase-card ${isActive ? 'is-phase-active' : ''}`}
+                      style={{ '--phase-accent': phase.accent }}
+                    >
+                      <div className="phase-card-top">
+                        <span className="phase-num">{phase.id}</span>
+                        <span className="phase-badge">{phase.badge}</span>
+                      </div>
+                      <h3 className="phase-title">{phase.title}</h3>
+                      <p className="phase-desc">{phase.desc}</p>
+                      <div className="phase-indicator-bar" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
           </div>
 
         </div>
-
       </section>
+
+      {/* =====================================================================
+          3. "WHAT WE OFFER" SECTION (Dedicated Alternating Zig-Zag Component)
+          ===================================================================== */}
+      <Whatweoffer />
+
+      {/* =====================================================================
+          4. FULL-WIDTH GLOWING CYBER METRICS BANNER
+          ===================================================================== */}
+      <div className="svc-main-container">
+        <div className="svc-cyber-metrics-card" data-reveal="fade-up">
+
+          <div className="svc-metrics-inner-grid">
+            {metricsStats.map((stat, idx) => (
+              <div key={idx} className="svc-cyber-stat-item" data-reveal="zoom-in">
+                <div className="svc-stat-icon-aura">
+                  {stat.icon}
+                </div>
+                <div className="svc-stat-info">
+                  <div className="svc-stat-number">
+                    <AnimatedNumber value={stat.number} duration={1800} delay={idx * 150} once={false} />
+                  </div>
+                  <div className="svc-stat-caption">{stat.caption}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Radiant Laser Wave Spline */}
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="svc-metrics-wave-svg">
+            <path
+              d="M0,80 C300,120 600,20 900,90 C1050,110 1150,60 1200,80 L1200,120 L0,120 Z"
+              fill="url(#svcWaveGradient)"
+              opacity="0.5"
+            />
+            <path
+              d="M0,90 C350,40 700,110 1000,50 C1100,30 1180,70 1200,60"
+              fill="none"
+              stroke="rgba(192, 132, 252, 0.85)"
+              strokeWidth="2.5"
+              filter="drop-shadow(0 0 8px rgba(168, 85, 247, 0.9))"
+            />
+            <defs>
+              <linearGradient id="svcWaveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="rgba(99, 102, 241, 0.4)" />
+                <stop offset="50%" stopColor="rgba(168, 85, 247, 0.7)" />
+                <stop offset="100%" stopColor="rgba(236, 72, 153, 0.4)" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+        </div>
+      </div>
 
       {/* =====================================================================
           5. FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME SWITCHER)
