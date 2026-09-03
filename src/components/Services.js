@@ -4,6 +4,11 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollTitle from './ScrollTitle';
 
+import uiUxImg from '../assets/ui-ux1.png';
+import androidAppImg from '../assets/android-app-img.webp';
+import seoImg from '../assets/seo-img.avif';
+import adsImg from '../assets/ads-img.jpg';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const servicesList = [
@@ -20,7 +25,7 @@ const servicesList = [
     ],
     badge: 'Web Architecture',
     accentColor: '#8b5cf6',
-    image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80',
+    image: uiUxImg,
   },
   {
     id: '02',
@@ -35,37 +40,37 @@ const servicesList = [
     ],
     badge: 'Mobile Engineering',
     accentColor: '#38bdf8',
-    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80',
+    image: androidAppImg,
   },
   {
     id: '03',
-    title: 'Performance Marketing & SEO Growth',
-    tagline: 'Data-Driven Multi-Channel Client Acquisition',
-    desc: 'Stop burning ad budget on guesswork. We build scalable customer acquisition funnels, laser-targeted Meta & Google ad campaigns, and rank-1 SEO strategies that drive measurable ROI.',
+    title: 'Search Engine Optimization (SEO)',
+    tagline: 'Dominate Top Search Rankings & Compound Inbound Leads',
+    desc: 'Dominate organic search results with deep technical audits, semantic keyword clustering, high-authority backlink architecture, and core web vitals speed optimization that drive scalable organic traffic.',
     features: [
-      'Google & Meta Ads Scaling',
-      'Technical & On-Page SEO Domination',
-      'Conversion Rate Optimization (CRO)',
-      'Real-Time ROI Analytics Tracking',
+      'Technical & On-Page SEO',
+      'Keyword Clustering & Search Intent',
+      'Authority Backlink Building',
+      'Core Web Vitals Speed Optimization',
     ],
-    badge: 'Growth Marketing',
+    badge: 'SEO & Search',
     accentColor: '#ec4899',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+    image: seoImg,
   },
   {
     id: '04',
-    title: 'AI Automation & Custom SaaS',
-    tagline: 'Future-Proofing Your Operations With Intelligent Systems',
-    desc: 'Supercharge operational efficiency and launch scalable software products. We integrate cutting-edge AI agents, automated CRM workflows, and custom backend infrastructure built for hyper-growth.',
+    title: 'Paid Ads & Performance Promotion',
+    tagline: 'High-ROI Multi-Platform Paid Ads & Viral Campaigns',
+    desc: 'Stop burning ad budget on guesswork. We build laser-targeted Meta, Google, TikTok, and YouTube ad campaigns with high-converting copy, scroll-stopping creatives, and ruthless ROI optimization.',
     features: [
-      'Custom AI Agents & Workflows',
-      'SaaS Product Architecture',
-      'Automated CRM & Lead Pipelines',
-      'Scalable Cloud Infrastructure',
+      'Google Search & Performance Max Ads',
+      'Meta (Facebook & Instagram) Scaling',
+      'Audience Retargeting & Funnel Growth',
+      'High-Converting Creative Ad Design',
     ],
-    badge: 'AI & Cloud',
+    badge: 'Ads Promotion',
     accentColor: '#10b981',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+    image: adsImg,
   },
 ];
 
@@ -276,33 +281,10 @@ const Services = () => {
                             className="face-bg-image"
                             loading="lazy"
                           />
-                          <div className="face-glass-overlay" />
-                          <div className="face-content">
-                            <div className="face-top-row">
-                              <span className="face-badge-pill">{item.badge}</span>
-                              <span className="face-num-pill">{item.id}</span>
-                            </div>
-                            <h4 className="face-title">{item.title}</h4>
-                            <p className="face-tagline">{item.tagline}</p>
-                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                {/* Status Pill */}
-                <div className="clean-canvas-pill">
-                  <span
-                    className="pill-dot"
-                    style={{
-                      backgroundColor: servicesList[activeCard].accentColor,
-                      boxShadow: `0 0 10px ${servicesList[activeCard].accentColor}`,
-                    }}
-                  />
-                  <span>
-                    {servicesList[activeCard].id} / {servicesList[activeCard].badge}
-                  </span>
                 </div>
               </div>
             </div>

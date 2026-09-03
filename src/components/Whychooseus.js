@@ -1,13 +1,60 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Whychooseus.css';
-import teamImg from '../assets/why-choose-team.jpg';
 import ScrollTitle from './ScrollTitle';
+
+// Featured Project Assets
+import pr1Dark from '../assets/pr1-dark.png';
+import pr1Light from '../assets/pr1-light.png';
+import contentMarketingImg from '../assets/services/Content-Marketing.jpg';
 
 const Whychooseus = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
-  const [satisfactionCount, setSatisfactionCount] = useState(0);
   const [customerCount, setCustomerCount] = useState(0);
+  const [uptimeCount, setUptimeCount] = useState('0.0');
+  const [mbTilt, setMbTilt] = useState({ x: 0, y: 0 });
   const sectionRef = useRef(null);
+
+  // Active theme tracking for seamless Dark/Light graphic switching
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('vayonix_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
+  });
+
+  useEffect(() => {
+    const handleThemeSync = () => {
+      const currentTheme = localStorage.getItem('vayonix_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
+      setTheme(currentTheme);
+    };
+
+    window.addEventListener('theme_change', handleThemeSync);
+    window.addEventListener('storage', handleThemeSync);
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          handleThemeSync();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => {
+      window.removeEventListener('theme_change', handleThemeSync);
+      window.removeEventListener('storage', handleThemeSync);
+      observer.disconnect();
+    };
+  }, []);
+
+  const handleMbTilt = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setMbTilt({ x: x * 8, y: y * -8 });
+  };
+
+  const resetMbTilt = () => {
+    setMbTilt({ x: 0, y: 0 });
+  };
 
   // Avatar photos for the 300+ Happy Customers pill
   const customerAvatars = [
@@ -73,13 +120,14 @@ const Whychooseus = () => {
     },
   ];
 
-  // Scroll Trigger Animated Counter: Re-animates smoothly upon viewport entry
+  // Scroll Trigger Animated Counters: Re-animates smoothly upon every viewport entry
   useEffect(() => {
     let animTimer = null;
 
     const startCounting = () => {
-      setSatisfactionCount(0);
+      if (animTimer) cancelAnimationFrame(animTimer);
       setCustomerCount(0);
+      setUptimeCount('0.0');
 
       const duration = 1800; // 1.8 seconds
       const startTime = performance.now();
@@ -91,8 +139,8 @@ const Whychooseus = () => {
         // Smooth easeOutExpo curve
         const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
-        setSatisfactionCount(Math.round(easeOut * 98));
         setCustomerCount(Math.round(easeOut * 300));
+        setUptimeCount((easeOut * 99.9).toFixed(1));
 
         if (progress < 1) {
           animTimer = requestAnimationFrame(updateCount);
@@ -107,10 +155,14 @@ const Whychooseus = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             startCounting();
+          } else {
+            if (animTimer) cancelAnimationFrame(animTimer);
+            setCustomerCount(0);
+            setUptimeCount('0.0');
           }
         });
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
 
     const currentElem = sectionRef.current;
@@ -303,13 +355,21 @@ const Whychooseus = () => {
                   </div>
                 </div>
 
-                {/* Bottom Concentric Waves Badge */}
+                {/* Bottom Concentric Waves Badge (Smooth Loop Rotation) */}
                 <div className="wcu-concentric-badge" aria-hidden="true">
-                  <svg viewBox="0 0 32 32" fill="none" className="wcu-wave-svg">
-                    <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
-                    <circle cx="16" cy="16" r="10" stroke="currentColor" strokeWidth="1.8" strokeDasharray="2 2" opacity="0.7" />
-                    <circle cx="16" cy="16" r="6" stroke="currentColor" strokeWidth="2.2" />
-                    <circle cx="16" cy="16" r="2.5" fill="currentColor" />
+                  <svg viewBox="0 0 100 100" fill="none" className="wcu-cyber-emblem-svg">
+                    <g className="emblem-outer-ring">
+                      <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="2.5" strokeDasharray="4 8" opacity="0.75" />
+                      <circle cx="50" cy="8" r="3" fill="currentColor" />
+                      <circle cx="50" cy="92" r="3" fill="currentColor" />
+                      <circle cx="8" cy="50" r="3" fill="currentColor" />
+                      <circle cx="92" cy="50" r="3" fill="currentColor" />
+                    </g>
+                    <g className="emblem-middle-ring">
+                      <circle cx="50" cy="50" r="28" stroke="currentColor" strokeWidth="3" strokeDasharray="5 5" opacity="0.9" />
+                    </g>
+                    <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="3.5" opacity="0.95" />
+                    <circle cx="50" cy="50" r="7.5" fill="currentColor" className="emblem-core-dot" />
                   </svg>
                   <div className="wcu-wave-pulse" />
                 </div>
@@ -319,38 +379,89 @@ const Whychooseus = () => {
           </div>
 
           {/* =================================================================
-              RIGHT COLUMN: LARGE CIRCULAR PORTAL IMAGE WITH SCROLL TRIGGER 92%
+              RIGHT COLUMN: ULTRA-MODERN 2-IMAGE DUAL SHOWCASE TEMPLATE
               ================================================================= */}
           <div className="wcu-right-visual" data-reveal="fade-left">
-            <div className="wcu-circular-portal-wrapper">
+            <div
+              className="wcu-dual-showcase-stage"
+              data-active-theme={theme}
+              onMouseMove={handleMbTilt}
+              onMouseLeave={resetMbTilt}
+              style={{
+                transform: `perspective(1000px) rotateX(${mbTilt.y}deg) rotateY(${mbTilt.x}deg)`,
+              }}
+            >
+              {/* Radiant Ambient Core Halo */}
+              <div className="wcu-dual-ambient-glow" />
 
-              {/* Outer Radiant Glowing Crescent Rings */}
-              <div className="wcu-crescent-aura" />
-              <div className="wcu-crescent-ring" />
+              {/* Decorative Geometric Orbit Ring */}
+              <div className="wcu-dual-orbit-ring" />
 
-              {/* Circular Team Image Container */}
-              <div className="wcu-circle-img-frame">
-                <img src={teamImg} alt="Vayonix expert team collaborating" className="wcu-portal-img" />
-                <div className="wcu-img-soft-vignette" />
+              {/* Floating Cyber Orbital Rotating Emblem in Infinite Loop */}
+              <div className="wcu-rotating-cyber-emblem" aria-hidden="true">
+                <svg viewBox="0 0 100 100" fill="none" className="wcu-cyber-emblem-svg">
+                  <g className="emblem-outer-ring">
+                    <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="2.5" strokeDasharray="4 8" opacity="0.75" />
+                    <circle cx="50" cy="8" r="3" fill="currentColor" />
+                    <circle cx="50" cy="92" r="3" fill="currentColor" />
+                    <circle cx="8" cy="50" r="3" fill="currentColor" />
+                    <circle cx="92" cy="50" r="3" fill="currentColor" />
+                    <circle cx="20.3" cy="20.3" r="2.5" fill="currentColor" opacity="0.8" />
+                    <circle cx="79.7" cy="79.7" r="2.5" fill="currentColor" opacity="0.8" />
+                    <circle cx="79.7" cy="20.3" r="2.5" fill="currentColor" opacity="0.8" />
+                    <circle cx="20.3" cy="79.7" r="2.5" fill="currentColor" opacity="0.8" />
+                  </g>
+                  <g className="emblem-middle-ring">
+                    <circle cx="50" cy="50" r="28" stroke="currentColor" strokeWidth="3" strokeDasharray="5 5" opacity="0.9" />
+                  </g>
+                  <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="3.5" opacity="0.95" />
+                  <circle cx="50" cy="50" r="7.5" fill="currentColor" className="emblem-core-dot" />
+                </svg>
+                <div className="wcu-emblem-glow" />
               </div>
 
-              {/* Scroll Trigger Animated 92% Satisfied Clients Central Disc */}
-              <div className="wcu-stats-disc">
-                <div className="wcu-stats-disc-inner">
-                  <span className="wcu-stats-number">{satisfactionCount}%</span>
-                  <p className="wcu-stats-label">Satisfied Clients Returning Often</p>
+              {/* CARD 1: PRIMARY MAIN SHOWCASE IMAGE (THEME AWARE) */}
+              <div className="wcu-dual-card wcu-card-primary">
+                <div className="wcu-card-img-wrapper">
+                  <img
+                    src={theme === 'light' ? pr1Light : pr1Dark}
+                    alt="Vayonix Infotech Platform Showcase"
+                    className="wcu-dual-img wcu-img-poster"
+                  />
+                  <div className="wcu-card-gradient-overlay" />
                 </div>
-                <div className="wcu-disc-glow-ring" />
+
+                {/* Specular Shimmer */}
+                <div className="wcu-card-shimmer" />
               </div>
 
-              {/* Decorative Holographic Discs in Bottom Corner */}
-              <div className="wcu-holographic-discs-accent">
-                <div className="wcu-holo-disc disc-1" />
-                <div className="wcu-holo-disc disc-2" />
-                <div className="wcu-holo-disc disc-3" />
-                <div className="wcu-holo-disc disc-4" />
-              </div>
+              {/* CARD 2: SECONDARY OVERLAPPING ACCENT IMAGE */}
+              <div className="wcu-dual-card wcu-card-secondary">
+                <div className="wcu-card-img-wrapper">
+                  <img
+                    src={contentMarketingImg}
+                    alt="High Tech Collaborative Strategy"
+                    className="wcu-dual-img"
+                  />
+                  <div className="wcu-card-gradient-overlay" />
+                </div>
 
+                {/* Floating Metric Glass Badge with Scroll Trigger Count */}
+                <div className="wcu-secondary-metric-badge">
+                  <div className="wcu-metric-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" className="wcu-metric-icon">
+                      <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <div className="wcu-metric-text-col">
+                    <span className="wcu-metric-val">{uptimeCount}%</span>
+                    <span className="wcu-metric-lbl">Uptime & Scalability</span>
+                  </div>
+                </div>
+
+                {/* Specular Shimmer */}
+                <div className="wcu-card-shimmer" />
+              </div>
             </div>
           </div>
 

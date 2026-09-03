@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
 import logo from '../assets/vayonix-logo-og.png';
@@ -7,7 +7,9 @@ const Header = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const lastScrollY = useRef(0);
 
   const isAboutPage = location.pathname === '/about';
   const isServicesPage = location.pathname === '/services';
@@ -19,51 +21,70 @@ const Header = () => {
     { name: 'About Us', path: '/about', isHash: false },
     { name: 'Services', path: '/services', isHash: false },
     { name: 'Blogs', path: '/blogs', isHash: false },
-    { name: 'Contact', path: '/contact' , isHash: false },
+    { name: 'Contact', path: '/contact', isHash: false },
   ];
 
-  // Ultra-smooth scroll detection & progress interpolation
+  // Ultra-smooth scroll detection & smart show/hide on scroll direction
   useEffect(() => {
-    let animationFrameId = null;
+    let ticking = false;
 
     const handleScroll = () => {
-      cancelAnimationFrame(animationFrameId);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY =
+            window.pageYOffset ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0;
 
-      animationFrameId = requestAnimationFrame(() => {
-        const winScroll =
-          window.scrollY ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop ||
-          (document.scrollingElement && document.scrollingElement.scrollTop) ||
-          0;
+          const docHeight = Math.max(
+            document.documentElement.scrollHeight,
+            document.body.scrollHeight,
+            document.documentElement.offsetHeight,
+            document.body.offsetHeight
+          );
 
-        const docHeight = Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight,
-          document.documentElement.offsetHeight,
-          document.body.offsetHeight
-        );
+          const winHeight = window.innerHeight || document.documentElement.clientHeight;
+          const totalScroll = docHeight - winHeight;
 
-        const winHeight = window.innerHeight || document.documentElement.clientHeight;
-        const totalScroll = docHeight - winHeight;
+          if (totalScroll > 0) {
+            const progress = (currentScrollY / totalScroll) * 100;
+            setScrollProgress(Math.min(100, Math.max(0, progress)));
+          } else {
+            setScrollProgress(0);
+          }
 
-        if (totalScroll > 0) {
-          const progress = (winScroll / totalScroll) * 100;
-          setScrollProgress(Math.min(100, Math.max(0, progress)));
-        } else {
-          setScrollProgress(0);
-        }
+          setScrolled(currentScrollY > 20);
 
-        setScrolled(winScroll > 15);
-      });
+          // Smart Hide on Scroll Down / Show on Scroll Up
+          if (currentScrollY <= 25) {
+            // Always show header at top of page
+            setVisible(true);
+          } else {
+            const diff = currentScrollY - lastScrollY.current;
+            if (diff > 4) {
+              // Scrolling down -> hide header smoothly
+              setVisible(false);
+              setMobileMenuOpen(false);
+            } else if (diff < -4) {
+              // Scrolling up -> show header smoothly
+              setVisible(true);
+            }
+          }
+
+          lastScrollY.current = Math.max(0, currentScrollY);
+          ticking = false;
+        });
+
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
-    handleScroll(); // Initial computation
+    handleScroll(); // Initial check
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
@@ -89,9 +110,8 @@ const Header = () => {
 
           {/* Supernova Diamond Prism Star Tip */}
           <div
-            className={`header-progress-prism-edge ${
-              scrollProgress > 1 ? 'is-visible' : ''
-            }`}
+            className={`header-progress-prism-edge ${scrollProgress > 1 ? 'is-visible' : ''
+              }`}
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="prism-spark-svg">
               <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
@@ -101,7 +121,11 @@ const Header = () => {
         </div>
       </div>
 
-      <header className={`site-header ${scrolled ? 'header-scrolled' : ''}`}>
+      <header
+        className={`site-header ${scrolled ? 'header-scrolled' : ''} ${
+          visible ? 'header-visible' : 'header-hidden'
+        }`}
+      >
         <div className="header-container">
           {/* Brand Logo with 3D Radiant Glow on Hover */}
           <Link to="/" className="header-logo-link" aria-label="Vayonix Home">
@@ -119,12 +143,12 @@ const Header = () => {
                   link.path === '/about'
                     ? isAboutPage
                     : link.path === '/services'
-                    ? isServicesPage
-                    : link.path === '/blogs'
-                    ? isBlogsPage
-                    : link.path === '/'
-                    ? location.pathname === '/' && !location.hash
-                    : false;
+                      ? isServicesPage
+                      : link.path === '/blogs'
+                        ? isBlogsPage
+                        : link.path === '/'
+                          ? location.pathname === '/' && !location.hash
+                          : false;
 
                 return (
                   <li key={link.name} className="nav-item">
@@ -195,10 +219,10 @@ const Header = () => {
                 link.path === '/about'
                   ? isAboutPage
                   : link.path === '/services'
-                  ? isServicesPage
-                  : link.path === '/'
-                  ? location.pathname === '/' && !location.hash
-                  : false;
+                    ? isServicesPage
+                    : link.path === '/'
+                      ? location.pathname === '/' && !location.hash
+                      : false;
 
               return (
                 <li
@@ -254,6 +278,9 @@ const Header = () => {
           </ul>
         </div>
       </header>
+
+      {/* Spacer to maintain page layout flow with fixed header */}
+      <div className="header-spacer" aria-hidden="true" />
     </>
   );
 };

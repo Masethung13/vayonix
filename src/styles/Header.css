@@ -80,15 +80,13 @@ body.theme-light {
 .header-scroll-progress-bar {
   position: relative;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #38bdf8 0%,
-    #6366f1 20%,
-    #8b5cf6 45%,
-    #d946ef 70%,
-    #ec4899 90%,
-    #f97316 100%
-  );
+  background: linear-gradient(90deg,
+      #38bdf8 0%,
+      #6366f1 20%,
+      #8b5cf6 45%,
+      #d946ef 70%,
+      #ec4899 90%,
+      #f97316 100%);
   background-size: 200% 100%;
   animation: laserSpectrumWave 4s linear infinite;
   border-radius: 0 9999px 9999px 0;
@@ -98,9 +96,17 @@ body.theme-light {
 }
 
 @keyframes laserSpectrumWave {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 [data-theme="light"] .header-scroll-progress-bar {
@@ -123,8 +129,14 @@ body.theme-light {
 }
 
 @keyframes laserPulseFlow {
-  0% { left: -100%; }
-  55%, 100% { left: 200%; }
+  0% {
+    left: -100%;
+  }
+
+  55%,
+  100% {
+    left: 200%;
+  }
 }
 
 /* Glowing Diamond Prism Star Tip (✦) */
@@ -163,10 +175,13 @@ body.theme-light {
 }
 
 @keyframes prismTwinkleRotate {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
     opacity: 0.9;
   }
+
   50% {
     transform: scale(1.35) rotate(35deg);
     opacity: 1;
@@ -188,27 +203,49 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   Header Main Sticky Frame
+   Header Main Sticky & Fixed Frame
    ========================================================================== */
 
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 99999;
   background: var(--nav-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--nav-border);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-sizing: border-box;
-  transition: background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  transform: translateY(0);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+}
+
+.site-header.header-hidden {
+  transform: translateY(-100%) !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+.site-header.header-visible {
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
 }
 
 .site-header.header-scrolled {
   background: var(--nav-bg-scrolled);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Header Spacer keeps document layout identical */
+.header-spacer {
+  height: 80px;
+  width: 100%;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 .header-container {
@@ -514,12 +551,17 @@ body.theme-light {
   .header-container {
     padding: 0 1.75rem;
   }
+
   .nav-list {
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 900px) {
+  .header-spacer {
+    height: 72px;
+  }
+
   .header-container {
     height: 72px;
     padding: 0 1.25rem;

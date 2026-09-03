@@ -3,15 +3,15 @@ import ScrollTitle from './ScrollTitle';
 import useScrollReveal from '../hooks/useScrollReveal';
 import '../styles/Whatweoffer.css';
 
-// Import rich showcase assets for each service
-import imgWebDev from '../assets/abt-dual-monitor.jpg';
-import imgMobileApp from '../assets/abt-team-laptop.jpg';
-import imgSeo from '../assets/service-icon-seo.jpg';
-import imgSocial from '../assets/service-icon-social.jpg';
-import imgContent from '../assets/case-study-saas.jpg';
-import imgEmail from '../assets/case-study-fintech.jpg';
-import imgAnalytics from '../assets/service-purple-rocket.jpg';
-import imgVideo from '../assets/case-study-cyber.jpg';
+// Import dedicated service showcase assets from /assets/services/
+import imgWebDev from '../assets/services/Web-Full-Stack Development.png';
+import imgMobileApp from '../assets/services/Mobile-App.png';
+import imgSeo from '../assets/services/seo-img.avif';
+import imgSocial from '../assets/services/Social-Media Marketing.jpg';
+import imgContent from '../assets/services/Content-Marketing.jpg';
+import imgEmail from '../assets/services/Email-Marketing.jpg';
+import imgAnalytics from '../assets/services/Analytics.jpg';
+import imgVideo from '../assets/services/video-editor.avif';
 
 const timelineServices = [
   {

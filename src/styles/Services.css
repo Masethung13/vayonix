@@ -385,108 +385,17 @@ body.theme-light {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .face-bg-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
-}
-
-.face-glass-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(3, 4, 15, 0.15) 0%,
-    rgba(3, 4, 15, 0.75) 60%,
-    rgba(3, 4, 15, 0.95) 100%
-  );
-  backdrop-filter: blur(1px);
-}
-
-.face-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1.65rem;
-  z-index: 5;
-}
-
-.face-top-row {
-  position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  right: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.face-badge-pill {
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.3rem 0.8rem;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border-radius: 9999px;
-}
-
-.face-num-pill {
-  font-size: 1.05rem;
-  font-weight: 900;
-  color: var(--face-accent);
-  text-shadow: 0 0 12px var(--face-accent);
-}
-
-.face-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-}
-
-.face-tagline {
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--srv-text-sub);
-  line-height: 1.35;
-}
-
-/* Status Pill */
-.clean-canvas-pill {
-  position: relative;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.2rem;
-  padding: 0.35rem 1rem;
-  background: var(--srv-tag-bg);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--srv-tag-border);
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--srv-text-title);
-  letter-spacing: 0.02em;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease;
-}
-
-.pill-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  filter: brightness(1.02) contrast(1.04);
 }
 
 /* ==========================================================================
@@ -607,31 +516,6 @@ body.theme-light {
     top: 0.75rem;
     left: 0.75rem;
     right: 0.75rem;
-  }
-
-  .face-badge-pill {
-    font-size: 0.65rem;
-    padding: 0.2rem 0.6rem;
-  }
-
-  .face-num-pill {
-    font-size: 0.9rem;
-  }
-
-  .face-title {
-    font-size: 1.05rem;
-    margin-bottom: 0.15rem;
-  }
-
-  .face-tagline {
-    font-size: 0.75rem;
-    line-height: 1.25;
-  }
-
-  .clean-canvas-pill {
-    margin-top: 0.65rem;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.72rem;
   }
 
   /* Compact Text Layer on Mobile */

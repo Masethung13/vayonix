@@ -18,61 +18,61 @@ const getFrameSrc = (index) => {
   }
 };
 
-// 4 Service Delivery Stages with Authentic Service-Related Content
+// 4 Core Services with High-Impact, Industry-Leading Content
 export const SERVICE_STAGES = [
   {
     id: '01',
-    badge: 'Stage 01 / Strategy',
-    shortLabel: 'Strategy',
-    title: 'Omni-Channel Discovery & Tech Architecture',
-    desc: 'Deep audience segmentation, competitor intelligence, and comprehensive tech stack mapping to architect your custom scalable growth roadmap.',
+    badge: 'Web & Full-Stack',
+    shortLabel: 'Web Dev',
+    title: 'Custom Web & Full-Stack Development',
+    desc: 'Engineering bespoke, ultra-fast React and Next.js platforms, clean UI/UX designs, and scalable backend infrastructure built for high concurrency and conversion acceleration.',
     deliverables: [
-      'Audience & Competitor Intelligence',
-      'Full-Stack Architecture Blueprint',
-      'Conversion Funnel & KPI Roadmap',
-      'Technical SEO & Growth Strategy',
+      'React & Next.js Web Apps',
+      'Modern Responsive UI/UX',
+      'Scalable Microservices & APIs',
+      'Sub-Second Speed & Web Vitals',
     ],
     accent: '#38bdf8',
   },
   {
     id: '02',
-    badge: 'Stage 02 / Creative & Engineering',
-    shortLabel: 'Build',
-    title: 'High-Converting Web & App Engineering',
-    desc: 'Developing responsive web platforms, mobile applications, and high-converting landing experiences engineered with sub-second speeds and fluid interactions.',
+    badge: 'Mobile Engineering',
+    shortLabel: 'Mobile App',
+    title: 'Full-Stack Mobile App Development',
+    desc: 'Crafting fluid 60FPS native and cross-platform mobile apps for iOS and Android with Flutter & React Native, featuring real-time synchronization, biometric security, and offline support.',
     deliverables: [
-      'Next.js & React Web Platforms',
-      'High-Converting Landing Pages',
-      'Scalable APIs & Microservices',
-      'Mobile iOS & Android Applications',
+      'iOS & Android Dual Deployment',
+      'Flutter & React Native Tech',
+      'Real-Time Cloud Synchronization',
+      'App Store & Play Store Launch',
     ],
     accent: '#818cf8',
   },
   {
     id: '03',
-    badge: 'Stage 03 / Performance Media',
-    shortLabel: 'Growth',
-    title: 'Precision Performance Media & CRO',
-    desc: 'Deploying hyper-targeted Meta, Google, and LinkedIn ad funnels with continuous multivariate creative A/B testing to slash acquisition costs and scale ROAS.',
+    badge: 'SEO Growth',
+    shortLabel: 'SEO',
+    title: 'Search Engine Optimization (SEO)',
+    desc: 'Dominating organic search results with deep technical audits, semantic keyword clustering, high-authority backlink architecture, and core web vitals speed optimization.',
     deliverables: [
-      'Meta, Google & LinkedIn Ads',
-      'Multivariate A/B Creative Testing',
-      'Conversion Rate Optimization (CRO)',
-      'High-Intent Lead Generation Funnels',
+      'Technical & On-Page SEO',
+      'Keyword Clustering & Intent',
+      'High-Authority Backlinks',
+      'Core Web Vitals Speed Boost',
     ],
     accent: '#a855f7',
   },
   {
     id: '04',
-    badge: 'Stage 04 / Automation & AI',
-    shortLabel: 'Scale',
-    title: 'Intelligent AI Automation & Compound Scaling',
-    desc: 'Integrating AI chatbots, automated CRM drip pipelines, and real-time executive BI dashboards for compounding, autonomous monthly growth.',
+    badge: 'Performance Media',
+    shortLabel: 'Paid Ads',
+    title: 'Paid Ads & Performance Marketing',
+    desc: 'Maximizing ROI across Meta, Google, and LinkedIn with laser-targeted ad funnels, scroll-stopping creative designs, continuous multivariate A/B testing, and conversion rate optimization.',
     deliverables: [
-      'Custom AI Chatbots & LLM Workflows',
-      'Automated CRM Lead Routing',
-      'Real-Time Executive BI Dashboards',
-      '24/7 SLA DevOps & Cloud Monitoring',
+      'Google Search & PMax Ads',
+      'Meta & Instagram Ad Scaling',
+      'Conversion Rate Optimization (CRO)',
+      'High-Intent Lead Funnels',
     ],
     accent: '#ec4899',
   },
@@ -184,7 +184,7 @@ const ServiceDeliveryCycle = () => {
             // Target card center relative to the top of track
             const cardCenter = targetCard.offsetTop + targetCard.clientHeight / 2;
             const viewportCenter = viewport.clientHeight / 2;
-            
+
             // Translate track so cardCenter aligns exactly with viewportCenter
             return -(cardCenter - viewportCenter);
           };
@@ -339,7 +339,7 @@ const ServiceDeliveryCycle = () => {
             Scroll To Watch Our <span className="sdc-title-grad">Service Delivery Cycle</span>
           </h2>
           <p className="sdc-subtitle">
-            Every campaign and application moves through a rigorous 4-stage engineering pipeline scrubbed frame-by-frame.
+            From web & mobile engineering to SEO dominance and high-ROI advertising, discover how we deliver end-to-end digital excellence.
           </p>
         </div>
 
@@ -358,20 +358,6 @@ const ServiceDeliveryCycle = () => {
 
               {/* 16:9 Canvas */}
               <canvas ref={canvasRef} className="sdc-sequence-canvas" />
-
-              {/* Centered Floating Status Pill */}
-              <div className="sdc-status-pill">
-                <span
-                  className="sdc-status-dot"
-                  style={{
-                    backgroundColor: activeStageData.accent,
-                    boxShadow: `0 0 10px ${activeStageData.accent}`,
-                  }}
-                />
-                <span>
-                  PHASE {activeStageData.id} : {activeStageData.badge}
-                </span>
-              </div>
             </div>
 
             {/* Mobile Tab Switcher (< 1024px) */}
@@ -384,7 +370,6 @@ const ServiceDeliveryCycle = () => {
                   style={{ '--tab-accent': stg.accent }}
                   onClick={() => handleStageClick(idx)}
                 >
-                  <span className="sdc-tab-num">{stg.id}</span>
                   <span className="sdc-tab-label">{stg.shortLabel}</span>
                 </button>
               ))}
@@ -412,7 +397,6 @@ const ServiceDeliveryCycle = () => {
                   >
                     <div className="sdc-phase-card-top">
                       <span className="sdc-phase-num">{stage.id}</span>
-                      <span className="sdc-phase-badge">{stage.badge}</span>
                     </div>
 
                     <h3 className="sdc-phase-title">{stage.title}</h3>
