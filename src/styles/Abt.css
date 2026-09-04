@@ -1232,6 +1232,7 @@ body.theme-light .abt-brand-slide-card:hover {
    ========================================================================== */
 
 @media (max-width: 768px) {
+
   /* 1. Header Banner */
   .abt-top-banner {
     height: 220px;

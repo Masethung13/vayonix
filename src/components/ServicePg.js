@@ -153,7 +153,7 @@ const ServicePg = () => {
           <h1 className="svc-banner-title">Our Services</h1>
           <div className="svc-breadcrumbs">
             <Link to="/" className="svc-crumb-link">Home</Link>
-            <span className="svc-crumb-sep">/</span>
+            <span className="svc-crumb-sep">›</span>
             <span className="svc-crumb-current">Our Services</span>
           </div>
         </div>

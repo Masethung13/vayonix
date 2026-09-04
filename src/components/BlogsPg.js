@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -13,7 +13,7 @@ import blogHeroLight from '../assets/blogs/blogs-img-light.jpeg';
 import vayonixLogo from '../assets/vayonix-logo-og.png';
 
 // Service-Specific High-Resolution Blog Imagery
-import imgWebDev from '../assets/blogs/web-img-blog.jpeg';
+import imgWebDev from '../assets/webdevelopment-service-img1.png';
 import imgMobileApp from '../assets/blogs/app-img-blog.jpeg';
 import imgSeoLight from '../assets/services/seo-img.avif';
 import imgSeoDark from '../assets/seo-dark.png';
@@ -223,6 +223,35 @@ const BlogsPg = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Draggable category filter track state
+  const filterBarRef = useRef(null);
+  const isDraggingFilter = useRef(false);
+  const startXFilter = useRef(0);
+  const scrollLeftFilter = useRef(0);
+  const hasMovedFilter = useRef(false);
+
+  const handleFilterMouseDown = (e) => {
+    if (!filterBarRef.current) return;
+    isDraggingFilter.current = true;
+    hasMovedFilter.current = false;
+    startXFilter.current = e.pageX - filterBarRef.current.offsetLeft;
+    scrollLeftFilter.current = filterBarRef.current.scrollLeft;
+  };
+
+  const handleFilterMouseMove = (e) => {
+    if (!isDraggingFilter.current || !filterBarRef.current) return;
+    const x = e.pageX - filterBarRef.current.offsetLeft;
+    const walk = (x - startXFilter.current) * 1.5;
+    if (Math.abs(walk) > 4) {
+      hasMovedFilter.current = true;
+    }
+    filterBarRef.current.scrollLeft = scrollLeftFilter.current - walk;
+  };
+
+  const handleFilterMouseUp = () => {
+    isDraggingFilter.current = false;
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -481,17 +510,29 @@ The Vayonix Infotech Team`,
           </div>
 
           {/* =================================================================
-              3. CATEGORY FILTER NAVIGATION BAR (Matches Screenshot Pills)
+              3. CATEGORY FILTER NAVIGATION BAR (Draggable Left/Right & Smooth Loop)
               ================================================================= */}
-          <div className="blog-category-filter-bar" data-reveal="fade-up">
+          <div
+            className="blog-category-filter-bar"
+            data-reveal="fade-up"
+            ref={filterBarRef}
+            onMouseDown={handleFilterMouseDown}
+            onMouseMove={handleFilterMouseMove}
+            onMouseUp={handleFilterMouseUp}
+            onMouseLeave={handleFilterMouseUp}
+          >
             <div className="blog-filter-pills-list">
-              {categories.map((cat) => {
+              {[...categories, ...categories, ...categories, ...categories].map((cat, idx) => {
                 const isActive = activeCategory === cat.id;
                 return (
                   <button
-                    key={cat.id}
+                    key={`${cat.id}-${idx}`}
                     className={`blog-filter-pill-btn ${isActive ? 'is-active' : ''}`}
-                    onClick={() => setActiveCategory(cat.id)}
+                    onClick={() => {
+                      if (!hasMovedFilter.current) {
+                        setActiveCategory(cat.id);
+                      }
+                    }}
                   >
                     <span className="blog-pill-icon">{cat.icon}</span>
                     <span className="blog-pill-label">{cat.label}</span>

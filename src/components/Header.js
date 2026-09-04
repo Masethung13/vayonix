@@ -197,9 +197,8 @@ const Header = () => {
         >
           <div className="header-progress-laser-pulse" />
           <div
-            className={`header-progress-prism-edge ${
-              scrollProgress > 1 ? 'is-visible' : ''
-            }`}
+            className={`header-progress-prism-edge ${scrollProgress > 1 ? 'is-visible' : ''
+              }`}
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="prism-spark-svg">
               <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
@@ -210,9 +209,8 @@ const Header = () => {
       </div>
 
       <header
-        className={`site-header ${scrolled ? 'header-scrolled' : ''} ${
-          visible || mobileMenuOpen ? 'header-visible' : 'header-hidden'
-        } ${mobileMenuOpen ? 'header-menu-active' : ''}`}
+        className={`site-header ${scrolled ? 'header-scrolled' : ''} ${visible || mobileMenuOpen ? 'header-visible' : 'header-hidden'
+          } ${mobileMenuOpen ? 'header-menu-active' : ''}`}
       >
         <div className="header-container">
           {/* Brand Logo */}

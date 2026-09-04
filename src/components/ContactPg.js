@@ -314,7 +314,7 @@ const ContactPg = () => {
           <h1 className="cnt-banner-title">Contact Us</h1>
           <div className="cnt-breadcrumbs">
             <Link to="/" className="cnt-crumb-link">Home</Link>
-            <span className="cnt-crumb-sep">/</span>
+            <span className="cnt-crumb-sep">›</span>
             <span className="cnt-crumb-current">Contact Us</span>
           </div>
         </div>
