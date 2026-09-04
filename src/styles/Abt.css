@@ -657,156 +657,105 @@ body.theme-light {
   opacity: 1;
 }
 
-/* Secondary Video Trigger Button: "Watch Our Story" */
-.abt-video-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.3s ease;
-}
-
-.abt-video-btn:hover {
-  transform: translateX(3px);
-}
-
-.abt-play-ring {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(56, 189, 248, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 20px var(--abt-glow-blue);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-theme="light"] .abt-play-ring {
-  background: #ffffff;
-  border-color: rgba(217, 119, 6, 0.5);
-  box-shadow: 0 0 20px rgba(217, 119, 6, 0.35);
-}
-
-.abt-video-btn:hover .abt-play-ring {
-  transform: scale(1.12);
-  border-color: #38bdf8;
-  box-shadow: 0 0 30px var(--abt-glow-blue);
-}
-
-.abt-play-icon {
-  width: 18px;
-  height: 18px;
-  color: #38bdf8;
-  margin-left: 3px;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-[data-theme="light"] .abt-play-icon {
-  color: #d97706;
-}
-
-.abt-video-btn:hover .abt-play-icon {
-  transform: scale(1.15);
-  color: #ffffff;
-}
-
-.abt-play-pulse-1,
-.abt-play-pulse-2 {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  animation: abtPlayPulse 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  pointer-events: none;
-}
-
-.abt-play-pulse-2 {
-  animation-delay: 1.4s;
-}
-
-@keyframes abtPlayPulse {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
-}
-
-.abt-video-text-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.abt-video-label {
-  font-size: 0.98rem;
-  font-weight: 800;
-  color: var(--abt-text-white);
-  line-height: 1.25;
-}
-
-.abt-video-duration {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--abt-text-sub);
-}
-
-/* Trust Bar Section */
+/* Trust Bar Section with Smooth Infinite Logo Slides */
 .abt-trust-section {
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
   width: 100%;
+  margin-top: 0.5rem;
 }
 
 .abt-trust-label {
-  font-size: 0.86rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: var(--abt-text-sub);
   letter-spacing: 0.02em;
 }
 
-.abt-brands-row {
-  display: flex;
-  align-items: center;
-  gap: 2.25rem;
-  flex-wrap: wrap;
+/* Logo Slider Container with Smooth Edge Blur/Mask */
+.abt-logo-slider-container {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+  padding: 0.35rem 0;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
-.abt-brand-logo-item {
-  color: var(--abt-brand-color);
-  opacity: 0.75;
-  transition: all 0.3s ease;
+.abt-logo-track {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: max-content;
+  animation: abtLogoSlide 16s linear infinite;
+  will-change: transform;
+}
+
+.abt-logo-slider-container:hover .abt-logo-track {
+  animation-play-state: paused;
+}
+
+@keyframes abtLogoSlide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.abt-brand-slide-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.15rem;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  min-width: 140px;
+  height: 54px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 14px rgba(56, 189, 248, 0.15);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
-.abt-brand-logo-item:hover {
-  color: var(--abt-brand-hover);
-  opacity: 1;
-  transform: translateY(-2px) scale(1.08);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+.abt-brand-slide-card:hover {
+  background: #ffffff;
+  border-color: #38bdf8;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.35);
 }
 
-[data-theme="light"] .abt-brand-logo-item:hover {
-  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
-}
-
-.abt-brand-svg {
-  height: 22px;
+.abt-brand-img {
+  max-height: 38px;
+  max-width: 115px;
   width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: none !important;
+  transition: transform 0.3s ease;
+}
+
+.abt-brand-slide-card:hover .abt-brand-img {
+  transform: scale(1.04);
+}
+
+[data-theme="light"] .abt-brand-slide-card,
+body.theme-light .abt-brand-slide-card {
+  background: #ffffff;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .abt-brand-slide-card:hover,
+body.theme-light .abt-brand-slide-card:hover {
+  background: #ffffff;
+  border-color: #d97706;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22);
 }
 
 /* ==========================================================================

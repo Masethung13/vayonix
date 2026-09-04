@@ -4,18 +4,22 @@ import ScrollTitle from './ScrollTitle';
 import ThemeToggle from './ThemeToggle';
 import '../styles/BlogsPg.css';
 
-// Import rich showcase assets & service artwork
+// Import rich showcase assets & blog artwork from src/assets/blogs
 import bannerBg from '../assets/abt-banner-bg.jpg';
-import blogHeroLaptop from '../assets/blog-hero-laptop.jpg';
+import blogHeroDark from '../assets/blogs/blogs-img-dark.jpeg';
+import blogHeroLight from '../assets/blogs/blogs-img-light.jpeg';
 import vayonixLogo from '../assets/vayonix-logo-og.png';
-import imgWebDev from '../assets/services/Web-Full-Stack Development.png';
-import imgMobileApp from '../assets/services/Mobile-App.png';
-import imgSeo from '../assets/services/seo-img.avif';
-import imgSocial from '../assets/services/Social-Media Marketing.jpg';
+
+// Service-Specific High-Resolution Blog Imagery
+import imgWebDev from '../assets/blogs/web-img-blog.jpeg';
+import imgMobileApp from '../assets/blogs/app-img-blog.jpeg';
+import imgSeoLight from '../assets/services/seo-img.avif';
+import imgSeoDark from '../assets/seo-dark.png';
+import imgSocial from '../assets/blogs/socialmediamarketing-img-blog.jpeg';
 import imgContent from '../assets/services/Content-Marketing.jpg';
-import imgEmail from '../assets/services/Email-Marketing.jpg';
-import imgAnalytics from '../assets/services/Analytics.jpg';
-import imgVideo from '../assets/services/video-editor.avif';
+import imgEmail from '../assets/blogs/emailmarketing-img-blog.jpeg';
+import imgAnalytics from '../assets/blogs/analytics-img-blog.jpeg';
+import imgVideo from '../assets/blogs/video-img-blog.jpeg';
 
 // Service-Based Blog Posts Data Matrix (Author: Team Vayonix, No Dates/Times)
 const initialBlogPosts = [
@@ -56,7 +60,8 @@ const initialBlogPosts = [
       role: 'SEO & Organic Growth',
       avatar: vayonixLogo
     },
-    image: imgSeo,
+    image: imgSeoLight,
+    darkImage: imgSeoDark,
     excerpt: 'Dominate organic search results with deep technical audits, semantic entity clustering, high-authority backlinks, and Core Web Vitals speed optimization.',
     featured: false,
     tags: ['Technical SEO', 'Entity Clustering', 'Backlinks', 'Core Web Vitals']
@@ -382,7 +387,7 @@ const BlogsPg = () => {
                 <div className="blog-pedestal-glow-aura" />
                 <div className="blog-pedestal-image-box">
                   <img
-                    src={blogHeroLaptop}
+                    src={theme === 'light' ? blogHeroLight : blogHeroDark}
                     alt="Cybernetic 3D Laptop with Growth Graphics on Pedestal"
                     className="blog-laptop-photo"
                   />
@@ -423,7 +428,7 @@ const BlogsPg = () => {
               <div className="blog-featured-grid">
                 <div className="blog-featured-image-wrap" data-reveal="zoom-in">
                   <img
-                    src={featuredPost.image}
+                    src={theme === 'dark' && featuredPost.darkImage ? featuredPost.darkImage : featuredPost.image}
                     alt={featuredPost.title}
                     className="blog-featured-img"
                   />
@@ -514,7 +519,11 @@ const BlogsPg = () => {
 
                     {/* Thumbnail Image */}
                     <div className="blog-card-thumb-wrap">
-                      <img src={post.image} alt={post.title} className="blog-card-thumb-img" />
+                      <img
+                        src={theme === 'dark' && post.darkImage ? post.darkImage : post.image}
+                        alt={post.title}
+                        className="blog-card-thumb-img"
+                      />
                       <div className="blog-card-cat-badge">{post.category}</div>
                     </div>
 

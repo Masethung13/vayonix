@@ -4,8 +4,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollTitle from './ScrollTitle';
 import '../styles/Ourvalues.css';
-import ctaPedestalDark from '../assets/values-cta-pedestal-dark.jpg';
-import ctaPedestalLight from '../assets/values-cta-pedestal-light.jpg';
+import growthDark from '../assets/growth22.png';
+import growthLight from '../assets/growth22-light.png';
 
 // Register GSAP Plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -414,18 +414,9 @@ const Ourvalues = () => {
                 />
               </div>
 
-              {/* Dynamic Live Phase Status Pill */}
-              <div className="ov-process-live-status">
-                <span
-                  className="ov-status-dot"
-                  style={{
-                    backgroundColor: PROCESS_DATA[activeProcessStep].accent,
-                    boxShadow: `0 0 10px ${PROCESS_DATA[activeProcessStep].accent}`,
-                  }}
-                />
-                <span className="ov-status-text">
-                  {PROCESS_DATA[activeProcessStep].tagline}
-                </span>
+              <div className="ov-header-flow-decor">
+                <div className="ov-decor-line" />
+                <div className="ov-decor-spark">✦</div>
               </div>
             </div>
 
@@ -540,9 +531,10 @@ const Ourvalues = () => {
                 
                 <div className="ov-pedestal-seamless-blend">
                   <img
-                    src={theme === 'light' ? ctaPedestalLight : ctaPedestalDark}
-                    alt="Success Growth Arrow on 3D Pedestal"
+                    src={theme === 'light' ? growthLight : growthDark}
+                    alt="Vayonix Brand Growth & Success Strategy"
                     className="ov-pedestal-img"
+                    key={theme}
                     loading="lazy"
                   />
                   <div className="ov-pedestal-vignette" />

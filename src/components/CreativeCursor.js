@@ -49,32 +49,39 @@ const CreativeCursor = () => {
     const trailPoints = [];
     const MAX_TRAIL = 16;
 
-    // Theme detector
+    // Theme detector (Multi-channel detection for instant reactivity)
     const isLightTheme = () => {
       return (
         document.documentElement.getAttribute('data-theme') === 'light' ||
-        document.body.classList.contains('theme-light')
+        document.body.classList.contains('theme-light') ||
+        document.body.getAttribute('data-theme') === 'light' ||
+        localStorage.getItem('vayonix_theme') === 'light'
       );
     };
 
     const getPalette = () => {
-      if (isLightTheme()) {
+      const isLight = isLightTheme();
+      if (isLight) {
         return {
-          primary: '#f59e0b',
-          secondary: '#fbbf24',
-          accent: '#d97706',
-          spark: '#ffffff',
-          glow: 'rgba(245, 158, 11, 0.45)',
-          ribbon: ['#fbbf24', '#f59e0b'],
+          isLight: true,
+          primary: '#ea580c', // Fiery neon orange
+          secondary: '#f59e0b', // Golden amber
+          accent: '#e11d48', // Vibrant rose
+          spark: '#fbbf24', // Yellow gold
+          glow: 'rgba(234, 88, 12, 0.45)',
+          ribbon: ['#ea580c', '#f59e0b'],
+          starColors: ['#ea580c', '#d97706', '#f59e0b', '#e11d48', '#8b5cf6', '#0284c7'],
         };
       }
       return {
+        isLight: false,
         primary: '#38bdf8', // Cyan
         secondary: '#a855f7', // Purple
         accent: '#818cf8', // Indigo
         spark: '#ffffff', // Star White
         glow: 'rgba(56, 189, 248, 0.55)',
         ribbon: ['#38bdf8', '#a855f7'],
+        starColors: ['#38bdf8', '#a855f7', '#818cf8', '#ffffff', '#c084fc'],
       };
     };
 
@@ -91,7 +98,7 @@ const CreativeCursor = () => {
     // Twinkle Star Spawner
     const spawnTwinkleStars = (x, y, count = 2, speedMult = 1) => {
       const palette = getPalette();
-      const colors = [palette.primary, palette.secondary, palette.accent, palette.spark, '#ffffff'];
+      const colors = palette.starColors;
 
       for (let i = 0; i < count; i++) {
         if (stars.length >= MAX_STARS) stars.shift();
@@ -119,21 +126,13 @@ const CreativeCursor = () => {
       }
     };
 
-    // Draw 4-point or 8-point geometric glowing twinkle star using fast GPU-friendly bloom
-    const drawStar = (starX, starY, size, spikes, inset, alpha, color) => {
+    // Draw 4-point or 8-point geometric glowing twinkle star (Zero black background in Light Mode)
+    const drawStar = (starX, starY, size, spikes, inset, alpha, color, isLight) => {
       ctx.save();
       ctx.translate(starX, starY);
-      ctx.globalAlpha = alpha;
-
-      // Soft ambient bloom halo using fast radial gradient (no expensive shadowBlur)
-      const bloomRadius = size * 2.0;
-      const bloom = ctx.createRadialGradient(0, 0, 0, 0, 0, bloomRadius);
-      bloom.addColorStop(0, color);
-      bloom.addColorStop(1, 'transparent');
-      ctx.fillStyle = bloom;
-      ctx.beginPath();
-      ctx.arc(0, 0, bloomRadius, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = 'transparent';
 
       // Sharp geometric star polygon
       ctx.fillStyle = color;
@@ -157,10 +156,10 @@ const CreativeCursor = () => {
       ctx.closePath();
       ctx.fill();
 
-      // White crystal core hot spot
+      // Sparkling crystal core hotspot
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.arc(0, 0, Math.max(0.7, size * 0.22), 0, Math.PI * 2);
+      ctx.arc(0, 0, Math.max(0.6, size * 0.24), 0, Math.PI * 2);
       ctx.fill();
 
       ctx.restore();
@@ -283,10 +282,10 @@ const CreativeCursor = () => {
         }
       }
 
-      // Render Soft Comet Ribbon Trail with GPU additive blending
+      // Render Soft Comet Ribbon Trail
       if (trailPoints.length > 1) {
         ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = palette.isLight ? 'source-over' : 'lighter';
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
@@ -294,7 +293,7 @@ const CreativeCursor = () => {
           const ptPrev = trailPoints[i - 1];
           const ptCurr = trailPoints[i];
           const progress = i / trailPoints.length;
-          const segmentAlpha = Math.min(ptPrev.alpha, ptCurr.alpha) * progress * 0.42;
+          const segmentAlpha = Math.min(ptPrev.alpha, ptCurr.alpha) * progress * (palette.isLight ? 0.55 : 0.42);
 
           if (segmentAlpha <= 0.01) continue;
 
@@ -314,10 +313,10 @@ const CreativeCursor = () => {
         ctx.restore();
       }
 
-      // 2. Render Animated Twinkling Stars (GPU additive blending, no blur slowdown)
+      // 2. Render Animated Twinkling Stars
       if (stars.length > 0) {
         ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = palette.isLight ? 'source-over' : 'lighter';
 
         for (let i = stars.length - 1; i >= 0; i--) {
           const s = stars[i];
@@ -337,7 +336,7 @@ const CreativeCursor = () => {
           const twinkleScale = 0.68 + 0.32 * Math.sin(s.twinklePhase);
           const currentSize = s.baseSize * dpr * twinkleScale;
 
-          drawStar(s.x, s.y, currentSize, s.spikes, s.inset, s.alpha, s.color);
+          drawStar(s.x, s.y, currentSize, s.spikes, s.inset, s.alpha, s.color, palette.isLight);
         }
         ctx.restore();
       }

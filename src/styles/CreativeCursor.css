@@ -6,6 +6,7 @@
   --cursor-primary: #38bdf8;
   --cursor-secondary: #a855f7;
   --cursor-accent: #818cf8;
+  --cursor-dot-bg: #ffffff;
   --cursor-glow: rgba(56, 189, 248, 0.45);
   --cursor-glow-strong: rgba(168, 85, 247, 0.65);
   --cursor-border: rgba(56, 189, 248, 0.75);
@@ -13,12 +14,13 @@
 
 [data-theme="light"],
 body.theme-light {
-  --cursor-primary: #f59e0b;
-  --cursor-secondary: #fbbf24;
-  --cursor-accent: #d97706;
-  --cursor-glow: rgba(245, 158, 11, 0.45);
-  --cursor-glow-strong: rgba(251, 191, 36, 0.65);
-  --cursor-border: rgba(245, 158, 11, 0.8);
+  --cursor-primary: #ea580c;
+  --cursor-secondary: #f59e0b;
+  --cursor-accent: #e11d48;
+  --cursor-dot-bg: #ea580c;
+  --cursor-glow: rgba(234, 88, 12, 0.4);
+  --cursor-glow-strong: rgba(234, 88, 12, 0.65);
+  --cursor-border: rgba(234, 88, 12, 0.85);
 }
 
 /* Master Root Container */
@@ -52,16 +54,12 @@ body.theme-light {
   height: 100vh;
   pointer-events: none;
   z-index: 9999997;
-  mix-blend-mode: screen;
-}
-
-[data-theme="light"] .cursor-canvas,
-body.theme-light .cursor-canvas {
-  mix-blend-mode: normal;
+  background: transparent !important;
+  mix-blend-mode: normal !important;
 }
 
 /* --------------------------------------------------------------------------
-   Precision Center Dot
+   Precision Center Dot (High-Contrast in Light & Dark Mode)
    -------------------------------------------------------------------------- */
 .cursor-dot {
   position: fixed;
@@ -71,7 +69,7 @@ body.theme-light .cursor-canvas {
   height: 5px;
   margin-top: -2.5px;
   margin-left: -2.5px;
-  background: #ffffff;
+  background: var(--cursor-dot-bg);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000002;
@@ -89,7 +87,7 @@ body.theme-light .cursor-canvas {
   height: 12px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, var(--cursor-primary) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--cursor-glow-strong) 0%, rgba(255, 255, 255, 0) 70%);
   opacity: 0.7;
 }
 
@@ -121,6 +119,7 @@ body.theme-light .cursor-canvas {
   transition: 
     border-color 0.2s ease, 
     box-shadow 0.2s ease,
+    background-color 0.2s ease,
     transform 0.15s ease;
 }
 
@@ -134,10 +133,11 @@ body.theme-light .cursor-canvas {
 
 [data-theme="light"] .cursor-hovered .cursor-ring-inner,
 body.theme-light .cursor-hovered .cursor-ring-inner {
-  border-color: #f59e0b;
+  border-color: #c2410c;
+  background-color: rgba(234, 88, 12, 0.08);
   box-shadow: 
-    0 0 14px var(--cursor-secondary),
-    0 0 20px var(--cursor-glow-strong);
+    0 0 14px rgba(234, 88, 12, 0.6),
+    0 0 22px rgba(245, 158, 11, 0.4);
 }
 
 /* Click feedback: subtle momentary inward pinch without resizing outer bounds */

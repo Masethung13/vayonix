@@ -264,13 +264,15 @@ body.theme-light {
 
 .mission-top-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: clamp(2.5rem, 5vw, 5.5rem);
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
   align-items: center;
   width: 100%;
 }
 
-/* Left Column: Seamless Rocket Blast Stage */
+/* ==========================================================================
+   Left Column: Futuristic 3D Glass Office Showcase
+   ========================================================================== */
 .mission-visual-column {
   position: relative;
   display: flex;
@@ -279,11 +281,10 @@ body.theme-light {
   width: 100%;
 }
 
-.mission-rocket-hero-stage {
+.mission-office-stage {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  aspect-ratio: 1 / 1;
+  max-width: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -291,139 +292,228 @@ body.theme-light {
   will-change: transform;
 }
 
-.mission-portal-ring-outer {
+/* Multi-tier Ambient Neon Glows */
+.mission-stage-ambient-glow {
   position: absolute;
-  width: 95%;
-  height: 95%;
-  border-radius: 50%;
-  border: 2px dashed rgba(56, 189, 248, 0.35);
-  animation: portalSpinSlow 35s linear infinite;
-}
-
-[data-theme="light"] .mission-portal-ring-outer {
-  border-color: rgba(217, 119, 6, 0.4);
-}
-
-.mission-portal-ring-inner {
-  position: absolute;
-  width: 82%;
-  height: 82%;
-  border-radius: 50%;
-  border: 1.5px solid rgba(168, 85, 247, 0.3);
-  animation: portalSpinRev 25s linear infinite reverse;
-}
-
-[data-theme="light"] .mission-portal-ring-inner {
-  border-color: rgba(234, 88, 12, 0.35);
-}
-
-@keyframes portalSpinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes portalSpinRev {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.mission-blast-ambient-glow {
-  position: absolute;
-  width: 75%;
-  height: 75%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--mission-glow-blue) 0%, transparent 70%);
+  inset: -15px;
+  border-radius: 36px;
+  background: radial-gradient(ellipse at 35% 35%, var(--mission-glow-blue) 0%, transparent 68%);
   filter: blur(40px);
   z-index: 1;
+  opacity: 0.85;
+  animation: stageGlowBreath 6s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
-.mission-rocket-cutout-frame {
+.mission-stage-ambient-glow-secondary {
+  position: absolute;
+  inset: -25px;
+  border-radius: 40px;
+  background: radial-gradient(ellipse at 75% 75%, var(--mission-glow-purple) 0%, transparent 68%);
+  filter: blur(48px);
+  z-index: 1;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+@keyframes stageGlowBreath {
+  0% { transform: scale(0.96); opacity: 0.7; }
+  100% { transform: scale(1.04); opacity: 0.95; }
+}
+
+/* Master Glass Showcase Card */
+.mission-stage-glass-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 26px;
+  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.75), 0 0 35px var(--mission-glow-blue);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+[data-theme="light"] .mission-stage-glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(217, 119, 6, 0.22);
+  box-shadow: 0 20px 48px -12px rgba(217, 119, 6, 0.15), 0 0 30px rgba(217, 119, 6, 0.08);
+}
+
+.mission-office-stage:hover .mission-stage-glass-card {
+  transform: translateY(-4px) scale(1.015);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), 0 0 50px var(--mission-glow-blue);
+}
+
+[data-theme="light"] .mission-office-stage:hover .mission-stage-glass-card {
+  border-color: rgba(217, 119, 6, 0.45);
+  box-shadow: 0 25px 55px -10px rgba(217, 119, 6, 0.22), 0 0 40px rgba(217, 119, 6, 0.15);
+}
+
+/* Cyber Geometric Corner Accents */
+.mission-card-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  z-index: 5;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.corner-tl {
+  top: -3px;
+  left: -3px;
+  border-top: 2.5px solid var(--mission-accent-cyan);
+  border-left: 2.5px solid var(--mission-accent-cyan);
+  border-top-left-radius: 12px;
+  filter: drop-shadow(0 0 8px var(--mission-accent-cyan));
+}
+
+.corner-tr {
+  top: -3px;
+  right: -3px;
+  border-top: 2.5px solid var(--mission-accent-purple);
+  border-right: 2.5px solid var(--mission-accent-purple);
+  border-top-right-radius: 12px;
+  filter: drop-shadow(0 0 8px var(--mission-accent-purple));
+}
+
+.corner-bl {
+  bottom: -3px;
+  left: -3px;
+  border-bottom: 2.5px solid var(--mission-accent-purple);
+  border-left: 2.5px solid var(--mission-accent-purple);
+  border-bottom-left-radius: 12px;
+  filter: drop-shadow(0 0 8px var(--mission-accent-purple));
+}
+
+.corner-br {
+  bottom: -3px;
+  right: -3px;
+  border-bottom: 2.5px solid var(--mission-accent-cyan);
+  border-right: 2.5px solid var(--mission-accent-cyan);
+  border-bottom-right-radius: 12px;
+  filter: drop-shadow(0 0 8px var(--mission-accent-cyan));
+}
+
+
+
+/* Inner Image Container */
+.mission-stage-image-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
-  border-radius: 50%;
+  border-radius: 18px;
   overflow: hidden;
-  z-index: 2;
-  box-shadow: 0 0 60px var(--mission-glow-blue);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  aspect-ratio: 16 / 10.5;
+  background: #0b0f19;
 }
 
-.mission-rocket-hero-stage:hover .mission-rocket-cutout-frame {
-  transform: scale(1.04) translateY(-6px);
-  box-shadow: 0 0 80px var(--mission-accent-cyan);
-}
-
-.mission-rocket-image {
+.mission-stage-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scale(1.02);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1.01);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mission-rocket-hero-stage:hover .mission-rocket-image {
-  transform: scale(1.08);
+.mission-office-stage:hover .mission-stage-image {
+  transform: scale(1.06);
 }
 
-.mission-seamless-vignette {
+/* Specular Shimmer Sweep Effect */
+.mission-stage-specular-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.mission-office-stage:hover .mission-stage-specular-sheen {
+  transform: translateX(120%);
+}
+
+/* Vignette Shadow Overlay */
+.mission-stage-inner-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+  z-index: 2;
+  background: radial-gradient(circle at center, transparent 72%, rgba(0, 0, 0, 0.4) 100%);
 }
 
-[data-theme="light"] .mission-seamless-vignette {
-  background: radial-gradient(circle at center, transparent 65%, rgba(255, 255, 255, 0.35) 100%);
+[data-theme="light"] .mission-stage-inner-vignette {
+  background: radial-gradient(circle at center, transparent 75%, rgba(255, 255, 255, 0.15) 100%);
 }
 
-/* Floating Dynamic Embers */
-.mission-ember {
+/* Bottom Floating Info Card */
+.mission-stage-bottom-card {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--mission-accent-cyan);
-  box-shadow: 0 0 10px var(--mission-accent-cyan), 0 0 18px var(--mission-accent-purple);
-  z-index: 5;
-  pointer-events: none;
+  bottom: -18px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 14px 35px -8px rgba(0, 0, 0, 0.65), 0 0 25px var(--mission-glow-blue);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.ember-1 {
-  bottom: 25%;
-  left: 20%;
-  animation: emberRise1 4s ease-out infinite;
+[data-theme="light"] .mission-stage-bottom-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  box-shadow: 0 12px 30px -6px rgba(217, 119, 6, 0.14), 0 0 18px rgba(217, 119, 6, 0.1);
 }
 
-.ember-2 {
-  bottom: 22%;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--mission-accent-pink);
-  animation: emberRise2 5s ease-out infinite 1s;
+.mission-office-stage:hover .mission-stage-bottom-card {
+  transform: translateY(-4px);
+  border-color: var(--mission-accent-cyan);
 }
 
-.ember-3 {
-  bottom: 30%;
-  left: 48%;
-  width: 5px;
-  height: 5px;
-  background: var(--mission-accent-purple);
-  animation: emberRise1 4.5s ease-out infinite 2s;
+.mission-stage-bottom-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--mission-highlight-grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px var(--mission-glow-blue);
 }
 
-@keyframes emberRise1 {
-  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translate(-35px, -110px) scale(1.3); opacity: 0; }
+.mission-stage-bottom-text {
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes emberRise2 {
-  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translate(40px, -130px) scale(1.4); opacity: 0; }
+.mission-stage-bottom-title {
+  font-size: 0.86rem;
+  font-weight: 750;
+  color: var(--mission-text-main);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.mission-stage-bottom-sub {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--mission-text-muted);
+  white-space: nowrap;
 }
 
 /* Right Column: Mission Headlines & Narrative */
@@ -691,11 +781,11 @@ body.theme-light {
 /* Small Laptops (1024px to 1280px) */
 @media (max-width: 1280px) and (min-width: 1024px) {
   .mission-top-grid {
-    gap: 3.5rem;
+    gap: 3.2rem;
   }
 
-  .mission-rocket-hero-stage {
-    max-width: 380px;
+  .mission-office-stage {
+    max-width: 480px;
   }
 
   .mission-pillars-row {
@@ -729,8 +819,8 @@ body.theme-light {
     margin-right: auto;
   }
 
-  .mission-rocket-hero-stage {
-    max-width: 360px;
+  .mission-office-stage {
+    max-width: 520px;
     margin: 0 auto;
   }
 
@@ -753,7 +843,7 @@ body.theme-light {
 
   .mission-top-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 3.2rem;
     text-align: center;
   }
 
@@ -771,9 +861,30 @@ body.theme-light {
     font-size: 0.95rem;
   }
 
-  .mission-rocket-hero-stage {
-    max-width: 290px;
+  .mission-office-stage {
+    max-width: 100%;
     margin: 0 auto;
+  }
+
+  .mission-stage-bottom-card {
+    bottom: -16px;
+    right: 12px;
+    padding: 7px 12px;
+    gap: 8px;
+  }
+
+  .mission-stage-bottom-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .mission-stage-bottom-title {
+    font-size: 0.76rem;
+  }
+
+  .mission-stage-bottom-sub {
+    font-size: 0.65rem;
   }
 
   .mission-track-header-bar {
@@ -810,7 +921,7 @@ body.theme-light {
     font-size: 1.7rem;
   }
 
-  .mission-rocket-hero-stage {
-    max-width: 240px;
+  .mission-stage-bottom-card {
+    display: none;
   }
 }

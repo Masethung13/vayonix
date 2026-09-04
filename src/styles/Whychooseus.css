@@ -819,7 +819,7 @@ body.theme-light {
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: none !important;
 }
 
 .wcu-img-poster {
@@ -829,7 +829,7 @@ body.theme-light {
 
 .wcu-card-primary:hover .wcu-dual-img,
 .wcu-card-secondary:hover .wcu-dual-img {
-  transform: scale(1.05);
+  transform: none !important;
 }
 
 .wcu-card-gradient-overlay {
@@ -920,21 +920,12 @@ body.theme-light {
   height: 200%;
   background: linear-gradient(115deg, transparent 25%, rgba(255, 255, 255, 0.12) 50%, transparent 75%);
   transform: rotate(25deg);
-  transition: left 0.75s ease;
   pointer-events: none;
 }
 
-.wcu-dual-card:hover .wcu-card-shimmer {
-  left: 180%;
-}
-
-/* 3D Separation on Hover */
-.wcu-dual-showcase-stage:hover .wcu-card-primary {
-  transform: translateZ(20px) translateY(-4px);
-}
-
+.wcu-dual-showcase-stage:hover .wcu-card-primary,
 .wcu-dual-showcase-stage:hover .wcu-card-secondary {
-  transform: translateZ(35px) translateY(4px);
+  transform: none !important;
 }
 
 /* ==========================================================================

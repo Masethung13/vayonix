@@ -11,7 +11,6 @@ const Whychooseus = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
   const [customerCount, setCustomerCount] = useState(0);
   const [uptimeCount, setUptimeCount] = useState('0.0');
-  const [mbTilt, setMbTilt] = useState({ x: 0, y: 0 });
   const sectionRef = useRef(null);
 
   // Active theme tracking for seamless Dark/Light graphic switching
@@ -44,17 +43,6 @@ const Whychooseus = () => {
       observer.disconnect();
     };
   }, []);
-
-  const handleMbTilt = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMbTilt({ x: x * 8, y: y * -8 });
-  };
-
-  const resetMbTilt = () => {
-    setMbTilt({ x: 0, y: 0 });
-  };
 
   // Avatar photos for the 300+ Happy Customers pill
   const customerAvatars = [
@@ -385,11 +373,6 @@ const Whychooseus = () => {
             <div
               className="wcu-dual-showcase-stage"
               data-active-theme={theme}
-              onMouseMove={handleMbTilt}
-              onMouseLeave={resetMbTilt}
-              style={{
-                transform: `perspective(1000px) rotateX(${mbTilt.y}deg) rotateY(${mbTilt.x}deg)`,
-              }}
             >
               {/* Radiant Ambient Core Halo */}
               <div className="wcu-dual-ambient-glow" />

@@ -1,34 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ScrollTitle from './ScrollTitle';
 import '../styles/Mission.css';
-import missionRocketDark from '../assets/mission-rocket-dark.jpg';
-import missionRocketLight from '../assets/mission-rocket-light.jpg';
+import officeImg from '../assets/office.png';
 
 const Mission = () => {
   const sectionRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoveredPillar, setHoveredPillar] = useState(null);
 
-  // Theme State (Dark / Light) with LocalStorage persistence & live event sync
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('vayonix_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
-  });
-
-  useEffect(() => {
-    const handleThemeSync = () => {
-      const currentTheme = localStorage.getItem('vayonix_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
-      setTheme(currentTheme);
-    };
-
-    window.addEventListener('theme_change', handleThemeSync);
-    window.addEventListener('storage', handleThemeSync);
-    return () => {
-      window.removeEventListener('theme_change', handleThemeSync);
-      window.removeEventListener('storage', handleThemeSync);
-    };
-  }, []);
-
-  // Parallax Mouse Movement for 3D Background & Rocket Stage
+  // Parallax Mouse Movement for 3D Background & Showcase Stage
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!sectionRef.current) return;
@@ -122,37 +102,51 @@ const Mission = () => {
             ===================================================================== */}
         <div className="mission-top-grid">
 
-          {/* Left Column: Seamless Rocket Blast Stage (No Card/Border) */}
+          {/* Left Column: Futuristic 3D Glass Office Showcase */}
           <div className="mission-visual-column" data-reveal="fade-right">
             <div
-              className="mission-rocket-hero-stage"
+              className="mission-office-stage"
               style={{
-                transform: `perspective(1000px) rotateX(${mousePos.y * -6}deg) rotateY(${mousePos.x * 6}deg) translate3d(${mousePos.x * 8}px, ${mousePos.y * 8}px, 0)`,
+                transform: `perspective(1000px) rotateX(${mousePos.y * -5}deg) rotateY(${mousePos.x * 5}deg) translate3d(${mousePos.x * 6}px, ${mousePos.y * 6}px, 0)`,
               }}
             >
-              {/* Luminous Cyber Portal Halo Ring */}
-              <div className="mission-portal-halo" />
-              <div className="mission-portal-ring-outer" />
-              <div className="mission-portal-ring-inner" />
+              {/* Multi-tier Neon Ambient Backlight Aura */}
+              <div className="mission-stage-ambient-glow" />
+              <div className="mission-stage-ambient-glow-secondary" />
 
-              {/* Fire & Plume Glowing Light Core */}
-              <div className="mission-fire-glow-underlay" />
+              {/* Main Glass Frame Pedestal */}
+              <div className="mission-stage-glass-card">
+                {/* Cyber Geometric Corner Accents */}
+                <div className="mission-card-corner corner-tl" />
+                <div className="mission-card-corner corner-tr" />
+                <div className="mission-card-corner corner-bl" />
+                <div className="mission-card-corner corner-br" />
 
-              {/* Rocket Seamless Artwork with Radial Edge Bleed */}
-              <div className="mission-rocket-seamless-blend">
-                <img
-                  src={theme === 'light' ? missionRocketLight : missionRocketDark}
-                  alt="Vayonix Mission Rocket Launch"
-                  className="mission-rocket-image"
-                  loading="lazy"
-                />
-                <div className="mission-seamless-vignette" />
+                {/* Inner Image Container with Glass Sheen & Vignette */}
+                <div className="mission-stage-image-wrapper">
+                  <img
+                    src={officeImg}
+                    alt="Vayonix Global Office & Headquarters"
+                    className="mission-stage-image"
+                    loading="lazy"
+                  />
+                  {/* Dynamic Specular Shimmer Sweep Effect */}
+                  <div className="mission-stage-specular-sheen" />
+                  {/* Subtle Gradient Shadow Vignette */}
+                  <div className="mission-stage-inner-vignette" />
+                </div>
+
+                {/* Bottom Floating Stats / Info Badge */}
+                <div className="mission-stage-bottom-card">
+                  <div className="mission-stage-bottom-icon">
+                    <span>✦</span>
+                  </div>
+                  <div className="mission-stage-bottom-text">
+                    <span className="mission-stage-bottom-title">Vayonix Infotech</span>
+                    <span className="mission-stage-bottom-sub">Digital Innovation & Strategic Hub</span>
+                  </div>
+                </div>
               </div>
-
-              {/* Floating Dynamic Embers */}
-              <div className="mission-ember ember-1" />
-              <div className="mission-ember ember-2" />
-              <div className="mission-ember ember-3" />
             </div>
           </div>
 

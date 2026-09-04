@@ -7,8 +7,18 @@ import abtBg from '../assets/abt-bg.png';
 import abtBgLight from '../assets/abt-bg-light1.png';
 import ThemeToggle from './ThemeToggle';
 
+// Official Certification & Government Accreditation Logos
+import logoMca from '../assets/mca.png';
+import logoStartupIndia from '../assets/startup-india.png';
+import logoStartupTn from '../assets/startup-tn.png';
+
+const certifiedLogos = [
+  { name: 'Ministry of Corporate Affairs', src: logoMca },
+  { name: 'Startup India', src: logoStartupIndia },
+  { name: 'Startup TN', src: logoStartupTn },
+];
+
 const Abt = () => {
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const sectionRef = useRef(null);
@@ -78,62 +88,6 @@ const Abt = () => {
   const resetTilt = (setTilt) => {
     setTilt({ x: 0, y: 0 });
   };
-
-  // Close video modal on Escape key
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setIsVideoOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  const brandLogos = [
-    {
-      name: 'Slack',
-      icon: (
-        <svg viewBox="0 0 120 30" fill="currentColor" className="abt-brand-svg">
-          <path d="M14.2 17.8a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8V15h2.8a2.8 2.8 0 0 1 2.8 2.8zm1.4 0a2.8 2.8 0 0 1 2.8-2.8 2.8 2.8 0 0 1 2.8 2.8v7a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8v-7zM21.2 12.2a2.8 2.8 0 0 1-2.8-2.8 2.8 2.8 0 0 1 2.8-2.8h2.8v2.8a2.8 2.8 0 0 1-2.8 2.8zm0 1.4a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8h-7a2.8 2.8 0 0 1-2.8-2.8 2.8 2.8 0 0 1 2.8-2.8h7zM15.6 5.2a2.8 2.8 0 0 1 2.8-2.8 2.8 2.8 0 0 1 2.8 2.8v2.8h-2.8a2.8 2.8 0 0 1-2.8-2.8zm-1.4 0a2.8 2.8 0 0 1-2.8 2.8 2.8 2.8 0 0 1-2.8-2.8V-1.8A2.8 2.8 0 0 1 11.4-4.6a2.8 2.8 0 0 1 2.8 2.8v7zM8.6 10.8a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8H5.8V13.6a2.8 2.8 0 0 1 2.8-2.8zm0-1.4A2.8 2.8 0 0 1 5.8 6.6 2.8 2.8 0 0 1 8.6 3.8h7a2.8 2.8 0 0 1 2.8 2.8 2.8 2.8 0 0 1-2.8 2.8h-7z" />
-          <text x="32" y="21" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="800" fill="currentColor">slack</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Google',
-      icon: (
-        <svg viewBox="0 0 90 28" fill="currentColor" className="abt-brand-svg">
-          <text x="0" y="21" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="700" letterSpacing="-0.5px" fill="currentColor">Google</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Notion',
-      icon: (
-        <svg viewBox="0 0 90 28" fill="currentColor" className="abt-brand-svg">
-          <rect x="2" y="4" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2.2" fill="none" />
-          <text x="7" y="18" fontFamily="Georgia, serif" fontSize="15" fontWeight="900" fill="currentColor">N</text>
-          <text x="26" y="19" fontFamily="system-ui, sans-serif" fontSize="16" fontWeight="700" fill="currentColor">Notion</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'Airbnb',
-      icon: (
-        <svg viewBox="0 0 95 28" fill="currentColor" className="abt-brand-svg">
-          <path d="M12 4C8 4 5 10 5 14c0 4 3 8 7 8s7-4 7-8c0-4-3-10-7-10zm0 13a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" stroke="currentColor" strokeWidth="2" fill="none" />
-          <text x="24" y="20" fontFamily="system-ui, sans-serif" fontSize="17" fontWeight="800" letterSpacing="-0.5px" fill="currentColor">airbnb</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'HubSpot',
-      icon: (
-        <svg viewBox="0 0 100 28" fill="currentColor" className="abt-brand-svg">
-          <text x="0" y="20" fontFamily="system-ui, sans-serif" fontSize="17" fontWeight="800" fill="currentColor">HubSp<tspan fill="#ff7a59">o</tspan>t</text>
-        </svg>
-      ),
-    },
-  ];
 
   return (
     <div className="abt-page-wrapper" id="about" ref={sectionRef}>
@@ -223,7 +177,7 @@ const Abt = () => {
           <div className="abt-content-grid">
 
             {/* ===============================================================
-                LEFT COLUMN: HEADINGS, SUBTEXT, DUAL CTAS & TRUST BAR
+                LEFT COLUMN: HEADINGS, SUBTEXT, CTA & LOGO MARQUEE SLIDER
                 =============================================================== */}
             <div className="abt-left-content" data-reveal="fade-right">
 
@@ -250,9 +204,8 @@ const Abt = () => {
                 We blend creativity, technology, and strategy to deliver digital experiences that drive real results and grow your brand.
               </p>
 
-              {/* Dual Action CTAs */}
+              {/* Action CTA */}
               <div className="abt-cta-row" data-reveal="fade-up" data-reveal-delay="200">
-
                 {/* Primary Pill Button: "Our Journey →" */}
                 <a href="#mission" className="abt-primary-btn">
                   <span className="abt-btn-text">Our Journey</span>
@@ -262,41 +215,23 @@ const Abt = () => {
                     </svg>
                   </span>
                 </a>
-
-                {/* Secondary Video Trigger Button: "Watch Our Story" */}
-                <button
-                  type="button"
-                  className="abt-video-btn"
-                  onClick={() => setIsVideoOpen(true)}
-                  aria-label="Watch our 2:45 min story video"
-                >
-                  <div className="abt-play-ring">
-                    <div className="abt-play-pulse-1" />
-                    <div className="abt-play-pulse-2" />
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="abt-play-icon">
-                      <path d="M8 5V19L19 12L8 5Z" />
-                    </svg>
-                  </div>
-                  <div className="abt-video-text-group">
-                    <span className="abt-video-label">Watch Our Story</span>
-                    <span className="abt-video-duration">2:45 Min</span>
-                  </div>
-                </button>
-
               </div>
 
-              {/* Trust Bar with Brand Logos */}
+              {/* Trust & Accreditations Section with Smooth Infinite Slides Ticker */}
               <div className="abt-trust-section" data-reveal="fade-up" data-reveal-delay="300">
-                <span className="abt-trust-label">Trusted by 50+ clients & brands worldwide</span>
-                <div className="abt-brands-row">
-                  {brandLogos.map((brand, idx) => (
-                    <div key={idx} className="abt-brand-logo-item" title={brand.name}>
-                      {brand.icon}
-                    </div>
-                  ))}
+                <span className="abt-trust-label">Associated With</span>
+                
+                <div className="abt-logo-slider-container">
+                  <div className="abt-logo-track">
+                    {/* Repeated items for seamless infinite auto-slide loop */}
+                    {[...certifiedLogos, ...certifiedLogos, ...certifiedLogos, ...certifiedLogos].map((brand, idx) => (
+                      <div key={idx} className="abt-brand-slide-card" title={brand.name}>
+                        <img src={brand.src} alt={brand.name} className="abt-brand-img" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-
             </div>
 
             {/* ===============================================================
@@ -332,33 +267,7 @@ const Abt = () => {
       </section>
 
       {/* =====================================================================
-          3. FULLSCREEN STORY VIDEO MODAL
-          ===================================================================== */}
-      {isVideoOpen && (
-        <div className="abt-video-modal-backdrop" onClick={() => setIsVideoOpen(false)}>
-          <div className="abt-video-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="abt-modal-close-btn"
-              onClick={() => setIsVideoOpen(false)}
-              aria-label="Close video player"
-            >
-              ✕
-            </button>
-            <div className="abt-video-iframe-wrap">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="Vayonix Agency Story Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          4. RIGHT BOTTOM FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME TOGGLE)
+          3. RIGHT BOTTOM FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME TOGGLE)
           ===================================================================== */}
       <div className="floating-action-cluster">
         {/* Bottom to Top Button */}
