@@ -15,6 +15,7 @@ import BlogsPg from './components/BlogsPg';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import NotFoundPg from './components/NotFoundPg';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import './styles/ScrollReveal.css';
 import './App.css';
@@ -88,8 +89,8 @@ function AppContent() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/terms" element={<TermsOfService />} />
-          {/* Catch-all fallback */}
-          <Route path="*" element={<HomePage />} />
+          {/* Catch-all 404 fallback */}
+          <Route path="*" element={<NotFoundPg />} />
         </Routes>
       </main>
       <Footer />

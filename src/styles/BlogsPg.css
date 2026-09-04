@@ -1102,10 +1102,18 @@ body.theme-light {
 
 .blog-newsletter-form {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 560px;
+}
+
+.blog-newsletter-input-group {
+  display: flex;
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  max-width: 540px;
 }
 
 .blog-newsletter-input {
@@ -1118,7 +1126,7 @@ body.theme-light {
   font-size: 0.95rem;
   outline: none;
   font-family: inherit;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 [data-theme="light"] .blog-newsletter-input {
@@ -1129,6 +1137,12 @@ body.theme-light {
 
 .blog-newsletter-input:focus {
   border-color: var(--abt-card-hover-border);
+  box-shadow: 0 0 20px var(--abt-glow-purple);
+}
+
+.blog-input-invalid {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
 }
 
 .blog-newsletter-btn {
@@ -1145,12 +1159,43 @@ body.theme-light {
   cursor: pointer;
   white-space: nowrap;
   box-shadow: 0 6px 20px var(--abt-glow-purple);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
 }
 
-.blog-newsletter-btn:hover {
+.blog-newsletter-btn:hover:not(:disabled) {
   transform: scale(1.04);
   background: var(--abt-btn-grad-hover);
+}
+
+.blog-newsletter-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.blog-btn-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: blogSpin 0.75s linear infinite;
+  display: inline-block;
+}
+
+@keyframes blogSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.blog-newsletter-error-msg {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ef4444;
+  margin: 0;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
 }
 
 .blog-subscribe-success-msg {
@@ -1161,6 +1206,8 @@ body.theme-light {
   color: #22c55e;
   font-weight: 800;
   font-size: 0.95rem;
+  text-align: center;
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.25);
 }
 
 /* ==========================================================================
@@ -1508,9 +1555,10 @@ body.theme-light {
     margin: 0 auto;
   }
 
-  .blog-newsletter-form {
+  .blog-newsletter-input-group {
     flex-direction: column;
     gap: 0.75rem;
+    width: 100%;
   }
 
   .blog-newsletter-btn {

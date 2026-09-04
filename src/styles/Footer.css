@@ -605,11 +605,52 @@ body.theme-light .vyn-contact-link:hover {
   transform: rotate(-12deg) scale(1.1);
 }
 
+.vyn-send-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.vyn-btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: vynSpin 0.75s linear infinite;
+}
+
+@keyframes vynSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.vyn-input-invalid {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.4) !important;
+}
+
 .vyn-sub-success {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--ft-accent-cyan);
+  color: #10b981;
   margin: 0;
+  line-height: 1.45;
+  animation: fadeIn 0.3s ease;
+}
+
+[data-theme="dark"] .vyn-sub-success,
+body.theme-dark .vyn-sub-success {
+  color: #34d399;
+}
+
+.vyn-sub-error {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ef4444;
+  margin: 0;
+  line-height: 1.45;
   animation: fadeIn 0.3s ease;
 }
 
