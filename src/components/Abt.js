@@ -67,6 +67,7 @@ const Abt = () => {
   // Parallax mouse movement for 3D floating background spheres & neon splines
   useEffect(() => {
     const handleMouseMove = (e) => {
+      if (window.innerWidth <= 768) return;
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX / innerWidth - 0.5) * 2;
       const y = (e.clientY / innerHeight - 0.5) * 2;
@@ -79,6 +80,7 @@ const Abt = () => {
 
   // 3D Perspective Card Tilt
   const handleTilt = (e, setTilt) => {
+    if (window.innerWidth <= 768) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
