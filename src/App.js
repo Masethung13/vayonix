@@ -13,6 +13,8 @@ import ServicePg from './components/ServicePg';
 import ContactPg from './components/ContactPg';
 import BlogsPg from './components/BlogsPg';
 import Footer from './components/Footer';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import './styles/ScrollReveal.css';
 import './App.css';
@@ -75,6 +77,10 @@ function AppContent() {
           <Route path="/blogs" element={<BlogsPg />} />
           <Route path="/blog" element={<BlogsPg />} />
           <Route path="/contact" element={<ContactPg />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/terms" element={<TermsOfService />} />
           {/* Catch-all fallback */}
           <Route path="*" element={<HomePage />} />
         </Routes>

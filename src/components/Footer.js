@@ -278,11 +278,11 @@ const Footer = () => {
             © {new Date().getFullYear()} <span className="vyn-brand-name">Vayonix</span>. All rights reserved.
           </p>
           <div className="vyn-legal-links">
+            <Link to="/privacy-policy">Privacy Policy</Link>
+            <span className="vyn-legal-sep">•</span>
+            <Link to="/terms-of-service">Terms of Service</Link>
+            <span className="vyn-legal-sep">•</span>
             <Link to="/about">About Agency</Link>
-            <span className="vyn-legal-sep">•</span>
-            <Link to="/services">Services</Link>
-            <span className="vyn-legal-sep">•</span>
-            <Link to="/blogs">Blogs</Link>
             <span className="vyn-legal-sep">•</span>
             <Link to="/contact">Get in Touch</Link>
           </div>
