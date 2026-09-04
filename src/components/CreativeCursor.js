@@ -2,16 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/CreativeCursor.css';
 
 const CreativeCursor = () => {
+  const rootRef = useRef(null);
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
   const ringRef = useRef(null);
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    // Detect touch device
+    // 1. Detect touch device / coarse pointer
     const checkTouch = () => {
       return (
         'ontouchstart' in window ||
@@ -44,11 +43,11 @@ const CreativeCursor = () => {
 
     // Twinkling Star Particle Collection
     const stars = [];
-    const MAX_STARS = 150;
+    const MAX_STARS = 120;
 
     // Smooth subtle ribbon points
     const trailPoints = [];
-    const MAX_TRAIL = 18;
+    const MAX_TRAIL = 16;
 
     // Theme detector
     const isLightTheme = () => {
@@ -105,11 +104,11 @@ const CreativeCursor = () => {
           x: x * dpr,
           y: y * dpr,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed + 0.15, // slight ambient float
-          baseSize: Math.random() * 4.2 + 2.2,
+          vy: Math.sin(angle) * speed + 0.15,
+          baseSize: Math.random() * 3.8 + 2.0,
           color,
           alpha: 1,
-          decay: Math.random() * 0.022 + 0.016,
+          decay: Math.random() * 0.024 + 0.018,
           rotation: Math.random() * Math.PI * 2,
           rotSpeed: (Math.random() - 0.5) * 0.08,
           twinklePhase: Math.random() * Math.PI * 2,
@@ -120,15 +119,24 @@ const CreativeCursor = () => {
       }
     };
 
-    // Draw 4-point or 8-point geometric glowing twinkle star
+    // Draw 4-point or 8-point geometric glowing twinkle star using fast GPU-friendly bloom
     const drawStar = (starX, starY, size, spikes, inset, alpha, color) => {
       ctx.save();
       ctx.translate(starX, starY);
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 12 * dpr;
 
+      // Soft ambient bloom halo using fast radial gradient (no expensive shadowBlur)
+      const bloomRadius = size * 2.0;
+      const bloom = ctx.createRadialGradient(0, 0, 0, 0, 0, bloomRadius);
+      bloom.addColorStop(0, color);
+      bloom.addColorStop(1, 'transparent');
+      ctx.fillStyle = bloom;
+      ctx.beginPath();
+      ctx.arc(0, 0, bloomRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sharp geometric star polygon
+      ctx.fillStyle = color;
       ctx.beginPath();
       const step = Math.PI / spikes;
       let rot = (Math.PI / 2) * 3;
@@ -150,11 +158,9 @@ const CreativeCursor = () => {
       ctx.fill();
 
       // White crystal core hot spot
-      ctx.beginPath();
-      ctx.arc(0, 0, Math.max(0.8, size * 0.22), 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#ffffff';
-      ctx.shadowBlur = 6 * dpr;
+      ctx.beginPath();
+      ctx.arc(0, 0, Math.max(0.7, size * 0.22), 0, Math.PI * 2);
       ctx.fill();
 
       ctx.restore();
@@ -162,55 +168,80 @@ const CreativeCursor = () => {
 
     let hasMoved = false;
 
+    // Instant Zero-Latency Mouse Movement Tracker
     const handleMouseMove = (e) => {
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
       if (!hasMoved) {
         hasMoved = true;
-        setIsVisible(true);
-        ring.x = e.clientX;
-        ring.y = e.clientY;
+        if (rootRef.current) {
+          rootRef.current.classList.remove('cursor-hidden');
+          rootRef.current.classList.add('cursor-visible');
+        }
+        ring.x = clientX;
+        ring.y = clientY;
       }
 
       mouse.prevX = mouse.x;
       mouse.prevY = mouse.y;
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      mouse.x = clientX;
+      mouse.y = clientY;
+
+      // 0ms INSTANT tracking: update inner dot synchronously without waiting for next frame
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0)`;
+      }
 
       const dx = mouse.x - mouse.prevX;
       const dy = mouse.y - mouse.prevY;
       mouse.speed = Math.hypot(dx, dy);
 
-      // Trailing ribbon with alpha decay
-      trailPoints.push({ 
-        x: mouse.x * dpr, 
-        y: mouse.y * dpr,
-        alpha: 1.0 
+      // Trailing ribbon points
+      trailPoints.push({
+        x: clientX * dpr,
+        y: clientY * dpr,
+        alpha: 1.0,
       });
       if (trailPoints.length > MAX_TRAIL) {
         trailPoints.shift();
       }
 
       // Spawn twinkle stars on movement
-      if (mouse.speed > 1.2) {
-        const starCount = Math.min(Math.floor(mouse.speed / 5) + 1, 4);
-        spawnTwinkleStars(mouse.x, mouse.y, starCount, Math.min(mouse.speed * 0.1, 2.2));
+      if (mouse.speed > 1.4) {
+        const starCount = Math.min(Math.floor(mouse.speed / 5) + 1, 3);
+        spawnTwinkleStars(clientX, clientY, starCount, Math.min(mouse.speed * 0.1, 2.0));
       }
+    };
 
-      // Update center dot position
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
-      }
+    // Event-driven hover detection: ONLY triggers on enter/leave (Zero mousemove CPU overhead)
+    const handleMouseOver = (e) => {
+      const target = e.target;
+      if (!target || !(target instanceof Element)) return;
 
-      // Check if hovering interactive element (for subtle glow, NO size change)
-      const target = document.elementFromPoint(e.clientX, e.clientY);
-      const isInteractive = target && target.closest(
-        'button, a, [role="button"], .btn, [class*="btn"], [class*="cta"], [class*="toggle"], [class*="action"], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      const isInteractive = target.closest(
+        'button, a, [role="button"], .btn, [class*="btn"], [class*="cta"], [class*="toggle"], [class*="action"], input, textarea, select, [tabindex]:not([tabindex="-1"]), label, summary'
       );
-      setIsHovered(!!isInteractive);
+
+      if (rootRef.current) {
+        rootRef.current.classList.toggle('cursor-hovered', !!isInteractive);
+      }
+    };
+
+    const handleMouseOut = (e) => {
+      const related = e.relatedTarget;
+      if (!related || (related instanceof Element && !related.closest(
+        'button, a, [role="button"], .btn, [class*="btn"], [class*="cta"], [class*="toggle"], [class*="action"], input, textarea, select, [tabindex]:not([tabindex="-1"]), label, summary'
+      ))) {
+        if (rootRef.current) {
+          rootRef.current.classList.remove('cursor-hovered');
+        }
+      }
     };
 
     const handleMouseDown = (e) => {
       // Burst of sparkling twinkle stars on click
-      spawnTwinkleStars(e.clientX, e.clientY, 18, 3.2);
+      spawnTwinkleStars(e.clientX, e.clientY, 16, 3.0);
 
       if (ringRef.current) {
         ringRef.current.classList.add('cursor-ring--click');
@@ -224,31 +255,38 @@ const CreativeCursor = () => {
     };
 
     const handleMouseLeave = () => {
-      setIsVisible(false);
+      if (rootRef.current) {
+        rootRef.current.classList.remove('cursor-visible');
+        rootRef.current.classList.add('cursor-hidden');
+      }
       trailPoints.length = 0;
       stars.length = 0;
     };
 
     const handleMouseEnter = () => {
-      setIsVisible(true);
+      if (rootRef.current) {
+        rootRef.current.classList.remove('cursor-hidden');
+        rootRef.current.classList.add('cursor-visible');
+      }
     };
 
-    // 60-120fps Animation Render Loop
+    // 60-120fps Hardware-Accelerated Animation Render Loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
       const palette = getPalette();
 
-      // 1. Age and decay ribbon trail points so tail smoothly disappears when stopped
+      // 1. Age and decay ribbon trail points
       for (let i = trailPoints.length - 1; i >= 0; i--) {
-        trailPoints[i].alpha -= 0.035;
+        trailPoints[i].alpha -= 0.04;
         if (trailPoints[i].alpha <= 0) {
           trailPoints.splice(i, 1);
         }
       }
 
-      // Render Soft Comet Ribbon Trail
+      // Render Soft Comet Ribbon Trail with GPU additive blending
       if (trailPoints.length > 1) {
         ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
@@ -256,7 +294,7 @@ const CreativeCursor = () => {
           const ptPrev = trailPoints[i - 1];
           const ptCurr = trailPoints[i];
           const progress = i / trailPoints.length;
-          const segmentAlpha = Math.min(ptPrev.alpha, ptCurr.alpha) * progress * 0.45;
+          const segmentAlpha = Math.min(ptPrev.alpha, ptCurr.alpha) * progress * 0.42;
 
           if (segmentAlpha <= 0.01) continue;
 
@@ -269,50 +307,61 @@ const CreativeCursor = () => {
           ctx.lineTo(ptCurr.x, ptCurr.y);
 
           ctx.strokeStyle = grad;
-          ctx.lineWidth = Math.max(0.5, progress * 3.2 * dpr);
+          ctx.lineWidth = Math.max(0.6, progress * 3.0 * dpr);
           ctx.globalAlpha = segmentAlpha;
-          ctx.shadowColor = palette.primary;
-          ctx.shadowBlur = progress * 10 * dpr;
           ctx.stroke();
         }
         ctx.restore();
       }
 
-      // 2. Render Animated Twinkling Stars
-      for (let i = stars.length - 1; i >= 0; i--) {
-        const s = stars[i];
-        s.x += s.vx;
-        s.y += s.vy;
-        s.vx *= 0.96;
-        s.vy *= 0.96;
-        s.alpha -= s.decay;
-        s.rotation += s.rotSpeed;
-        s.twinklePhase += s.twinkleSpeed;
+      // 2. Render Animated Twinkling Stars (GPU additive blending, no blur slowdown)
+      if (stars.length > 0) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
 
-        if (s.alpha <= 0) {
-          stars.splice(i, 1);
-          continue;
+        for (let i = stars.length - 1; i >= 0; i--) {
+          const s = stars[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vx *= 0.96;
+          s.vy *= 0.96;
+          s.alpha -= s.decay;
+          s.rotation += s.rotSpeed;
+          s.twinklePhase += s.twinkleSpeed;
+
+          if (s.alpha <= 0) {
+            stars.splice(i, 1);
+            continue;
+          }
+
+          const twinkleScale = 0.68 + 0.32 * Math.sin(s.twinklePhase);
+          const currentSize = s.baseSize * dpr * twinkleScale;
+
+          drawStar(s.x, s.y, currentSize, s.spikes, s.inset, s.alpha, s.color);
         }
-
-        const twinkleScale = 0.65 + 0.35 * Math.sin(s.twinklePhase);
-        const currentSize = s.baseSize * dpr * twinkleScale;
-
-        drawStar(s.x, s.y, currentSize, s.spikes, s.inset, s.alpha, s.color);
+        ctx.restore();
       }
 
-      // 3. Smooth Fixed-Size Outer Circle Follower (always small, constant size)
+      // 3. Ultra-Snappy Follower Ring (lerpFactor 0.50 eliminates perceived delay while keeping fluid smoothness)
       if (ringRef.current && hasMoved) {
-        const lerpFactor = 0.22;
+        const lerpFactor = 0.50;
         ring.x += (mouse.x - ring.x) * lerpFactor;
         ring.y += (mouse.y - ring.y) * lerpFactor;
 
         ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0)`;
       }
 
+      // Sync dot on vsync as well
+      if (dotRef.current && hasMoved) {
+        dotRef.current.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
+      }
+
       animationFrameId = requestAnimationFrame(render);
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseover', handleMouseOver, { passive: true });
+    window.addEventListener('mouseout', handleMouseOut, { passive: true });
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mouseleave', handleMouseLeave);
@@ -323,6 +372,8 @@ const CreativeCursor = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mouseout', handleMouseOut);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -337,7 +388,8 @@ const CreativeCursor = () => {
 
   return (
     <div
-      className={`creative-cursor-root ${isVisible ? 'cursor-visible' : 'cursor-hidden'} ${isHovered ? 'cursor-hovered' : ''}`}
+      ref={rootRef}
+      className="creative-cursor-root cursor-hidden"
       aria-hidden="true"
     >
       {/* Twinkling Star Canvas */}
