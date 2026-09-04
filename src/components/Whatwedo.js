@@ -370,18 +370,11 @@ const Whatwedo = () => {
               {/* Primary Action Button with Glowing Aura */}
               <a href="#contact" className="wwd-primary-btn">
                 <span className="wwd-btn-label">Let's Work Together</span>
-                <div className="wwd-btn-arrow-wrap">
-                  <svg viewBox="0 0 16 16" fill="none" className="wwd-btn-arrow-svg">
-                    <path
-                      d="M3.33 8H12.67M12.67 8L8.67 4M12.67 8L8.67 12"
-                      stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                <span className="vyn-btn-arrow-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                    <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
                   </svg>
-                </div>
-                <div className="wwd-btn-glow" />
+                </span>
               </a>
 
               {/* Watch Story Video Trigger Button */}
@@ -466,11 +459,11 @@ const Whatwedo = () => {
                 </div>
                 <div className="wwd-stat-pill-info">
                   <div className="wwd-stat-pill-count">
-                    <AnimatedNumber value="120+" />
+                    <AnimatedNumber value="50+" />
                   </div>
-                  <div className="wwd-stat-pill-heading">Projects Delivered</div>
+                  <div className="wwd-stat-pill-heading">Projects Completed</div>
                   <div className="wwd-stat-pill-sub">
-                    Across <AnimatedNumber value="15+" /> Industries
+                    Across <AnimatedNumber value="10+" /> Industries
                   </div>
                 </div>
                 <div className="wwd-pill-glow" />
@@ -590,7 +583,7 @@ const Whatwedo = () => {
               </div>
             </div>
 
-            {/* Metric 2: 250+ Projects Completed */}
+            {/* Metric 2: 50+ Projects Completed */}
             <div className="wwd-stat-cell">
               <div className="wwd-stat-icon-circle">
                 <svg viewBox="0 0 24 24" fill="none" className="wwd-stat-cell-svg">
@@ -600,13 +593,13 @@ const Whatwedo = () => {
               </div>
               <div className="wwd-stat-cell-info">
                 <div className="wwd-stat-cell-num">
-                  <AnimatedNumber value="250+" />
+                  <AnimatedNumber value="50+" />
                 </div>
                 <div className="wwd-stat-cell-label">Projects Completed</div>
               </div>
             </div>
 
-            {/* Metric 3: 15+ Industry Awards */}
+            {/* Metric 3: 5 Awards Won */}
             <div className="wwd-stat-cell">
               <div className="wwd-stat-icon-circle">
                 <svg viewBox="0 0 24 24" fill="none" className="wwd-stat-cell-svg">
@@ -616,9 +609,9 @@ const Whatwedo = () => {
               </div>
               <div className="wwd-stat-cell-info">
                 <div className="wwd-stat-cell-num">
-                  <AnimatedNumber value="15+" />
+                  <AnimatedNumber value="5" />
                 </div>
-                <div className="wwd-stat-cell-label">Industry Awards</div>
+                <div className="wwd-stat-cell-label">Awards Won</div>
               </div>
             </div>
 
@@ -626,22 +619,11 @@ const Whatwedo = () => {
 
           {/* Testimonial Quote Block */}
           <div className="wwd-quote-block">
-            <div className="wwd-quote-symbol">
-              <svg viewBox="0 0 24 24" fill="none" className="wwd-quote-svg">
-                <path
-                  d="M10 11H6C4.89543 11 4 10.1046 4 9V7C4 5.89543 4.89543 5 6 5H8C9.10457 5 10 5.89543 10 7V11ZM10 11C10 13.7614 7.76142 16 5 16M20 11H16C14.8954 11 14 10.1046 14 9V7C14 5.89543 14.8954 5 16 5H18C19.1046 5 20 5.89543 20 7V11ZM20 11C20 13.7614 17.7614 16 15 16"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
             <div className="wwd-quote-content">
               <p className="wwd-quote-text">
-                "Their creativity, attention to detail, and strategic approach made a real difference to our brand."
+                " Your vision, our creativity — together, we create something unforgettable.💜🚀"
               </p>
-              <span className="wwd-quote-author">— Alex Morgan, CEO of Visionary Co.</span>
+              <span className="wwd-quote-author">— Team Vayonix</span>
             </div>
           </div>
 

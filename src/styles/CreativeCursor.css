@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Creative Cursor & Twinkling Star Effect — Vayonix Theme
+   ========================================================================== */
+
+:root {
+  --cursor-primary: #38bdf8;
+  --cursor-secondary: #a855f7;
+  --cursor-accent: #818cf8;
+  --cursor-glow: rgba(56, 189, 248, 0.45);
+  --cursor-glow-strong: rgba(168, 85, 247, 0.65);
+  --cursor-border: rgba(56, 189, 248, 0.75);
+}
+
+[data-theme="light"],
+body.theme-light {
+  --cursor-primary: #f59e0b;
+  --cursor-secondary: #fbbf24;
+  --cursor-accent: #d97706;
+  --cursor-glow: rgba(245, 158, 11, 0.45);
+  --cursor-glow-strong: rgba(251, 191, 36, 0.65);
+  --cursor-border: rgba(245, 158, 11, 0.8);
+}
+
+/* Master Root Container */
+.creative-cursor-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999999;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor-hidden {
+  opacity: 0;
+}
+
+.cursor-visible {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Twinkling Stars & Sparkle Canvas Layer
+   -------------------------------------------------------------------------- */
+.cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999997;
+  mix-blend-mode: screen;
+}
+
+[data-theme="light"] .cursor-canvas,
+body.theme-light .cursor-canvas {
+  mix-blend-mode: normal;
+}
+
+/* --------------------------------------------------------------------------
+   Precision Center Dot
+   -------------------------------------------------------------------------- */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  margin-left: -2.5px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000002;
+  box-shadow: 
+    0 0 8px var(--cursor-primary),
+    0 0 16px var(--cursor-secondary);
+  will-change: transform;
+}
+
+.cursor-dot-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cursor-primary) 0%, transparent 70%);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   Small Outer Circle (Always Fixed Size: 24px, Never Changes On Hover)
+   -------------------------------------------------------------------------- */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  pointer-events: none;
+  z-index: 10000000;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--cursor-border);
+  box-shadow: 0 0 10px var(--cursor-glow);
+  transition: 
+    border-color 0.2s ease, 
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+/* Hover state: Same exact size (no resizing), subtle brightness/glow only */
+.cursor-hovered .cursor-ring-inner {
+  border-color: #ffffff;
+  box-shadow: 
+    0 0 14px var(--cursor-primary),
+    0 0 20px var(--cursor-glow-strong);
+}
+
+[data-theme="light"] .cursor-hovered .cursor-ring-inner,
+body.theme-light .cursor-hovered .cursor-ring-inner {
+  border-color: #f59e0b;
+  box-shadow: 
+    0 0 14px var(--cursor-secondary),
+    0 0 20px var(--cursor-glow-strong);
+}
+
+/* Click feedback: subtle momentary inward pinch without resizing outer bounds */
+.cursor-ring--click .cursor-ring-inner {
+  transform: scale(0.85);
+}
+
+/* --------------------------------------------------------------------------
+   Universal Native Cursor Override (Desktop Only)
+   -------------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+
+  /* Retain standard text caret inside text inputs for natural typing */
+  input,
+  textarea,
+  select {
+    cursor: text !important;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-canvas {
+    display: none !important;
+  }
+  .cursor-ring-inner {
+    transition: none !important;
+  }
+}

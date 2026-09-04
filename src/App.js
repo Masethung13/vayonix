@@ -16,6 +16,7 @@ import Footer from './components/Footer';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import './styles/ScrollReveal.css';
 import './App.css';
+import CreativeCursor from './components/CreativeCursor';
 
 // Auto scroll to top on route change
 function ScrollToTop() {
@@ -55,9 +56,16 @@ function AboutPage() {
 function AppContent() {
   useScrollReveal(0.12);
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('vayonix_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.className = `theme-${savedTheme}`;
+  }, []);
+
   return (
     <div className="App">
       <ScrollToTop />
+      <CreativeCursor />
       <Header />
       <main className="app-main-content">
         <Routes>
@@ -72,6 +80,10 @@ function AppContent() {
         </Routes>
       </main>
       <Footer />
+
+      {/* Circular Theme Expanding Wave Overlays */}
+      <div className="darkCircle" aria-hidden="true" />
+      <div className="lightCircle" aria-hidden="true" />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { db } from '../firebase';
 import ScrollTitle from './ScrollTitle';
 import useScrollReveal from '../hooks/useScrollReveal';
+import ThemeToggle from './ThemeToggle';
 import '../styles/ContactPg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 
@@ -66,9 +67,6 @@ const ContactPg = () => {
   useScrollReveal(0.08);
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
   // Form State
   const [formData, setFormData] = useState({
     name: '',
@@ -80,6 +78,8 @@ const ContactPg = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Theme synchronization with LocalStorage & Document Element
   const [theme, setTheme] = useState(() => {
@@ -106,10 +106,6 @@ const ContactPg = () => {
     };
   }, []);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
   const handleMouseMove = (e) => {
     if (window.innerWidth < 1024) return;
     const { clientX, clientY } = e;
@@ -121,11 +117,11 @@ const ContactPg = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
-        setScrollProgress((scrollY / docHeight) * 100);
-      }
       setShowScrollTop(scrollY > 220);
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress(Math.min(100, Math.round((scrollY / totalScroll) * 100)));
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -285,7 +281,7 @@ const ContactPg = () => {
 
   return (
     <div className="cnt-page-wrapper" onMouseMove={handleMouseMove}>
-      
+
       {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
@@ -436,14 +432,14 @@ const ContactPg = () => {
       <section className="cnt-form-section" id="contact-form-section">
         <div className="cnt-main-container">
           <div className="cnt-form-split-layout">
-            
+
             {/* Left Column: Glass Form Container */}
             <div className="cnt-form-glass-box" data-reveal="fade-up">
               <div className="cnt-form-box-aura" />
 
               <div className="cnt-form-head" data-reveal="fade-up">
                 <span className="cnt-form-pill-tag">PROJECT ESTIMATION & INQUIRY</span>
-                
+
                 {/* ScrollTitle for Form Section */}
                 <ScrollTitle
                   as="h3"
@@ -465,7 +461,7 @@ const ContactPg = () => {
               </div>
 
               <form onSubmit={handleFormSubmit} className="cnt-interactive-form" noValidate>
-                
+
                 {/* Row 1: Name & Email */}
                 <div className="cnt-form-row" data-reveal="fade-up" data-reveal-delay="100">
                   <div className="cnt-input-group">
@@ -563,18 +559,21 @@ const ContactPg = () => {
                   <span className="cnt-btn-text">
                     {isSubmitting ? 'Submitting & Emailing Brief...' : 'Submit Project Brief'}
                   </span>
-                  <span className="cnt-btn-arrow">→</span>
-                  <div className="cnt-btn-shimmer" />
+                  <span className="vyn-btn-arrow-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                      <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
+                    </svg>
+                  </span>
                 </button>
               </form>
             </div>
 
             {/* Right Column: Direct Corporate Channels & SLA Guarantee */}
             <div className="cnt-sidebar-col" data-reveal="fade-up" data-reveal-delay="150">
-              
+
               {/* Direct Channels Card */}
               <div className="cnt-sidebar-glass-card" data-reveal="fade-up" data-reveal-delay="200">
-                
+
                 {/* ScrollTitle for Sidebar Channels */}
                 <ScrollTitle
                   as="h4"
@@ -662,11 +661,12 @@ const ContactPg = () => {
           4. FLOATING ACTION CLUSTER
           ===================================================================== */}
       <div className="floating-action-cluster">
+        {/* Bottom to Top Button */}
         <button
           className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
           onClick={scrollToTop}
           aria-label="Scroll back to top"
-          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+          title={`Scroll to top (${scrollProgress}%)`}
         >
           <svg className="scroll-progress-svg" viewBox="0 0 48 48">
             <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
@@ -681,7 +681,6 @@ const ContactPg = () => {
               }}
             />
           </svg>
-
           <div className="scroll-arrow-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
               <path
@@ -696,34 +695,8 @@ const ContactPg = () => {
           <div className="scroll-btn-glow" />
         </button>
 
-        <button
-          className="theme-toggle-btn"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-        >
-          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : ''}`}>
-            <span className="theme-icon sun-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5" />
-                <line x1="12" y1="1" x2="12" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="23" />
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                <line x1="1" y1="12" x2="3" y2="12" />
-                <line x1="21" y1="12" x2="23" y2="12" />
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-              </svg>
-            </span>
-            <span className="theme-icon moon-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            </span>
-          </div>
-          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
-        </button>
+        {/* Theme Toggle Component with Sun & Moon and Expanding Wave */}
+        <ThemeToggle />
       </div>
 
     </div>

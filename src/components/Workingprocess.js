@@ -34,30 +34,55 @@ const Workingprocess = () => {
     },
   ];
 
-  // Silky smooth scroll trigger for timeline steps
+  // Bi-directional smooth scroll trigger (works both Top-to-Bottom & Bottom-to-Top)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute('data-step-index'));
-            if (!isNaN(index)) {
-              setActiveStep(index);
-            }
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!sectionRef.current) {
+            ticking = false;
+            return;
           }
+
+          const sectionRect = sectionRef.current.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+
+          // Only calculate when the section is within view
+          if (sectionRect.bottom > 0 && sectionRect.top < windowHeight) {
+            const targetLine = windowHeight * 0.45; // 45% down the viewport acts as the activation focal point
+            let closestIndex = 0;
+            let minDistance = Infinity;
+
+            stepRefs.current.forEach((el, index) => {
+              if (el) {
+                const rect = el.getBoundingClientRect();
+                const elementCenter = rect.top + rect.height / 2;
+                const distance = Math.abs(elementCenter - targetLine);
+
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  closestIndex = index;
+                }
+              }
+            });
+
+            setActiveStep(closestIndex);
+          }
+
+          ticking = false;
         });
-      },
-      {
-        rootMargin: '-20% 0px -35% 0px',
-        threshold: 0.15,
+        ticking = true;
       }
-    );
+    };
 
-    stepRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Trigger initial state check
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [processSteps.length]);
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -92,7 +117,10 @@ const Workingprocess = () => {
         <div className="wp-bg-glow wp-glow-right" />
 
         {/* 3D Isometric Cyber Cube 1 */}
-        <div className="wp-3d-cube-item cube-pos-1" style={{ transform: `translate3d(${mousePos.x * -18}px, ${mousePos.y * -18}px, 0)` }}>
+        <div
+          className="wp-3d-cube-item cube-pos-1"
+          style={{ transform: `translate3d(${mousePos.x * -18}px, ${mousePos.y * -18}px, 0)` }}
+        >
           <svg viewBox="0 0 100 115" className="wp-iso-cube-svg">
             <polygon points="50,5 95,30 50,55 5,30" className="cube-face cube-top" />
             <polygon points="5,30 50,55 50,110 5,85" className="cube-face cube-left" />
@@ -102,7 +130,10 @@ const Workingprocess = () => {
         </div>
 
         {/* 3D Isometric Cyber Cube 2 */}
-        <div className="wp-3d-cube-item cube-pos-2" style={{ transform: `translate3d(${mousePos.x * 22}px, ${mousePos.y * 22}px, 0)` }}>
+        <div
+          className="wp-3d-cube-item cube-pos-2"
+          style={{ transform: `translate3d(${mousePos.x * 22}px, ${mousePos.y * 22}px, 0)` }}
+        >
           <svg viewBox="0 0 100 115" className="wp-iso-cube-svg cube-rev">
             <polygon points="50,5 95,30 50,55 5,30" className="cube-face cube-top" />
             <polygon points="5,30 50,55 50,110 5,85" className="cube-face cube-left" />
@@ -114,8 +145,19 @@ const Workingprocess = () => {
         {/* 3D Hexagonal Quantum Ring */}
         <div className="wp-3d-hex-ring-item hex-pos-1">
           <svg viewBox="0 0 140 140" className="wp-hex-ring-svg">
-            <polygon points="70,10 125,40 125,100 70,130 15,100 15,40" stroke="url(#wpHexGrad1)" strokeWidth="2" fill="none" />
-            <polygon points="70,30 105,50 105,90 70,110 35,90 35,50" stroke="url(#wpHexGrad2)" strokeWidth="1.5" strokeDasharray="5 5" fill="none" />
+            <polygon
+              points="70,10 125,40 125,100 70,130 15,100 15,40"
+              stroke="url(#wpHexGrad1)"
+              strokeWidth="2"
+              fill="none"
+            />
+            <polygon
+              points="70,30 105,50 105,90 70,110 35,90 35,50"
+              stroke="url(#wpHexGrad2)"
+              strokeWidth="1.5"
+              strokeDasharray="5 5"
+              fill="none"
+            />
             <defs>
               <linearGradient id="wpHexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.8" />
@@ -133,7 +175,6 @@ const Workingprocess = () => {
 
       <div className="wp-main-container">
         <div className="wp-split-grid">
-
           {/* =================================================================
               LEFT COLUMN: HEADINGS & 3D HOLOGRAPHIC GEOMETRIC WIREFRAME
               ================================================================= */}
@@ -164,14 +205,14 @@ const Workingprocess = () => {
 
             {/* Subtitle */}
             <p className="wp-sub-text" data-reveal="fade-up" data-reveal-delay="100">
-              Our proven execution framework transforms complex challenges into seamless, scalable, and high-impact digital realities.
+              Our proven execution framework transforms complex challenges into seamless,
+              scalable, and high-impact digital realities.
             </p>
 
             {/* 3D Wireframe Holographic Geometry Mesh */}
             <div className="wp-3d-wireframe-container" data-reveal="fade-up" data-reveal-delay="150">
               <div className="wp-wireframe-glow-halo" />
               <div className="wp-3d-cube-stage">
-                {/* Multi-layered Animated Wireframe Geometric Mesh */}
                 <svg viewBox="0 0 280 280" fill="none" className="wp-wireframe-svg">
                   {/* Outer Isometric Facets */}
                   <polygon
@@ -184,9 +225,33 @@ const Workingprocess = () => {
                   <line x1="140" y1="20" x2="140" y2="150" stroke="currentColor" strokeWidth="1.6" />
                   <line x1="250" y1="85" x2="140" y2="150" stroke="currentColor" strokeWidth="1.6" />
                   <line x1="30" y1="85" x2="140" y2="150" stroke="currentColor" strokeWidth="1.6" />
-                  <line x1="140" y1="150" x2="140" y2="280" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" />
-                  <line x1="140" y1="150" x2="250" y2="215" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" />
-                  <line x1="140" y1="150" x2="30" y2="215" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" />
+                  <line
+                    x1="140"
+                    y1="150"
+                    x2="140"
+                    y2="280"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeDasharray="3 3"
+                  />
+                  <line
+                    x1="140"
+                    y1="150"
+                    x2="250"
+                    y2="215"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeDasharray="3 3"
+                  />
+                  <line
+                    x1="140"
+                    y1="150"
+                    x2="30"
+                    y2="215"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeDasharray="3 3"
+                  />
 
                   {/* Inner Concentric Lattice */}
                   <polygon
@@ -196,7 +261,14 @@ const Workingprocess = () => {
                     strokeDasharray="2 2"
                     className="wp-wire-inner"
                   />
-                  <circle cx="140" cy="150" r="28" stroke="currentColor" strokeWidth="1.8" className="wp-core-pulse" />
+                  <circle
+                    cx="140"
+                    cy="150"
+                    r="28"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    className="wp-core-pulse"
+                  />
                   <circle cx="140" cy="150" r="5" fill="currentColor" className="wp-core-dot" />
                 </svg>
               </div>
@@ -240,7 +312,6 @@ const Workingprocess = () => {
               })}
             </div>
           </div>
-
         </div>
       </div>
     </section>

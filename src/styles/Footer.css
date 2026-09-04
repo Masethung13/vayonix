@@ -603,23 +603,16 @@
    Responsive Breakpoints
    ========================================================================== */
 
-@media (max-width: 1200px) {
-  .vyn-footer-main {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
-  }
-
-  .vyn-brand-col {
-    grid-column: span 3;
-    max-width: 100%;
-  }
-
-  .vyn-brand-desc {
-    max-width: 100%;
-  }
-}
-
+/* Tablet & iPad Viewports (<= 992px) */
 @media (max-width: 992px) {
+  .vyn-footer-section {
+    padding: 4rem 0 2.5rem 0;
+  }
+
+  .vyn-footer-container {
+    padding: 0 1.75rem;
+  }
+
   .vyn-cta-content {
     flex-direction: column;
     text-align: center;
@@ -628,17 +621,101 @@
 
   .vyn-footer-main {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    gap: 2.75rem 2rem;
+    text-align: center;
+  }
+
+  .vyn-footer-col {
+    align-items: center;
+    text-align: center;
   }
 
   .vyn-brand-col {
     grid-column: span 2;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .vyn-footer-logo {
+    justify-content: center;
+    margin: 0 auto 1.25rem auto;
+  }
+
+  .vyn-logo-wrapper {
+    margin: 0 auto;
+  }
+
+  .vyn-brand-desc {
+    text-align: center;
+    margin: 0 auto 1.5rem auto;
+    max-width: 480px;
+  }
+
+  .vyn-social-row {
+    justify-content: center;
+  }
+
+  .vyn-col-title {
+    text-align: center;
+    margin-bottom: 1.15rem;
+  }
+
+  .vyn-link-list {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-link-list a {
+    justify-content: center;
+  }
+
+  .vyn-contact-list {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-contact-item {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-newsletter-col {
+    grid-column: span 2;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .vyn-news-desc {
+    text-align: center;
+    margin: 0 auto 1.25rem auto;
+    max-width: 440px;
+  }
+
+  .vyn-subscribe-form {
+    align-items: center;
+    margin: 0 auto;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .vyn-footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.15rem;
+  }
+
+  .vyn-legal-links {
+    justify-content: center;
   }
 }
 
+/* Mobile Screens (<= 640px) */
 @media (max-width: 640px) {
   .vyn-footer-section {
-    padding: 3.5rem 0 2.5rem 0;
+    padding: 3.5rem 0 2.25rem 0;
   }
 
   .vyn-footer-container {
@@ -653,17 +730,85 @@
 
   .vyn-footer-main {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 2.25rem;
     margin-bottom: 3rem;
+    text-align: center;
   }
 
-  .vyn-brand-col {
+  .vyn-footer-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-brand-col,
+  .vyn-newsletter-col {
     grid-column: span 1;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-footer-logo {
+    justify-content: center;
+    margin: 0 auto 1.15rem auto;
+  }
+
+  .vyn-logo-wrapper {
+    margin: 0 auto;
+    height: 42px;
+  }
+
+  .vyn-brand-desc {
+    text-align: center;
+    margin: 0 auto 1.35rem auto;
+    font-size: 0.86rem;
+    max-width: 100%;
+  }
+
+  .vyn-social-row {
+    justify-content: center;
+  }
+
+  .vyn-link-list {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-link-list a {
+    justify-content: center;
+  }
+
+  .vyn-contact-list {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-contact-item {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vyn-news-desc {
+    text-align: center;
+    margin: 0 auto 1.15rem auto;
+  }
+
+  .vyn-subscribe-form {
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
   }
 
   .vyn-footer-bottom {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
+  }
+
+  .vyn-legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
   }
 }

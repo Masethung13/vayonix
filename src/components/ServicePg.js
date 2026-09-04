@@ -5,6 +5,7 @@ import AnimatedNumber from './AnimatedNumber';
 import useScrollReveal from '../hooks/useScrollReveal';
 import Whatweoffer from './Whatweoffer';
 import ServiceDeliveryCycle from './ServiceDeliveryCycle';
+import ThemeToggle from './ThemeToggle';
 import '../styles/ServicePg.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import serviceDarkImg from '../assets/service-dark.jpg';
@@ -12,19 +13,19 @@ import serviceLightImg from '../assets/service-light1.jpg';
 
 const metricsStats = [
   {
-    number: '200+',
+    number: '98%',
     caption: 'Happy Clients',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <circle cx="12" cy="12" r="9" />
+        <path d="M8 14C8.5 15.5 10 16.5 12 16.5C14 16.5 15.5 15.5 16 14" />
+        <circle cx="9" cy="9.5" r="1.2" fill="currentColor" />
+        <circle cx="15" cy="9.5" r="1.2" fill="currentColor" />
       </svg>
     )
   },
   {
-    number: '500+',
+    number: '50+',
     caption: 'Projects Completed',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,6 +33,16 @@ const metricsStats = [
         <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
         <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
         <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </svg>
+    )
+  },
+  {
+    number: '5',
+    caption: 'Awards Won',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 21H16M12 17V21M6 4H18V8C18 11.3137 15.3137 14 12 14C8.68629 14 6 11.3137 6 8V4Z" />
+        <path d="M6 6H3C3 8.5 4.5 10 6 10.5M18 6H21C21 8.5 19.5 10 18 10.5" />
       </svg>
     )
   },
@@ -44,19 +55,6 @@ const metricsStats = [
         <polyline points="17 6 23 6 23 12" />
       </svg>
     )
-  },
-  {
-    number: '98%',
-    caption: 'Client Satisfaction',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2" />
-        <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2" />
-        <path d="M4 22h16" />
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2a1 1 0 0 1-1-1v-2.34" />
-        <path d="M6 3h12v7a6 6 0 0 1-12 0V3z" />
-      </svg>
-    )
   }
 ];
 
@@ -66,7 +64,6 @@ const ServicePg = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Theme synchronization with LocalStorage & Document Element
   const [theme, setTheme] = useState(() => {
@@ -94,10 +91,6 @@ const ServicePg = () => {
     };
   }, []);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
   const handleMouseMove = (e) => {
     if (window.innerWidth < 1024) return;
     const { clientX, clientY } = e;
@@ -118,14 +111,16 @@ const ServicePg = () => {
     setTilt({ x: 0, y: 0 });
   };
 
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
-        setScrollProgress((scrollY / docHeight) * 100);
-      }
       setShowScrollTop(scrollY > 220);
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress(Math.min(100, Math.round((scrollY / totalScroll) * 100)));
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -264,8 +259,11 @@ const ServicePg = () => {
               <div className="svc-cta-row" data-reveal="fade-up">
                 <a href="#services-sequence" className="svc-primary-btn">
                   <span className="svc-btn-text">Explore All Services</span>
-                  <span className="svc-btn-arrow">→</span>
-                  <div className="svc-btn-shimmer" />
+                  <span className="vyn-btn-arrow-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                      <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
+                    </svg>
+                  </span>
                 </a>
               </div>
 
@@ -360,11 +358,12 @@ const ServicePg = () => {
           5. FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME SWITCHER)
           ===================================================================== */}
       <div className="floating-action-cluster">
+        {/* Bottom to Top Button */}
         <button
           className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
           onClick={scrollToTop}
           aria-label="Scroll back to top"
-          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+          title={`Scroll to top (${scrollProgress}%)`}
         >
           <svg className="scroll-progress-svg" viewBox="0 0 48 48">
             <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
@@ -379,7 +378,6 @@ const ServicePg = () => {
               }}
             />
           </svg>
-
           <div className="scroll-arrow-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
               <path
@@ -394,34 +392,8 @@ const ServicePg = () => {
           <div className="scroll-btn-glow" />
         </button>
 
-        <button
-          className="theme-toggle-btn"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-        >
-          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : ''}`}>
-            <span className="theme-icon sun-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5" />
-                <line x1="12" y1="1" x2="12" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="23" />
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                <line x1="1" y1="12" x2="3" y2="12" />
-                <line x1="21" y1="12" x2="23" y2="12" />
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-              </svg>
-            </span>
-            <span className="theme-icon moon-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            </span>
-          </div>
-          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
-        </button>
+        {/* Theme Toggle Component with Sun & Moon and Expanding Wave */}
+        <ThemeToggle />
       </div>
 
     </div>

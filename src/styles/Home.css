@@ -1121,28 +1121,25 @@ body.theme-light {
 
 /* 3. Tablets & Hybrid Devices (769px - 991px) */
 @media (max-width: 991px) {
+
   /* Dark Opacity Background Overlay for crisp text contrast */
   .cosmic-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(3, 4, 15, 0.8) 0%,
-      rgba(3, 4, 15, 0.88) 50%,
-      rgba(3, 4, 15, 0.95) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(3, 4, 15, 0.8) 0%,
+        rgba(3, 4, 15, 0.88) 50%,
+        rgba(3, 4, 15, 0.95) 100%);
     pointer-events: none;
     z-index: 2;
   }
 
   [data-theme="light"] .cosmic-bg::after {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.82) 0%,
-      rgba(255, 255, 255, 0.9) 50%,
-      rgba(255, 255, 255, 0.96) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.82) 0%,
+        rgba(255, 255, 255, 0.9) 50%,
+        rgba(255, 255, 255, 0.96) 100%);
   }
 
   .home-top-right-orbit {
@@ -1204,23 +1201,19 @@ body.theme-light {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(3, 4, 15, 0.82) 0%,
-      rgba(3, 4, 15, 0.89) 50%,
-      rgba(3, 4, 15, 0.96) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(3, 4, 15, 0.82) 0%,
+        rgba(3, 4, 15, 0.89) 50%,
+        rgba(3, 4, 15, 0.96) 100%);
     pointer-events: none;
     z-index: 2;
   }
 
   [data-theme="light"] .cosmic-bg::after {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.92) 50%,
-      rgba(255, 255, 255, 0.97) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.85) 0%,
+        rgba(255, 255, 255, 0.92) 50%,
+        rgba(255, 255, 255, 0.97) 100%);
   }
 
   .hero-main {
@@ -1306,23 +1299,19 @@ body.theme-light {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(3, 4, 15, 0.85) 0%,
-      rgba(3, 4, 15, 0.91) 50%,
-      rgba(3, 4, 15, 0.97) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(3, 4, 15, 0.85) 0%,
+        rgba(3, 4, 15, 0.91) 50%,
+        rgba(3, 4, 15, 0.97) 100%);
     pointer-events: none;
     z-index: 2;
   }
 
   [data-theme="light"] .cosmic-bg::after {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.88) 0%,
-      rgba(255, 255, 255, 0.94) 50%,
-      rgba(255, 255, 255, 0.98) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.88) 0%,
+        rgba(255, 255, 255, 0.94) 50%,
+        rgba(255, 255, 255, 0.98) 100%);
   }
 
   .hero-main {

@@ -5,6 +5,7 @@ import '../styles/Abt.css';
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import abtBg from '../assets/abt-bg.png';
 import abtBgLight from '../assets/abt-bg-light1.png';
+import ThemeToggle from './ThemeToggle';
 
 const Abt = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -19,42 +20,29 @@ const Abt = () => {
 
   // Apply theme to document element on change
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.body.className = `theme-${theme}`;
-    localStorage.setItem('vayonix_theme', theme);
-    window.dispatchEvent(new Event('theme_change'));
-  }, [theme]);
-
-  // Sync theme changes across tabs / other components
-  useEffect(() => {
-    const handleThemeSync = () => {
+    const handleSync = () => {
       const currentTheme = localStorage.getItem('vayonix_theme') || 'dark';
       setTheme(currentTheme);
     };
-    window.addEventListener('theme_change', handleThemeSync);
-    window.addEventListener('storage', handleThemeSync);
+    window.addEventListener('theme_change', handleSync);
+    window.addEventListener('storage', handleSync);
     return () => {
-      window.removeEventListener('theme_change', handleThemeSync);
-      window.removeEventListener('storage', handleThemeSync);
+      window.removeEventListener('theme_change', handleSync);
+      window.removeEventListener('storage', handleSync);
     };
   }, []);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
-  };
-
-  // Scroll Progress and Bottom-to-Top Button Visibility
-  const [scrollProgress, setScrollProgress] = useState(0);
+  // Bottom-to-Top Button Visibility & Progress
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 220);
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
       if (totalScroll > 0) {
-        const currentProgress = (window.scrollY / totalScroll) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, currentProgress)));
+        setScrollProgress(Math.min(100, Math.round((window.scrollY / totalScroll) * 100)));
       }
-      setShowScrollTop(window.scrollY > 220);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -268,8 +256,11 @@ const Abt = () => {
                 {/* Primary Pill Button: "Our Journey →" */}
                 <a href="#about" className="abt-primary-btn">
                   <span className="abt-btn-text">Our Journey</span>
-                  <span className="abt-btn-arrow">→</span>
-                  <div className="abt-btn-glow" />
+                  <span className="vyn-btn-arrow-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                      <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
+                    </svg>
+                  </span>
                 </a>
 
                 {/* Secondary Video Trigger Button: "Watch Our Story" */}
@@ -296,7 +287,7 @@ const Abt = () => {
 
               {/* Trust Bar with Brand Logos */}
               <div className="abt-trust-section" data-reveal="fade-up" data-reveal-delay="300">
-                <span className="abt-trust-label">Trusted by 200+ brands worldwide</span>
+                <span className="abt-trust-label">Trusted by 50+ clients & brands worldwide</span>
                 <div className="abt-brands-row">
                   {brandLogos.map((brand, idx) => (
                     <div key={idx} className="abt-brand-logo-item" title={brand.name}>
@@ -370,14 +361,13 @@ const Abt = () => {
           4. RIGHT BOTTOM FLOATING ACTION CLUSTER (SCROLL-TO-TOP & THEME TOGGLE)
           ===================================================================== */}
       <div className="floating-action-cluster">
-        {/* Bottom to Top Button with Circular SVG Scroll Progress Loader */}
+        {/* Bottom to Top Button */}
         <button
           className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
           onClick={scrollToTop}
           aria-label="Scroll back to top"
-          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+          title={`Scroll to top (${scrollProgress}%)`}
         >
-          {/* Circular SVG Progress Ring */}
           <svg className="scroll-progress-svg" viewBox="0 0 48 48">
             <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
             <circle
@@ -391,8 +381,6 @@ const Abt = () => {
               }}
             />
           </svg>
-
-          {/* Centered Upward Arrow Icon */}
           <div className="scroll-arrow-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
               <path
@@ -404,43 +392,11 @@ const Abt = () => {
               />
             </svg>
           </div>
-
-          {/* Ambient Glow */}
           <div className="scroll-btn-glow" />
         </button>
 
-        {/* Theme Toggle Button */}
-        <button
-          className="theme-toggle-btn"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-        >
-          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : 'dark-active'}`}>
-            {/* Sun Icon */}
-            <div className="theme-icon sun-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5" fill="#f59e0b"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            </div>
-
-            {/* Moon Icon */}
-            <div className="theme-icon moon-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#f59e0b"></path>
-              </svg>
-            </div>
-          </div>
-          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
-        </button>
+        {/* Theme Toggle Component with Sun & Moon and Expanding Wave */}
+        <ThemeToggle />
       </div>
 
     </div>

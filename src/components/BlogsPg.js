@@ -1,126 +1,148 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollTitle from './ScrollTitle';
+import ThemeToggle from './ThemeToggle';
 import '../styles/BlogsPg.css';
 
-// Import rich showcase assets
+// Import rich showcase assets & service artwork
 import bannerBg from '../assets/abt-banner-bg.jpg';
 import blogHeroLaptop from '../assets/blog-hero-laptop.jpg';
-import imgSeo from '../assets/blog-card-seo.jpg';
-import imgAi from '../assets/blog-card-ai.jpg';
-import imgSaas from '../assets/case-study-saas.jpg';
-import imgFintech from '../assets/case-study-fintech.jpg';
-import imgCyber from '../assets/case-study-cyber.jpg';
-import imgAnalytics from '../assets/service-purple-rocket.jpg';
+import vayonixLogo from '../assets/vayonix-logo-og.png';
+import imgWebDev from '../assets/services/Web-Full-Stack Development.png';
+import imgMobileApp from '../assets/services/Mobile-App.png';
+import imgSeo from '../assets/services/seo-img.avif';
+import imgSocial from '../assets/services/Social-Media Marketing.jpg';
+import imgContent from '../assets/services/Content-Marketing.jpg';
+import imgEmail from '../assets/services/Email-Marketing.jpg';
+import imgAnalytics from '../assets/services/Analytics.jpg';
+import imgVideo from '../assets/services/video-editor.avif';
 
-// Comprehensive Blog Posts Data Matrix
+// Service-Based Blog Posts Data Matrix (Author: Team Vayonix, No Dates/Times)
 const initialBlogPosts = [
   {
     id: 1,
-    title: 'The 2026 Algorithmic SEO Playbook: Semantic Clustering & Entity Dominance',
-    category: 'SEO',
-    readTime: '6 min read',
-    date: 'Sep 02, 2026',
+    title: 'Web & Full-Stack Development: Scaling High-Concurrency React & Node Architectures',
+    category: 'Web Development',
     author: {
-      name: 'Alex Vance',
-      role: 'Chief SEO Strategist',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'Full-Stack Engineering',
+      avatar: vayonixLogo
     },
-    image: imgSeo,
-    excerpt: 'Discover how machine learning rankers process contextual topical entities over traditional keyword density, and how to build high-authority topic clusters.',
+    image: imgWebDev,
+    excerpt: 'How we engineer ultra-fast React and Next.js applications, robust microservice APIs, and secure zero-latency cloud infrastructure built for massive scale.',
     featured: true,
-    tags: ['Technical SEO', 'Entity Search', 'Core Web Vitals']
+    tags: ['React.js', 'Next.js', 'High-Speed APIs', 'Cloud Scale']
   },
   {
     id: 2,
-    title: 'Autonomous Growth Telemetry: Harnessing AI Predictive Modeling for Peak ROAS',
-    category: 'Analytics',
-    readTime: '8 min read',
-    date: 'Aug 28, 2026',
+    title: 'Mobile App Engineering: Crafting 60fps Native Experiences on iOS & Android',
+    category: 'Mobile App',
     author: {
-      name: 'Elena Rostova',
-      role: 'Head of Data Science',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'Mobile App Specialists',
+      avatar: vayonixLogo
     },
-    image: imgAi,
-    excerpt: 'Server-side attribution modeling and predictive cohort LTV analysis are replacing third-party cookies. Here is how modern growth teams deploy edge telemetry.',
+    image: imgMobileApp,
+    excerpt: 'Building cross-platform and native mobile apps with sub-second launch times, fluid gesture interactions, offline data sync, and bank-grade biometrics.',
     featured: false,
-    tags: ['AI Modeling', 'Attribution', 'Telemetry']
+    tags: ['iOS & Android', '60fps Native', 'Offline Sync', 'Biometrics']
   },
   {
     id: 3,
-    title: 'Viral Social Engineering: Creating Short-Form Funnels That Convert Cold Viewers',
-    category: 'Social Media',
-    readTime: '5 min read',
-    date: 'Aug 22, 2026',
+    title: 'Algorithmic SEO Playbook: Semantic Clustering & First-Page Search Dominance',
+    category: 'SEO',
     author: {
-      name: 'Marcus Chen',
-      role: 'Viral Media Director',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'SEO & Organic Growth',
+      avatar: vayonixLogo
     },
-    image: imgSaas,
-    excerpt: 'Stop relying on random viral hits. Learn the 3-second hook retention framework that systematically guides TikTok and Reels viewers into your commercial pipeline.',
+    image: imgSeo,
+    excerpt: 'Dominate organic search results with deep technical audits, semantic entity clustering, high-authority backlinks, and Core Web Vitals speed optimization.',
     featured: false,
-    tags: ['Short-Form', 'TikTok Reels', 'Retention']
+    tags: ['Technical SEO', 'Entity Clustering', 'Backlinks', 'Core Web Vitals']
   },
   {
     id: 4,
-    title: 'High-Ticket PPC Bid Architectures: Scaled Multi-Platform Omnichannel Funnels',
-    category: 'PPC',
-    readTime: '7 min read',
-    date: 'Aug 18, 2026',
+    title: 'Social Media Marketing: Viral Content Strategy & High-Engagement Communities',
+    category: 'Social Media',
     author: {
-      name: 'Sarah Jenkins',
-      role: 'Performance Lead',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'Social Media Strategists',
+      avatar: vayonixLogo
     },
-    image: imgFintech,
-    excerpt: 'How we generated over $14.2M in client pipeline revenue through programmatic DSP bidding matrices, high-intent search ads, and algorithmic retargeting.',
+    image: imgSocial,
+    excerpt: 'Scale brand authority and cultivate active followers across Instagram, TikTok, LinkedIn, and YouTube through trendjacking, short-form reels, and influencer funnels.',
     featured: false,
-    tags: ['Google Ads', 'Programmatic', 'Retargeting']
+    tags: ['Short-Form Video', 'Reels & TikTok', 'Community Growth', 'Influencer Funnels']
   },
   {
     id: 5,
-    title: 'Persuasive Brand Resonance: Building Domain Authority That Crushes Competitors',
+    title: 'Content Marketing & Brand Resonance: Persuasive Storytelling That Drives Conversion',
     category: 'Content Marketing',
-    readTime: '9 min read',
-    date: 'Aug 12, 2026',
     author: {
-      name: 'David Sterling',
-      role: 'Brand Architect',
-      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'Content & Brand Architects',
+      avatar: vayonixLogo
     },
-    image: imgCyber,
-    excerpt: 'Why generic blog articles fail and how in-depth whitepapers, executive commentary, and proprietary research reports drive enterprise sales cycles.',
+    image: imgContent,
+    excerpt: 'Create captivating thought leadership whitepapers, persuasive sales copy, and viral lead magnets that educate prospects and establish undeniable industry leadership.',
     featured: false,
-    tags: ['Thought Leadership', 'Whitepapers', 'Brand']
+    tags: ['Thought Leadership', 'Lead Magnets', 'Tone-of-Voice', 'Conversion Copy']
   },
   {
     id: 6,
-    title: 'Next-Gen Scaling Frameworks: Zero-Latency Cloud Infrastructure for High Traffic',
-    category: 'Growth Strategy',
-    readTime: '6 min read',
-    date: 'Aug 05, 2026',
+    title: 'Email Marketing & CRM Automation: Lifecycle Flows That Multiply Customer Lifetime Value',
+    category: 'CRM & Automation',
     author: {
-      name: 'Alex Vance',
-      role: 'Chief SEO Strategist',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+      name: 'Team Vayonix',
+      role: 'CRM & Automation Leads',
+      avatar: vayonixLogo
+    },
+    image: imgEmail,
+    excerpt: 'Build high-converting behavioral trigger automations, smart customer segmentation, and personalized SMS sequences that generate consistent repeat revenue on autopilot.',
+    featured: false,
+    tags: ['Trigger Automations', 'Smart Segmentation', 'Inbox Deliverability', 'Omnichannel CRM']
+  },
+  {
+    id: 7,
+    title: 'Analytics & Performance Telemetry: Turning Raw Marketing Metrics into Predictable Revenue',
+    category: 'Analytics',
+    author: {
+      name: 'Team Vayonix',
+      role: 'Data & Telemetry Engineers',
+      avatar: vayonixLogo
     },
     image: imgAnalytics,
-    excerpt: 'A comprehensive technical audit on scaling modern React and Next.js web applications to handle 500,000+ concurrent users with sub-100ms response times.',
+    excerpt: 'Eliminate revenue blindspots with multi-touch attribution, server-side tracking, and custom executive BI dashboards that turn raw marketing data into profitable growth.',
     featured: false,
-    tags: ['Edge Hosting', 'React', 'Infrastructure']
+    tags: ['Attribution Modeling', 'Custom BI Dashboards', 'Server-Side GTM', 'Predictive LTV']
+  },
+  {
+    id: 8,
+    title: 'Video Production & Motion Editing: Cinematic Commercial Ads That Stop the Scroll',
+    category: 'Video Production',
+    author: {
+      name: 'Team Vayonix',
+      role: 'Creative Video Directors',
+      avatar: vayonixLogo
+    },
+    image: imgVideo,
+    excerpt: 'Produce cinematic commercial films, 3D motion graphics, VFX animations, and high-energy social ads that capture immediate attention and inspire massive action.',
+    featured: false,
+    tags: ['Commercial Ads', '3D Motion & VFX', 'Reels & TikToks', 'Audio Mastering']
   }
 ];
 
 const categories = [
-  { id: 'All', label: 'All Posts', icon: '▦' },
+  { id: 'All', label: 'All Services', icon: '▦' },
+  { id: 'Web Development', label: 'Web Development', icon: '💻' },
+  { id: 'Mobile App', label: 'Mobile App', icon: '📱' },
   { id: 'SEO', label: 'SEO', icon: '🔍' },
-  { id: 'Social Media', label: 'Social Media', icon: '📱' },
-  { id: 'PPC', label: 'PPC', icon: '🎯' },
+  { id: 'Social Media', label: 'Social Media', icon: '📢' },
   { id: 'Content Marketing', label: 'Content Marketing', icon: '✍' },
-  { id: 'Analytics', label: 'Analytics', icon: '📈' },
-  { id: 'Growth Strategy', label: 'Growth Strategy', icon: '🚀' }
+  { id: 'CRM & Automation', label: 'CRM & Automation', icon: '📩' },
+  { id: 'Analytics', label: 'Analytics', icon: '📊' },
+  { id: 'Video Production', label: 'Video Production', icon: '🎬' }
 ];
 
 const BlogsPg = () => {
@@ -129,7 +151,6 @@ const BlogsPg = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [subscribed, setSubscribed] = useState(false);
   const [emailInput, setEmailInput] = useState('');
 
@@ -159,10 +180,6 @@ const BlogsPg = () => {
     };
   }, []);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e;
     const x = (clientX / window.innerWidth - 0.5) * 2;
@@ -181,14 +198,16 @@ const BlogsPg = () => {
     setTilt({ x: 0, y: 0 });
   };
 
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
-        setScrollProgress((scrollY / docHeight) * 100);
-      }
       setShowScrollTop(scrollY > 220);
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress(Math.min(100, Math.round((scrollY / totalScroll) * 100)));
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -235,7 +254,7 @@ const BlogsPg = () => {
 
   return (
     <div className="blog-page-wrapper" onMouseMove={handleMouseMove}>
-      
+
       {/* =====================================================================
           1. CINEMATIC BREADCRUMBS BANNER (Matches Abt.js Exactly)
           ===================================================================== */}
@@ -264,7 +283,7 @@ const BlogsPg = () => {
           2. HERO SHOWCASE SECTION (Exact Match to User Reference Screenshot)
           ===================================================================== */}
       <section className="blog-hero-section">
-        
+
         {/* 3D Background Canvas with Parallax Stars */}
         <div
           className="blog-3d-loop-canvas"
@@ -275,7 +294,7 @@ const BlogsPg = () => {
         >
           <div className="blog-glow blog-glow-1" />
           <div className="blog-glow blog-glow-2" />
-          
+
           <div className="blog-3d-star-prism star-1" style={{ transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -16}px, 0)` }}>✦</div>
           <div className="blog-3d-star-prism star-2" style={{ transform: `translate3d(${mousePos.x * 20}px, ${mousePos.y * 20}px, 0)` }}>✦</div>
           <div className="blog-3d-star-prism star-3" style={{ transform: `translate3d(${mousePos.x * -12}px, ${mousePos.y * 14}px, 0)` }}>✦</div>
@@ -283,13 +302,13 @@ const BlogsPg = () => {
         </div>
 
         <div className="blog-main-container">
-          
+
           {/* Top Hero Split Grid: Left Headlines + Right 3D Laptop Pedestal Visual */}
           <div className="blog-hero-split-grid">
-            
+
             {/* Left Column: Headlines, Description & Search Bar */}
             <div className="blog-hero-left-content" data-reveal="fade-right">
-              
+
               {/* Tag Pill Matching Reference Screenshot */}
               <div className="blog-tag-pill" data-reveal="fade-up">
                 <span className="blog-tag-spark">✦</span>
@@ -400,7 +419,7 @@ const BlogsPg = () => {
           {activeCategory === 'All' && !searchQuery && (
             <div className="blog-featured-article-card" data-reveal="fade-up">
               <div className="blog-featured-badge" data-reveal="fade-up">★ FEATURED ANALYSIS</div>
-              
+
               <div className="blog-featured-grid">
                 <div className="blog-featured-image-wrap" data-reveal="zoom-in">
                   <img
@@ -412,12 +431,6 @@ const BlogsPg = () => {
                 </div>
 
                 <div className="blog-featured-content-wrap" data-reveal="fade-left">
-                  <div className="blog-meta-row">
-                    <span className="blog-meta-date">📅 {featuredPost.date}</span>
-                    <span className="blog-meta-dot">•</span>
-                    <span className="blog-meta-time">⏱ {featuredPost.readTime}</span>
-                  </div>
-
                   <h3 className="blog-featured-title">
                     <a href="#article" className="blog-title-link">{featuredPost.title}</a>
                   </h3>
@@ -440,7 +453,7 @@ const BlogsPg = () => {
                     </div>
 
                     <a href="#article" className="blog-read-action-btn">
-                      <span>Read Article</span>
+                      <span>Explore Service</span>
                       <span className="blog-read-arrow">→</span>
                     </a>
                   </div>
@@ -453,7 +466,7 @@ const BlogsPg = () => {
               5. DYNAMIC ARTICLES GRID WITH SCROLLTITLE SECTION HEADING
               ================================================================= */}
           <div className="blog-articles-section">
-            
+
             <div className="blog-section-header-row" data-reveal="fade-up">
               <div className="blog-section-title-wrap">
                 <ScrollTitle
@@ -498,7 +511,7 @@ const BlogsPg = () => {
                     data-reveal-delay={((pIdx % 3) * 100).toString()}
                   >
                     <div className="blog-card-top-beam" />
-                    
+
                     {/* Thumbnail Image */}
                     <div className="blog-card-thumb-wrap">
                       <img src={post.image} alt={post.title} className="blog-card-thumb-img" />
@@ -507,13 +520,6 @@ const BlogsPg = () => {
 
                     {/* Content */}
                     <div className="blog-card-body-wrap">
-                      
-                      <div className="blog-meta-row">
-                        <span className="blog-meta-date">📅 {post.date}</span>
-                        <span className="blog-meta-dot">•</span>
-                        <span className="blog-meta-time">⏱ {post.readTime}</span>
-                      </div>
-
                       <h3 className="blog-card-title">
                         <a href="#article" className="blog-card-title-link">{post.title}</a>
                       </h3>
@@ -598,7 +604,11 @@ const BlogsPg = () => {
                   />
                   <button type="submit" className="blog-newsletter-btn">
                     <span>Subscribe Free</span>
-                    <span className="blog-btn-arrow">→</span>
+                    <span className="vyn-btn-arrow-circle">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                        <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
+                      </svg>
+                    </span>
                   </button>
                 </form>
               )}
@@ -613,14 +623,13 @@ const BlogsPg = () => {
           Exact Match to Home Page
           ===================================================================== */}
       <div className="floating-action-cluster">
-        {/* Bottom to Top Button with Circular SVG Scroll Progress Loader */}
+        {/* Bottom to Top Button */}
         <button
           className={`scroll-to-top-btn ${showScrollTop ? 'btn-visible' : ''}`}
           onClick={scrollToTop}
           aria-label="Scroll back to top"
-          title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+          title={`Scroll to top (${scrollProgress}%)`}
         >
-          {/* Circular SVG Progress Ring */}
           <svg className="scroll-progress-svg" viewBox="0 0 48 48">
             <circle className="scroll-progress-track" cx="24" cy="24" r="20" />
             <circle
@@ -634,8 +643,6 @@ const BlogsPg = () => {
               }}
             />
           </svg>
-
-          {/* Centered Upward Arrow Icon */}
           <div className="scroll-arrow-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" className="scroll-arrow-svg">
               <path
@@ -647,43 +654,11 @@ const BlogsPg = () => {
               />
             </svg>
           </div>
-
-          {/* Ambient Glow */}
           <div className="scroll-btn-glow" />
         </button>
 
-        {/* Theme Toggle Button */}
-        <button
-          className="theme-toggle-btn"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-        >
-          <div className={`theme-icon-slider ${theme === 'light' ? 'light-active' : 'dark-active'}`}>
-            {/* Sun Icon */}
-            <div className="theme-icon sun-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5" fill="#f59e0b"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            </div>
-
-            {/* Moon Icon */}
-            <div className="theme-icon moon-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#f59e0b"></path>
-              </svg>
-            </div>
-          </div>
-          <span className="theme-label">{theme === 'dark' ? 'Dark' : 'Light'}</span>
-        </button>
+        {/* Theme Toggle Component with Sun & Moon and Expanding Wave */}
+        <ThemeToggle />
       </div>
 
     </div>

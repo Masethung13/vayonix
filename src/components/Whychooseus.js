@@ -139,7 +139,7 @@ const Whychooseus = () => {
         // Smooth easeOutExpo curve
         const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
-        setCustomerCount(Math.round(easeOut * 300));
+        setCustomerCount(Math.round(easeOut * 98));
         setUptimeCount((easeOut * 99.9).toFixed(1));
 
         if (progress < 1) {
@@ -351,7 +351,7 @@ const Whychooseus = () => {
                     ))}
                   </div>
                   <div className="wcu-vertical-text">
-                    <span>{customerCount}+ Happy Customers</span>
+                    <span>{customerCount}% Happy Clients</span>
                   </div>
                 </div>
 
