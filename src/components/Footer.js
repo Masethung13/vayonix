@@ -1,20 +1,82 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 import '../styles/Footer.css';
 import logo from '../assets/vayonix-footer-img.png';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' }); // type: 'success' | 'error' | ''
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
+    const cleanEmail = email.trim().toLowerCase();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!cleanEmail) {
+      setStatus({ type: 'error', message: 'Please enter your email address.' });
+      return;
+    }
+
+    if (!emailRegex.test(cleanEmail)) {
+      setStatus({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatus({ type: '', message: '' });
+
+    try {
+      // 1. Save subscriber email to Firebase Firestore
+      const firestorePromise = addDoc(collection(db, 'subscribers'), {
+        email: cleanEmail,
+        source: 'footer_newsletter',
+        status: 'active',
+        createdAt: serverTimestamp()
+      });
+
+      // 2. Dispatch via FormSubmit AJAX to send reply mail to the user + notification to hello.vayonixinfotech@gmail.com
+      const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello.vayonixinfotech@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          email: cleanEmail,
+          _replyto: cleanEmail,
+          _subject: 'Welcome to Vayonix Infotech | Subscription Confirmed',
+          _autoresponse: `Hello,\n\nThank you for subscribing to Vayonix Infotech! We are excited to have you with us.\n\nYou'll now be the first to receive updates on high-impact digital strategies, modern web & mobile engineering, AI automations, and growth insights.\n\nIf you have an upcoming project or need strategic advice, feel free to reply directly to this email or reach us on WhatsApp at +91 90920 07731.\n\nWarm regards,\nThe Vayonix Infotech Team\nhello.vayonixinfotech@gmail.com\nhttps://vayonix-info.web.app`,
+          _template: 'table',
+          _captcha: 'false',
+          Subscriber_Email: cleanEmail,
+          Subscription_Source: 'Footer Newsletter',
+          Timestamp: new Date().toISOString()
+        })
+      });
+
+      await Promise.all([firestorePromise, formSubmitPromise]);
+
+      setStatus({
+        type: 'success',
+        message: '✦ Welcome aboard! A confirmation email has been sent to your inbox.'
+      });
+      setEmail('');
+
+      // Auto-clear success message after 7 seconds
       setTimeout(() => {
-        setSubscribed(false);
-        setEmail('');
-      }, 4000);
+        setStatus({ type: '', message: '' });
+      }, 7000);
+    } catch (error) {
+      console.error('Footer Newsletter Subscription Error:', error);
+      setStatus({
+        type: 'error',
+        message: 'Could not complete subscription. Please email us at hello.vayonixinfotech@gmail.com'
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -249,23 +311,42 @@ const Footer = () => {
             <h3 className="vyn-col-title">Newsletter</h3>
             <p className="vyn-news-desc">Stay updated with the latest digital trends, tech insights, and case studies.</p>
 
-            <form onSubmit={handleSubscribe} className="vyn-subscribe-form">
+            <form onSubmit={handleSubscribe} className="vyn-subscribe-form" noValidate>
               <div className="vyn-input-wrapper">
                 <input
                   type="email"
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status.type) setStatus({ type: '', message: '' });
+                  }}
+                  disabled={isSubmitting}
                   required
-                  className="vyn-email-input"
+                  className={`vyn-email-input ${status.type === 'error' ? 'vyn-input-invalid' : ''}`}
                 />
-                <button type="submit" className="vyn-send-btn" aria-label="Subscribe to newsletter">
-                  <svg viewBox="0 0 24 24" fill="none" className="vyn-send-icon">
-                    <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <button
+                  type="submit"
+                  className={`vyn-send-btn ${isSubmitting ? 'is-loading' : ''}`}
+                  disabled={isSubmitting}
+                  aria-label="Subscribe to newsletter"
+                >
+                  {isSubmitting ? (
+                    <div className="vyn-btn-spinner" aria-label="Submitting..." />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" className="vyn-send-icon">
+                      <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
                 </button>
               </div>
-              {subscribed && <p className="vyn-sub-success">✦ Thank you for subscribing!</p>}
+
+              {/* Status Notifications */}
+              {status.message && (
+                <p className={status.type === 'success' ? 'vyn-sub-success' : 'vyn-sub-error'}>
+                  {status.message}
+                </p>
+              )}
             </form>
           </div>
         </div>
