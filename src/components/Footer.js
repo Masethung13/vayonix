@@ -46,24 +46,40 @@ const Footer = () => {
         },
         body: JSON.stringify({
           email: cleanEmail,
+          Email: cleanEmail,
           _replyto: cleanEmail,
-          _subject: 'Welcome to Vayonix Infotech | Subscription Confirmed',
-          _autoresponse: `Hello,\n\nThank you for subscribing to Vayonix Infotech! We are excited to have you with us.\n\nYou'll now be the first to receive updates on high-impact digital strategies, modern web & mobile engineering, AI automations, and growth insights.\n\nIf you have an upcoming project or need strategic advice, feel free to reply directly to this email or reach us on WhatsApp at +91 90920 07731.\n\nWarm regards,\nThe Vayonix Infotech Team\nhello.vayonixinfotech@gmail.com\nhttps://vayonix-info.web.app`,
+          _subject: 'Thank You for Subscribing to Vayonix Infotech!',
+          _autoresponse: `Thank you for subscribing to Vayonix Infotech!
+
+We are thrilled to welcome you to our community. You will now receive our exclusive insights on digital transformation, high-converting web and mobile engineering, AI automations, and growth marketing strategies.
+
+Need help building your next digital product or scaling your brand?
+• WhatsApp: +91 90920 07731
+• Email: hello.vayonixinfotech@gmail.com
+• Website: https://vayonix-info.web.app
+
+Best regards,
+The Vayonix Infotech Team`,
           _template: 'table',
           _captcha: 'false',
-          Subscriber_Email: cleanEmail,
-          Subscription_Source: 'Footer Newsletter',
-          Timestamp: new Date().toISOString()
+          'Subscriber Email': cleanEmail,
+          'Subscription Type': 'Newsletter',
+          'Date & Time': new Date().toLocaleString()
         })
       });
 
-      await Promise.all([firestorePromise, formSubmitPromise]);
+      const [, formSubmitResponse] = await Promise.all([firestorePromise, formSubmitPromise]);
+      const formSubmitData = await formSubmitResponse.json().catch(() => ({}));
 
-      setStatus({
-        type: 'success',
-        message: '✦ Welcome aboard! A confirmation email has been sent to your inbox.'
-      });
-      setEmail('');
+      if (formSubmitResponse.ok || formSubmitData.success) {
+        setStatus({
+          type: 'success',
+          message: '✦ Thank you for subscribing! A confirmation email has been sent to your inbox.'
+        });
+        setEmail('');
+      } else {
+        throw new Error(formSubmitData.message || 'Form submission failed');
+      }
 
       // Auto-clear success message after 7 seconds
       setTimeout(() => {

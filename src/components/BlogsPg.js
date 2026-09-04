@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 import ScrollTitle from './ScrollTitle';
 import ThemeToggle from './ThemeToggle';
 import '../styles/BlogsPg.css';
@@ -218,12 +220,93 @@ const BlogsPg = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubscribe = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState({ type: '', message: '' });
+
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (emailInput.trim()) {
-      setSubscribed(true);
-      setEmailInput('');
-      setTimeout(() => setSubscribed(false), 5000);
+    const cleanEmail = emailInput.trim().toLowerCase();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!cleanEmail) {
+      setSubscribeStatus({ type: 'error', message: 'Please enter your email address.' });
+      return;
+    }
+
+    if (!emailRegex.test(cleanEmail)) {
+      setSubscribeStatus({ type: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubscribeStatus({ type: '', message: '' });
+
+    try {
+      // 1. Save subscriber email to Firebase Firestore
+      const firestorePromise = addDoc(collection(db, 'subscribers'), {
+        email: cleanEmail,
+        source: 'blogs_newsletter',
+        status: 'active',
+        createdAt: serverTimestamp()
+      });
+
+      // 2. Dispatch via FormSubmit AJAX to send reply mail to user + notification to hello.vayonixinfotech@gmail.com
+      const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello.vayonixinfotech@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          email: cleanEmail,
+          Email: cleanEmail,
+          _replyto: cleanEmail,
+          _subject: 'Thank You for Subscribing to Vayonix Growth Dispatch!',
+          _autoresponse: `Thank you for subscribing to Vayonix Infotech's Growth Dispatch!
+
+You are now subscribed to our weekly breakdown of algorithmic trends, case studies, conversion frameworks, and modern full-stack web/AI insights.
+
+Need help building your next digital product or scaling your brand?
+• WhatsApp: +91 90920 07731
+• Email: hello.vayonixinfotech@gmail.com
+• Website: https://vayonix-info.web.app
+
+Best regards,
+The Vayonix Infotech Team`,
+          _template: 'table',
+          _captcha: 'false',
+          'Subscriber Email': cleanEmail,
+          'Subscription Type': 'Blog Growth Dispatch',
+          'Date & Time': new Date().toLocaleString()
+        })
+      });
+
+      const [, formSubmitResponse] = await Promise.all([firestorePromise, formSubmitPromise]);
+      const formSubmitData = await formSubmitResponse.json().catch(() => ({}));
+
+      if (formSubmitResponse.ok || formSubmitData.success) {
+        setSubscribed(true);
+        setEmailInput('');
+        setSubscribeStatus({
+          type: 'success',
+          message: "✦ You're on the VIP list! A confirmation email has been sent to your inbox."
+        });
+
+        setTimeout(() => {
+          setSubscribed(false);
+          setSubscribeStatus({ type: '', message: '' });
+        }, 7000);
+      } else {
+        throw new Error(formSubmitData.message || 'Form submission failed');
+      }
+    } catch (error) {
+      console.error('Blog Newsletter Subscription Error:', error);
+      setSubscribeStatus({
+        type: 'error',
+        message: 'Could not complete subscription. Please email us at hello.vayonixinfotech@gmail.com'
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -590,26 +673,48 @@ const BlogsPg = () => {
 
               {subscribed ? (
                 <div className="blog-subscribe-success-msg" data-reveal="zoom-in">
-                  <span>✓ You're on the VIP list! Check your inbox for our latest growth report.</span>
+                  <span>✓ {subscribeStatus.message || "You're on the VIP list! Check your inbox for our latest growth report."}</span>
                 </div>
               ) : (
-                <form className="blog-newsletter-form" onSubmit={handleSubscribe} data-reveal="fade-up" data-reveal-delay="150">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your work email address..."
-                    className="blog-newsletter-input"
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                  />
-                  <button type="submit" className="blog-newsletter-btn">
-                    <span>Subscribe Free</span>
-                    <span className="vyn-btn-arrow-circle">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
-                        <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
-                      </svg>
-                    </span>
-                  </button>
+                <form className="blog-newsletter-form" onSubmit={handleSubscribe} noValidate data-reveal="fade-up" data-reveal-delay="150">
+                  <div className="blog-newsletter-input-group">
+                    <input
+                      type="email"
+                      required
+                      disabled={isSubmitting}
+                      placeholder="Enter your work email address..."
+                      className={`blog-newsletter-input ${subscribeStatus.type === 'error' ? 'blog-input-invalid' : ''}`}
+                      value={emailInput}
+                      onChange={(e) => {
+                        setEmailInput(e.target.value);
+                        if (subscribeStatus.type) setSubscribeStatus({ type: '', message: '' });
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`blog-newsletter-btn ${isSubmitting ? 'is-loading' : ''}`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="blog-btn-spinner" />
+                          <span>Subscribing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Subscribe Free</span>
+                          <span className="vyn-btn-arrow-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
+                              <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
+                            </svg>
+                          </span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {subscribeStatus.type === 'error' && (
+                    <p className="blog-newsletter-error-msg">{subscribeStatus.message}</p>
+                  )}
                 </form>
               )}
             </div>
