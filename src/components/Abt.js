@@ -254,7 +254,7 @@ const Abt = () => {
               <div className="abt-cta-row" data-reveal="fade-up" data-reveal-delay="200">
 
                 {/* Primary Pill Button: "Our Journey →" */}
-                <a href="#about" className="abt-primary-btn">
+                <a href="#mission" className="abt-primary-btn">
                   <span className="abt-btn-text">Our Journey</span>
                   <span className="vyn-btn-arrow-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">

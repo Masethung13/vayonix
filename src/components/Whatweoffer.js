@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import ScrollTitle from './ScrollTitle';
 import useScrollReveal from '../hooks/useScrollReveal';
 import '../styles/Whatweoffer.css';
@@ -369,10 +370,10 @@ const Whatweoffer = () => {
                         </div>
 
                         <div className="wwo-action-link-row">
-                          <a href={svc.link} className="wwo-learn-more-action">
+                          <Link to="/contact" className="wwo-learn-more-action">
                             <span>CONTACT US</span>
                             <span className="wwo-learn-arrow-symbol">→</span>
-                          </a>
+                          </Link>
                         </div>
                         <div className="wwo-card-shimmer" />
                       </div>
@@ -418,10 +419,10 @@ const Whatweoffer = () => {
                         </div>
 
                         <div className="wwo-action-link-row">
-                          <a href={svc.link} className="wwo-learn-more-action">
+                          <Link to="/contact" className="wwo-learn-more-action">
                             <span>CONTACT US</span>
                             <span className="wwo-learn-arrow-symbol">→</span>
-                          </a>
+                          </Link>
                         </div>
                         <div className="wwo-card-shimmer" />
                       </div>

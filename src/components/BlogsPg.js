@@ -432,7 +432,7 @@ const BlogsPg = () => {
 
                 <div className="blog-featured-content-wrap" data-reveal="fade-left">
                   <h3 className="blog-featured-title">
-                    <a href="#article" className="blog-title-link">{featuredPost.title}</a>
+                    <Link to="/services" className="blog-title-link">{featuredPost.title}</Link>
                   </h3>
 
                   <p className="blog-featured-excerpt">{featuredPost.excerpt}</p>
@@ -452,10 +452,10 @@ const BlogsPg = () => {
                       </div>
                     </div>
 
-                    <a href="#article" className="blog-read-action-btn">
+                    <Link to="/services" className="blog-read-action-btn">
                       <span>Explore Service</span>
                       <span className="blog-read-arrow">→</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -521,7 +521,7 @@ const BlogsPg = () => {
                     {/* Content */}
                     <div className="blog-card-body-wrap">
                       <h3 className="blog-card-title">
-                        <a href="#article" className="blog-card-title-link">{post.title}</a>
+                        <Link to="/services" className="blog-card-title-link">{post.title}</Link>
                       </h3>
 
                       <p className="blog-card-desc">{post.excerpt}</p>
@@ -538,10 +538,10 @@ const BlogsPg = () => {
                           <div className="blog-author-name-sm">{post.author.name}</div>
                         </div>
 
-                        <a href="#article" className="blog-card-read-link">
+                        <Link to="/services" className="blog-card-read-link">
                           <span>Read</span>
                           <span className="blog-arrow-symbol">→</span>
-                        </a>
+                        </Link>
                       </div>
 
                     </div>

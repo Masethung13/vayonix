@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Home.css';
 import heroBg from '../assets/hero-bg.png';
 import heroBgLight from '../assets/hero-bg-light.png';
@@ -215,14 +216,14 @@ const Home = () => {
 
             {/* CTA & Stats Card Row */}
             <div className="cta-action-row" data-reveal="fade-up" data-reveal-delay="300">
-              <a href="#launch" className="primary-launch-btn">
+              <Link to="/contact" className="primary-launch-btn">
                 <span>Let's Launch Your Brand</span>
                 <span className="vyn-btn-arrow-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
                     <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
                   </svg>
                 </span>
-              </a>
+              </Link>
 
             </div>
           </div>

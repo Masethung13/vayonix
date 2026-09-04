@@ -18,13 +18,20 @@ import './styles/ScrollReveal.css';
 import './App.css';
 import CreativeCursor from './components/CreativeCursor';
 
-// Auto scroll to top on route change
+// Auto scroll to top on route change or smooth scroll to hash
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }

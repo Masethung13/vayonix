@@ -262,7 +262,7 @@ const Header = () => {
 
           {/* Header Action & Mobile Hamburger */}
           <div className="header-action">
-            <Link to="/about" className="cta-button desktop-cta">
+            <Link to="/contact" className="cta-button desktop-cta">
               <span>Get Started</span>
               <span className="vyn-btn-arrow-circle">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">

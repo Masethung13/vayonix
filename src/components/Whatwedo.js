@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Whatwedo.css';
 import AnimatedNumber from './AnimatedNumber';
 
@@ -281,9 +282,9 @@ const Whatwedo = () => {
               =============================================================== */}
           <div className="wwd-left-pane" data-reveal="fade-right">
             {/* Top Pill Tag */}
-            <div className="wwd-tag-pill" data-reveal="fade-up">
+            <Link to="/about" className="wwd-tag-pill" data-reveal="fade-up">
               <span className="wwd-tag-text">About Us</span>
-            </div>
+            </Link>
 
             {/* Main Title with Scroll-Triggered Word-by-Word Color Transformation */}
             <h2 className="wwd-hero-title" ref={titleRef}>
@@ -368,14 +369,14 @@ const Whatwedo = () => {
             {/* CTAs Row */}
             <div className="wwd-cta-row">
               {/* Primary Action Button with Glowing Aura */}
-              <a href="#contact" className="wwd-primary-btn">
+              <Link to="/contact" className="wwd-primary-btn">
                 <span className="wwd-btn-label">Let's Work Together</span>
                 <span className="vyn-btn-arrow-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
                     <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" />
                   </svg>
                 </span>
-              </a>
+              </Link>
 
               {/* Watch Story Video Trigger Button */}
               <button

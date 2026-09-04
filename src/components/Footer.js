@@ -31,12 +31,12 @@ const Footer = () => {
         <div className="vyn-footer-main">
           {/* Column 1: Brand Logo & Socials */}
           <div className="vyn-footer-col vyn-brand-col" data-reveal="fade-right">
-            <a href="#home" className="vyn-footer-logo" aria-label="Vayonix Home">
+            <Link to="/" className="vyn-footer-logo" aria-label="Vayonix Home">
               <div className="vyn-logo-wrapper">
                 <div className="vyn-logo-glow-aura" />
                 <img src={logo} alt="Vayonix Logo" className="vyn-footer-logo-img" />
               </div>
-            </a>
+            </Link>
 
             <p className="vyn-brand-desc">
               We are a digital innovation agency focused on driving growth, generating high-intent leads, and maximizing ROI for modern enterprises.
@@ -81,10 +81,9 @@ const Footer = () => {
             <ul className="vyn-link-list">
               <li><Link to="/"><span className="vyn-link-bullet">✦</span>Home</Link></li>
               <li><Link to="/about"><span className="vyn-link-bullet">✦</span>About Us</Link></li>
-              <li><a href="/#services"><span className="vyn-link-bullet">✦</span>Services</a></li>
-              <li><a href="/#what-we-do"><span className="vyn-link-bullet">✦</span>Case Studies</a></li>
-              <li><a href="/#working-process"><span className="vyn-link-bullet">✦</span>Process</a></li>
-              <li><a href="/#contact"><span className="vyn-link-bullet">✦</span>Contact Us</a></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>Services</Link></li>
+              <li><Link to="/blogs"><span className="vyn-link-bullet">✦</span>Our Blogs</Link></li>
+              <li><Link to="/contact"><span className="vyn-link-bullet">✦</span>Contact Us</Link></li>
             </ul>
           </div>
 
@@ -92,12 +91,12 @@ const Footer = () => {
           <div className="vyn-footer-col" data-reveal="fade-up" data-reveal-delay="200">
             <h3 className="vyn-col-title">Services</h3>
             <ul className="vyn-link-list">
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Web Development</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>App Development</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>SEO Optimization</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Social Media Marketing</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Content Marketing</a></li>
-              <li><a href="#what-we-do"><span className="vyn-link-bullet">✦</span>Analytics & Reporting</a></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>Web Development</Link></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>App Development</Link></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>SEO Optimization</Link></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>Social Media Marketing</Link></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>Content Marketing</Link></li>
+              <li><Link to="/services"><span className="vyn-link-bullet">✦</span>Analytics & Reporting</Link></li>
             </ul>
           </div>
 

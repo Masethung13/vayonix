@@ -257,7 +257,7 @@ const ServicePg = () => {
               </p>
 
               <div className="svc-cta-row" data-reveal="fade-up">
-                <a href="#services-sequence" className="svc-primary-btn">
+                <a href="#services-grid" className="svc-primary-btn">
                   <span className="svc-btn-text">Explore All Services</span>
                   <span className="vyn-btn-arrow-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 19" className="vyn-btn-arrow-svg">
