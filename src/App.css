@@ -452,13 +452,5 @@ section,
 }
 
 /* ==========================================================================
-   Responsive Header CTA Hiding for Tablet and Mobile (<= 1024px)
+   Responsive Header CTA rules now unified cleanly inside Header.css
    ========================================================================== */
-@media (max-width: 1024px) {
-  .desktop-cta,
-  .mobile-main-cta-btn,
-  .header-action .desktop-cta,
-  .header-action .cta-button {
-    display: none !important;
-  }
-}

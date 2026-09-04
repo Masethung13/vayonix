@@ -140,17 +140,21 @@ const Header = () => {
             setScrollProgress(0);
           }
 
-          setScrolled(currentScrollY > 20);
+          setScrolled(currentScrollY > 15);
 
-          // Smart Hide on Scroll Down / Show on Scroll Up (only when mobile menu is closed)
+          // Smart Hide on Scroll Down / Ultra-Smooth Reveal on Scroll Up & Top
           if (!mobileMenuOpen) {
-            if (currentScrollY <= 25) {
+            // If near top of page (e.g. scrolling up to top), ensure header is always visible
+            if (currentScrollY <= 40) {
               setVisible(true);
             } else {
               const diff = currentScrollY - lastScrollY.current;
-              if (diff > 4) {
+              // Scrolling down significantly -> smoothly slide away
+              if (diff > 8) {
                 setVisible(false);
-              } else if (diff < -4) {
+              } 
+              // Scrolling up smoothly -> reveal header
+              else if (diff < -6) {
                 setVisible(true);
               }
             }
