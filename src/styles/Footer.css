@@ -369,6 +369,27 @@
   transform: rotate(8deg) scale(1.1);
 }
 
+.vyn-social-instagram:hover {
+  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 22px rgba(225, 48, 108, 0.55) !important;
+}
+
+.vyn-social-whatsapp:hover {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55) !important;
+}
+
+.vyn-social-email:hover {
+  background: linear-gradient(135deg, #ea4335 0%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 22px rgba(56, 189, 248, 0.55) !important;
+}
+
 /* Column Titles */
 .vyn-col-title {
   font-size: 1.05rem;
@@ -460,6 +481,24 @@
 .vyn-contact-icon svg {
   width: 100%;
   height: 100%;
+}
+
+.vyn-contact-link {
+  color: inherit;
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.25s ease;
+}
+
+.vyn-contact-link:hover {
+  color: var(--ft-accent-cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+[data-theme="light"] .vyn-contact-link:hover,
+body.theme-light .vyn-contact-link:hover {
+  color: var(--ft-accent-purple);
 }
 
 /* Newsletter Column */
