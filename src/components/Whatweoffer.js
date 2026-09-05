@@ -6,11 +6,11 @@ import '../styles/Whatweoffer.css';
 
 // Import dedicated service showcase assets from /assets/services/
 import imgWebDev from '../assets/services/Web-Full-Stack Development.png';
-import imgMobileApp from '../assets/services/Mobile-App.png';
-import imgSeo from '../assets/services/seo-img.avif';
-import imgSocial from '../assets/services/Social-Media Marketing.jpg';
-import imgContent from '../assets/services/Content-Marketing.jpg';
-import imgEmail from '../assets/services/Email-Marketing.jpg';
+import imgMobileApp from '../assets/android-app-img.webp';
+import imgSeo from '../assets/seo-service-img.png';
+import imgSocial from '../assets/blogs/socialmediamarketing-img-blog.jpeg';
+import imgContent from '../assets/contentmarketing-service-img.png';
+import imgEmail from '../assets/blogs/emailmarketing-img-blog.jpeg';
 import imgAnalytics from '../assets/services/Analytics.jpg';
 import imgVideo from '../assets/services/video-editor.avif';
 
